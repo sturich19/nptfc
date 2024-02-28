@@ -1,0 +1,9 @@
+td.win, td.loss
+{
+    text-align: center;   
+}
+
+td.tigersCell
+{
+    font-weight: bold;
+}
