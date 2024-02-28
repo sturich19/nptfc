@@ -1,0 +1,213 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using nptfcBE.DTO;
+using nptfcBE.Models;
+
+namespace nptfcBE.Controllers;
+
+[ApiController]
+[Route("api/GameStats")]
+public class GameStatsController : ControllerBase
+{
+    private readonly DatabaseContext _context;
+
+    public GameStatsController(DatabaseContext databaseContext)
+    {
+        _context = databaseContext;
+    }    
+
+    [HttpGet("{id}", Name = "GetGameStat")]
+    public async Task<ActionResult<GameStatDTO>> GetGameStat(int id)
+    {
+         var gameStat = await _context.GameStats
+                        .Where(f=> f.Id == id)
+                        .Include(f => f.Season)
+                        .Include(f => f.Player)
+                        .Include(f => f.Fixture)
+                        .FirstOrDefaultAsync();
+
+        if (gameStat == null)
+        {
+            return NotFound();
+        }
+
+        return new GameStatDTO
+        {
+            Id = gameStat.Id,
+            Apps = 1,
+            Goals = gameStat.Goals,
+            Assists = gameStat.Assists,
+            GSO = gameStat.GSO,
+            Shots = gameStat.Shots,
+            Tackles = gameStat.Tackles,
+            PlayerId =  gameStat.PlayerId,
+            SeasonId = gameStat.SeasonId,
+            FixtureId = gameStat.FixtureId,
+            PlayerName = gameStat.Player.Firstname +  " "  + gameStat.Player.Surname,
+            ShotsOnTarget = gameStat.ShotsOnTarget,
+            ShotsOffTarget = gameStat.ShotsOffTarget,
+            Saves = gameStat.Saves
+        };                   
+    }       
+
+    [HttpGet(Name = "GetGameStats")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStats()
+    {
+          return await _context.GameStats                    
+                    .Join(_context.Players,
+                        gs => gs.PlayerId, 
+                        p => p.Id,
+                        (gs, p) => new {gs, p})
+                    .GroupBy(x => x.gs.PlayerId)                    
+                    .Select(gameStatGroup => new GameStatDTO
+                    {
+                        Id = gameStatGroup.Key,
+                        Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        Apps = gameStatGroup.Count(),
+                        Assists = gameStatGroup.Sum(x => x.gs.Assists),
+                        GSO = gameStatGroup.Sum(x => x.gs.GSO),
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),
+                        Tackles = gameStatGroup.Sum(x => x.gs.Tackles),
+                        PlayerId =  gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
+                        ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
+                        ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
+                        Saves = gameStatGroup.First().gs.Saves
+                    })                                                                                         
+                    .ToListAsync(); 
+
+    }
+
+    [HttpGet("player/{playerId}", Name = "GetGameStatsForPlayer")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForPlayer(int playerId)
+    {
+          return await _context.GameStats
+                    .Select(gameStat => new GameStatDTO
+                    {
+                        Id = gameStat.Id,
+                        Apps = 1,
+                        Goals = gameStat.Goals,
+                        Assists = gameStat.Assists,
+                        GSO = gameStat.GSO,
+                        Shots = gameStat.Shots,
+                        Tackles = gameStat.Tackles,
+                        PlayerId =  gameStat.PlayerId,
+                        SeasonId = gameStat.SeasonId,
+                        FixtureId = gameStat.FixtureId,
+                        PlayerName = gameStat.Player.Firstname +  " "  + gameStat.Player.Surname,
+                        ShotsOnTarget = gameStat.ShotsOnTarget,
+                        ShotsOffTarget = gameStat.ShotsOffTarget,
+                        Saves = gameStat.Saves
+                        
+                    })        
+                    .Where(g => g.PlayerId == playerId)                                                                
+                    .ToListAsync();                   
+    }    
+
+    [HttpGet("season/{seasonId}", Name = "GetGameStatsForSeason")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForSeason(int seasonId)
+    {
+            // This is joining game stat with the players based on the season passed. Then summing up the data points for each "player"
+            return await _context.GameStats
+                    .Where(g => g.SeasonId == seasonId)  
+                    .Join(_context.Players,
+                        gs => gs.PlayerId, 
+                        p => p.Id,
+                        (gs, p) => new {gs, p})
+                    .GroupBy(x => x.gs.PlayerId)                    
+                    .Select(gameStatGroup => new GameStatDTO
+                    {
+                        Id = gameStatGroup.Key,
+                        Apps = gameStatGroup.Count(),
+                        Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        Assists = gameStatGroup.Sum(x => x.gs.Assists),
+                        GSO = gameStatGroup.Sum(x => x.gs.GSO),
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),
+                        Tackles = gameStatGroup.Sum(x => x.gs.Tackles),
+                        PlayerId =  gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
+                        ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
+                        ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
+                        Saves = gameStatGroup.First().gs.ShotsOffTarget
+                    })                                                                                         
+                    .ToListAsync();                   
+    }   
+
+    [HttpGet("fixture/{fixtureId}", Name = "GetGameStatsForFixture")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForFixture(int fixtureId)
+    {
+          return await _context.GameStats
+                    .Select(gameStat => new GameStatDTO
+                    {
+                        Id = gameStat.Id,
+                        Apps = 1,
+                        Goals = gameStat.Goals,
+                        Assists = gameStat.Assists,
+                        GSO = gameStat.GSO,
+                        Shots = gameStat.Shots,
+                        Tackles = gameStat.Tackles,
+                        PlayerId =  gameStat.PlayerId,
+                        SeasonId = gameStat.SeasonId,
+                        FixtureId = gameStat.FixtureId,
+                        PlayerName = gameStat.Player.Firstname +  " "  + gameStat.Player.Surname,
+                        ShotsOnTarget = gameStat.ShotsOnTarget,
+                        ShotsOffTarget = gameStat.ShotsOffTarget,
+                        Saves = gameStat.Saves,
+                    })        
+                    .Where(g => g.FixtureId == fixtureId)                                                                
+                    .ToListAsync();                   
+    }   
+
+    [HttpGet("{playerId}, {seasonId}", Name = "GetGameStatsForPlayerPerSeason")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForPlayerPerSeason(int playerId, int seasonId)
+    {
+          return await _context.GameStats
+                    .Select(gameStat => new GameStatDTO
+                    {
+                        Id = gameStat.Id,
+                        Apps = 1,
+                        Goals = gameStat.Goals,
+                        Assists = gameStat.Assists,
+                        GSO = gameStat.GSO,
+                        Shots = gameStat.Shots,
+                        Tackles = gameStat.Tackles,
+                        PlayerId =  gameStat.PlayerId,
+                        SeasonId = gameStat.SeasonId,
+                        FixtureId = gameStat.FixtureId,
+                        PlayerName = gameStat.Player.Firstname + " " + gameStat.Player.Surname,
+                        ShotsOnTarget = gameStat.ShotsOnTarget,
+                        ShotsOffTarget = gameStat.ShotsOffTarget,
+                        Saves = gameStat.Saves
+                    })        
+                    .Where(g => playerId == g.PlayerId)      
+                    .Where(g => g.SeasonId == seasonId)                                          
+                    .ToListAsync();                   
+    }   
+
+
+    // POST: api/GameStat
+    [HttpPost]
+    public async Task<ActionResult<GameStat>> PostGameStat(GameStatDTO gameStatDTO)
+    {
+         var fixture = await _context.TigersFixtures
+            .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.FixtureId);
+
+        var player = await _context.Players
+            .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.PlayerId);
+
+        var season = await _context.Seasons
+            .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.SeasonId);
+
+        if (fixture == null || player == null || season == null)
+            return BadRequest();
+       
+        GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);      
+        EntityEntry<GameStat> addedGameStat = _context.GameStats.Add(gameStatToAdd);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(PostGameStat), new { id = addedGameStat.Entity.Id }, gameStatDTO);
+    }
+}
