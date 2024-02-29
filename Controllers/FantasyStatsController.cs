@@ -68,6 +68,11 @@ public class FantasyStatsController : ControllerBase
         return fantasyStats.OrderByDescending(f => f.TotalPoints);
     }   
 
+    /// <summary>
+    /// Gets the fantasy stats by age group.
+    /// </summary>
+    /// <param name="ageGroup"></param>
+    /// <returns></returns>
     [HttpGet("ageGroup/{ageGroup}", Name = "GetFantasyStatsByAgeGroup")]
     public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStatsByAgeGroup(int ageGroup)
     {
