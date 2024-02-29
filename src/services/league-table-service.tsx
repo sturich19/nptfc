@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { LeagueTable } from '../objects/league-table';
-const API_URL = 'http://localhost:5032/api/league';
+const API_URL = 'http://nptfc-backend.azurewebsites.net/api/league';
 
 export const GetLeagueTable = async (seasonId : any) => {
     const url = API_URL + "/";

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Player } from '../objects/player';
-const API_URL = 'http://localhost:5032/api/players';
+const API_URL = 'http://nptfc-backend.azurewebsites.net/api/players';
 
 export const GetPlayers = async () => {
     try {

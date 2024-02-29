@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'http://localhost:5032/api/FantasyFootball';
+const API_URL = 'http://nptfc-backend.azurewebsites.net/api/FantasyFootball';
 
 export const GetAgeGroupFantasyStats = async (ageGroup : number) => {
     try {
