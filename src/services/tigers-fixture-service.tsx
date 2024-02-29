@@ -13,8 +13,8 @@ export const GetTigersFixturesForSeason = async (seasonId : any) => {
     }
 };
 
-// Add some comments.
-export const GetTigersFixtures = async () => {}
+
+export const GetTigersFixtures = async () => {
     
     try {
         const response = await axios.get(API_URL);
