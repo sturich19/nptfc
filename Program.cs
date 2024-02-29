@@ -15,6 +15,16 @@ builder.Services.AddDbContext<DatabaseContext> (opt=> opt.UseSqlServer("Server=t
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+ builder.Services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(builder =>
+            {
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+        });
 /*builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: MyAllowSpecificOrigins,
