@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { TigersFixture } from '../objects/tigers-fixture';
-const API_URL = 'http://nptfc-backend.azurewebsites.net/api/tigersfixtures';
+const API_URL = 'https://nptfc-backend.azurewebsites.net/api/tigersfixtures';
 
 export const GetTigersFixturesForSeason = async (seasonId : any) => {
     const url = API_URL + '/season/';

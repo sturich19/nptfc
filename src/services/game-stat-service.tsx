@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { GameStat } from '../objects/game-stat';
-const API_URL = 'http://nptfc-backend.azurewebsites.net/api/GameStats';
+const API_URL = 'https://nptfc-backend.azurewebsites.net/api/GameStats';
 
 export const GetGameStats = async () => {
     try {
