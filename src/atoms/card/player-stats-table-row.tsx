@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Player } from "../../objects/player";
 import { GameStat } from "../../objects/game-stat";
-import { GetTotalAssists, GetTotalGSO, GetTotalGames, GetTotalGoals, GetTotalShots, GetTotalTackles } from "../../utils/game-stats-util";
+import { GetTotalAssists, GetTotalGSO, GetTotalGames, GetTotalGoals, GetTotalShots } from "../../utils/game-stats-util";
 import { Season } from "../../objects/season";
 import { GetSeasonGameStatsForPlayer } from "../../services/game-stat-service";
 

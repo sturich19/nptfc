@@ -1,4 +1,4 @@
-import { AppBar, Avatar, Box,  Container, IconButton, ThemeProvider, Toolbar, createTheme } from '@mui/material';
+import { AppBar, Container, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 import './header.css';
 import { green, lightBlue } from '@mui/material/colors';
 import HeaderMenuCollapsed from './header-menu-collapsed';

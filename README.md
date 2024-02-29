@@ -44,3 +44,11 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## Trouble shooting
+
+1. Git hub - when running the action i was getting react-scripts build: permission denied
+2. This was a permission issue on the folder. 
+3. VS Code run -  git update-index --chmod=+x node_modules/.bin/react-scripts
+4. git commit -m 'type something here'
+5. git push
