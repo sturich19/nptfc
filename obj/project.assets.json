@@ -8152,11 +8152,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\srichardson\\OneDrive - Aptean-online\\Stuart Richardson\\Learning\\nptfc\\backend\\nptfcBE.csproj",
+      "projectUniqueName": "C:\\Source\\NPTFC\\backend\\nptfc-backend\\nptfcBE.csproj",
       "projectName": "nptfcBE",
-      "projectPath": "C:\\Users\\srichardson\\OneDrive - Aptean-online\\Stuart Richardson\\Learning\\nptfc\\backend\\nptfcBE.csproj",
+      "projectPath": "C:\\Source\\NPTFC\\backend\\nptfc-backend\\nptfcBE.csproj",
       "packagesPath": "C:\\Users\\srichardson\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\srichardson\\OneDrive - Aptean-online\\Stuart Richardson\\Learning\\nptfc\\backend\\obj\\",
+      "outputPath": "C:\\Source\\NPTFC\\backend\\nptfc-backend\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

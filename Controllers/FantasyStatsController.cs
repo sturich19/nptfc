@@ -22,6 +22,11 @@ public class FantasyStatsController : ControllerBase
         _context = databaseContext;
     }    
 
+    // <summary>
+    // Gets the fantasy stats for the current season.
+    // </summary>
+    // <param name="seasonId"></param>
+    // <returns></returns>
     [HttpGet("season/{seasonId}", Name = "GetFantasyStats")]
     public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStats(int seasonId)
     {

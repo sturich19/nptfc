@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
-builder.Services.AddDbContext<DatabaseContext> (opt=> opt.UseSqlServer("Server=tcp:nptfc-uk.database.windows.net,1433;Initial Catalog=NPTFC;Persist Security Info=False;User ID=nptfc-sa;Password=Alice@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"));
+builder.Services.AddDbContext<DatabaseContext> (opt=> opt.UseSqlServer("Server=tcp:nptfc-uk.database.windows.net,1433;Initial Catalog=NPTFC;Persist Security Info=False;User ID=nptfc-sa;Password=Alice@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=60;"));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

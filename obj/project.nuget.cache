@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "SJhOzOYxmlRLEFzgl66y580SNpYB3HdUlaFgdZazq/Jot4rAfzeD24Oy8yg1rmjBpei3lOJM4MluBe+jk35sjQ==",
+  "dgSpecHash": "ig1XnORy9gOAEKVLKe9KBwCHIwKTWWAUpuPg/p7n3vjVOrNNdasBTd3DXELTIM0d1h5lrfOkSjIFlacvBPkhOw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\srichardson\\OneDrive - Aptean-online\\Stuart Richardson\\Learning\\nptfc\\backend\\nptfcBE.csproj",
+  "projectFilePath": "C:\\Source\\NPTFC\\backend\\nptfc-backend\\nptfcBE.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\srichardson\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\srichardson\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
