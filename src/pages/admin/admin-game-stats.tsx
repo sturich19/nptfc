@@ -10,7 +10,6 @@ import { GetPlayers } from "../../services/player-service";
 import { GameStat } from "../../objects/game-stat";
 import { PostGameStat } from "../../services/game-stat-service";
 import TextField from "../../atoms/textfield/textfield";
-import * as Yup from "yup";
 
 const AdminGameStats = ()  =>
 {   
@@ -33,21 +32,7 @@ const AdminGameStats = ()  =>
                                         shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves}
                                                     
             PostGameStat(gameStat).then(formik.resetForm);
-        },
-        // validationSchema: (Yup.object({
-        //     goals: Yup
-        //     .number()
-        //     .min(1, "Enter some goals or 0")
-        //     .required("Enter some goals"),
-        //     assists: Yup
-        //     .number()
-        //     .min(1, "Enter some assists or 0")
-        //     .required("Enter some assists") ,
-        //     shots: Yup
-        //     .number()
-        //     .min(1, "Enter some shots or 0")
-        //     .required("Enter some shots")                        
-        // }))
+        }
     });
 
     return(
