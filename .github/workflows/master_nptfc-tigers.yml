@@ -28,7 +28,7 @@ jobs:
           npm run test --if-present
       
       - name: Zip the project
-        run: Compress-Archive -Path * -DestinationPath node-app.zip -Force
+        run: Compress-Archive -Path build/ -DestinationPath node-app.zip -Force
         shell: pwsh
         
       - name: Upload artifact for deployment job
