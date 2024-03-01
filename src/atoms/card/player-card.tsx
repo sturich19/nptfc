@@ -6,17 +6,11 @@ import { Season } from "../../objects/season";
 import PlayerStatsTableRow from "./player-stats-table-row";
 
 interface playerProps{
-    player : Player
+    player : Player,
+    seasons? : Season[]
 }
 
 const PlayerCard = (playerProps : playerProps) => {     
-
-    const [seasons, setSeasons] = useState<Season[] | null>(null);
-    
-    useEffect(() => {
-        GetSeasons().then(seasons => setSeasons(seasons));        
-        
-    }, [playerProps.player.id]);
 
     var position = PositionString(playerProps.player.position);
 
@@ -40,7 +34,7 @@ const PlayerCard = (playerProps : playerProps) => {
                                     </tr>
                                 </thead>
                                 <tbody className="table-group-divider">
-                                    {seasons?.map(season => 
+                                    {playerProps.seasons?.map(season => 
                                         <PlayerStatsTableRow season={season} player={playerProps.player}></PlayerStatsTableRow>
                                     )}
                                 </tbody>

@@ -22,7 +22,7 @@ const PlayerStatsTableRow = (playerStatsProps : playerStatsProps) => {
     useEffect(() =>
     {
         GetSeasonGameStatsForPlayer(playerStatsProps.season.id, playerStatsProps.player.id).then(gameStats => setGameStats(gameStats));
-    })
+    }, [playerStatsProps.season.id, playerStatsProps.player.id]);
     
     useEffect(() => {
         if (gameStats != null)
