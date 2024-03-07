@@ -6,7 +6,7 @@ const Layout = () => {
 
     return(
         <>
-            <div className='container-fluid'>
+            <div className='container-fluid g-0'>
                 <div className='row'>
                     <Header/>
                 </div>                

@@ -7,7 +7,7 @@ const HeaderMenuNav = () => {
                 href="/Seasons"
                 sx={{ my: 2, color: 'white', display: 'block' }}
             >
-            Seasons
+            Home
             </Button>
             <Button key={"players"}
                 href="/Players"

@@ -39,7 +39,7 @@ const HeaderMenuCollapsed = () => {
                             href="/Seasons" 
                             textAlign="center" 
                             sx={{mr: 2,display: { xs: 'flex', md: 'none' },flexGrow: 1,color: 'inherit',textDecoration: 'none',}}>
-                        Seasons
+                            Home
                         </Typography>
                     </MenuItem>
 

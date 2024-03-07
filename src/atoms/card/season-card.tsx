@@ -1,16 +1,13 @@
+import { GetImageToUse } from '../../utils/season-utils';
 import './season-card-styles.css';
+
 const SeasonCard = ({season, handleClick} : any) => {     
 
+    var altText = 'U' + season.ageGroup + 's - ' + season.startYear;
+
     return(   
-        <div className="col-sm-3">
-            <div className="card">
-                <div className="card-body">
-                    <h5 className="card-title">U{season.ageGroup}s - {season.startYear}</h5>
-                    <p className="card-title">{season.monthStart} {'->'} {season.monthEnd}</p>
-                    <p className="card-text">Division: {season.division}</p>                    
-                    <button className="btn btn-primary" onClick={()=> handleClick(season.id)}>View</button>                        
-                </div>
-            </div>
+        <div className="col-sm-4 col-6 col-md-2 col-lg-2 col-xl-2  season-card" onClick={() => handleClick(season.id)}>            
+            <img src={GetImageToUse(season)} alt={altText} />
         </div>        
     )
 }

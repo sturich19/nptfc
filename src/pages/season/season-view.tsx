@@ -95,13 +95,13 @@ export default function SeasonView()
                                 {/* League Table */}
                                 {viewDetails ?                                 
                                     <div className="row">
-                                        <div className="col-1"></div>
+                                        <div className="col-1 d-none"></div>
                                         {   leagueTable ? 
                                                 <div className="col-10">  
                                                     {leagueTable.length > 0 ? <LeagueTableComponent leagueTableRows={leagueTable}></LeagueTableComponent> : <div></div>}
                                                 </div>
                                             : <p>Loading Table...</p>}
-                                        <div className="col-1"></div>
+                                        <div className="col-1 d-none"></div>
                                     </div>  
                                   :
                                   <div></div>
