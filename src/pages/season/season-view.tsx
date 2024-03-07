@@ -116,7 +116,7 @@ export default function SeasonView()
                                         <div className="row">
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>  
                                             <div className="col-11">
-                                            <p>Tigers results - click a row to see the match data</p>
+                                            <h6>Tigers results - click a row to see the match data</h6>
                                             </div>  
                                         </div>
                                         <div className="row">
