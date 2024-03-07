@@ -78,15 +78,15 @@ export default function SeasonView()
         <>
         <div className='container-fluid g-0'>
             <div className='row'>                
-                <div className='col-11 col-md-10 col-lg-11'>                   
+                <div className='col-12 col-md-10 col-lg-11'>                   
                     { fixtures ? 
                         <>  
                             <div className='container-fluid'>
                                 <div className='row'>                                    
                                     <ButtonAtom label="League" clickHander={() => handleSideBarItemClick(0)}></ButtonAtom>
-                                    <ButtonAtom label="Grid" clickHander={() => handleSideBarItemClick(2)}>Grid</ButtonAtom>                                                                   
-                                    <ButtonAtom label="Stats" clickHander={() => handleSideBarItemClick(1)}>Stats</ButtonAtom>
-                                    <ButtonAtom label="Fantasy" clickHander={() => handleSideBarItemClick(3)}>Fantasy</ButtonAtom>     
+                                    <ButtonAtom label="Grid" clickHander={() => handleSideBarItemClick(2)}></ButtonAtom>                                                                   
+                                    <ButtonAtom label="Stats" clickHander={() => handleSideBarItemClick(1)}></ButtonAtom>
+                                    <ButtonAtom label="Fantasy" clickHander={() => handleSideBarItemClick(3)}></ButtonAtom>     
                                 </div>
                                 <div className="row">
                                     <h4 className="season-header">U{currentSeason?.ageGroup}'s Divison {currentSeason?.division} - {currentSeason?.monthStart} to {currentSeason?.monthEnd}</h4>

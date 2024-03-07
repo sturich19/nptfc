@@ -1,12 +1,13 @@
 import { Typography } from "@mui/material";
-import MenuIcon from '@mui/icons-material/Adb';
+import TitleIcon from '@mui/icons-material/SportsSoccerTwoTone';
 
 const HeaderMenuLogo = () => {
 
-    const title = "NPTFC";
+    const title = "Tigers";
     return (
         <>
             {/* This is seen when display > xs  */}
+            <TitleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'white' }} />
             <Typography variant="h6" noWrap component="a" href="/Home"
                 sx={{
                     mr: 2,
@@ -22,7 +23,7 @@ const HeaderMenuLogo = () => {
             </Typography>
 
             {/* This is seen when display < md  */}
-            <MenuIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'white' }} />
+            <TitleIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'white' }} />
             <Typography variant="h5" noWrap component="a" href="/Home"
                 sx={{
                     mr: 2,

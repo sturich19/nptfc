@@ -17,13 +17,13 @@ const HeaderMenuCollapsed = () => {
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
                 size="large"
-                aria-label="account of current user"
+                aria-label="Main menu"
                 aria-controls="menu-appbar"
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
-                color="inherit"                        
+                color= "inherit"
             >
-                <MenuIcon/>
+                <MenuIcon sx={{ color: 'white' }}/>
             </IconButton>
             <Menu id="menu-appbar" anchorEl={anchorElNav}
                 anchorOrigin={{vertical: 'bottom',horizontal: 'left',}}
