@@ -81,27 +81,30 @@ export default function SeasonView()
                 <div className='col-12 col-md-10 col-lg-11'>                   
                     { fixtures ? 
                         <>  
-                            <div className='container-fluid'>
-                                <div className='row'>                                    
+                            <div className='container-fluid'>                                
+                                <div className="season-header">
+                                    <h4>U{currentSeason?.ageGroup}'s Divison {currentSeason?.division} - {currentSeason?.monthStart} to {currentSeason?.monthEnd}</h4>
+                                </div>  
+
+                                <div className='row'>  
+                                    <div className='col-2'></div>
                                     <ButtonAtom label="League" clickHander={() => handleSideBarItemClick(0)}></ButtonAtom>
-                                    <ButtonAtom label="Grid" clickHander={() => handleSideBarItemClick(2)}></ButtonAtom>                                                                   
+                                    <ButtonAtom label="Grid" clickHander={() => handleSideBarItemClick(2)}></ButtonAtom>
                                     <ButtonAtom label="Stats" clickHander={() => handleSideBarItemClick(1)}></ButtonAtom>
-                                    <ButtonAtom label="Fantasy" clickHander={() => handleSideBarItemClick(3)}></ButtonAtom>     
-                                </div>
-                                <div className="row">
-                                    <h4 className="season-header">U{currentSeason?.ageGroup}'s Divison {currentSeason?.division} - {currentSeason?.monthStart} to {currentSeason?.monthEnd}</h4>
-                                </div>                               
+                                    <ButtonAtom label="Fantasy" clickHander={() => handleSideBarItemClick(3)}></ButtonAtom>
+                                    <div className='col-2'></div>
+                                </div>                             
                                
                                 {/* League Table */}
                                 {viewDetails ?                                 
                                     <div className="row">
-                                        <div className="col-1 d-none"></div>
+                                        <div className="col-sm-1 .d-none .d-sm-block"></div>
                                         {   leagueTable ? 
                                                 <div className="col-10">  
                                                     {leagueTable.length > 0 ? <LeagueTableComponent leagueTableRows={leagueTable}></LeagueTableComponent> : <div></div>}
                                                 </div>
                                             : <p>Loading Table...</p>}
-                                        <div className="col-1 d-none"></div>
+                                        <div className="col-sm-1 .d-none .d-sm-block"></div>
                                     </div>  
                                   :
                                   <div></div>
@@ -111,14 +114,14 @@ export default function SeasonView()
                                 {viewDetails ? 
                                     <>
                                         <div className="row">
-                                            <div className="col-1"></div>  
-                                            <div className="col-10">
+                                            <div className="col-sm-1 .d-none .d-sm-block"></div>  
+                                            <div className="col-11">
                                             <p>Tigers results - click a row to see the match data</p>
                                             </div>  
                                         </div>
                                         <div className="row">
-                                            <div className="col-1"></div>
-                                            <div className="col-10">                                                                                      
+                                            <div className="col-sm-1 .d-none .d-sm-block"></div>
+                                            <div className="col-11">                                                                                      
                                                 <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>                             
                                             </div>
                                         </div>   

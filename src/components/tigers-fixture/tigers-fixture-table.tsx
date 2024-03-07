@@ -22,14 +22,14 @@ const TigersFixtureTable = (fixturesProps : TigersFixtureComponentProps) => {
                 <table className="table table-hover table-condensed table-responsive">
                     <thead>
                         <tr>
-                            <th>Date</th>
+                            <th>Date</th>                            
+                            <th></th>
+                            <th>Home</th>                            
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th>Away</th>  
                             <th>Type</th>
-                            <th>Result</th>
-                            <th>Home Team</th>                            
-                            <th></th>
-                            <th></th>
-                            <th></th>
-                            <th>Away Team</th>  
                         </tr>
                     </thead>
                     <tbody className='table-group-divider'>     

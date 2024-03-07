@@ -51,14 +51,14 @@ const TigersFixtureRow = ({fixture} : TigersFixtureItemComponentProps) => {
     return(  
         
         <tr onClick={() => handleClick(fixture.id)}>
-            <td className='col-1'>{new Date(fixture.date).toLocaleDateString("en-UK")}</td>            
-            <td className='col-1'>{gameType}</td>
+            <td className='col-1'>{new Date(fixture.date).toLocaleDateString("en-UK")}</td>                        
             <td className={resultClassToAdd}>{result}</td>
             <td className='col-3'>{fixture.homeTeam}</td>
             <td className='col-1'>{fixture.homeTeamScore}</td>
             <td className='col-1'>V</td>
             <td className='col-1'>{fixture.awayTeamScore}</td>            
-            <td className='col-3'>{fixture.awayTeam}</td>                        
+            <td className='col-3'>{fixture.awayTeam}</td>
+            <td className='col-1'>{gameType}</td>
         </tr>                
         
     )
