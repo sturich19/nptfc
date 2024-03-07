@@ -7,10 +7,10 @@ const Layout = () => {
     return(
         <>
             <div className='container-fluid g-0'>
-                <div className='row'>
+                <div className='row g-0'>
                     <Header/>
                 </div>                
-                <div className='row' id='main-body'>
+                <div className='row g-0' id='main-body'>
                     <Outlet/>   
                 </div>
             </div>                        

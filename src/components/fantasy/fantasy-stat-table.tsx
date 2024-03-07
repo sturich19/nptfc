@@ -61,11 +61,11 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                                 <th>Player</th>                              
                                 <th className="sortable" onClick={() => Sort("pts")}>Pts</th>  
                                 <th className="sortable" onClick={() => Sort("pld")}>Apps</th>
-                                <th className="sortable" onClick={() => Sort("gls")}>Goals</th>
-                                <th className="sortable" onClick={() => Sort("ass")}>Assists</th>
+                                <th className="sortable" onClick={() => Sort("gls")}>Gls</th>
+                                <th className="sortable" onClick={() => Sort("ass")}>Ass</th>
                                 <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                                 <th className="sortable" onClick={() => Sort("shots")}>Shots</th>                                                      
-                                <th className="sortable" onClick={() => Sort("cs")}>Clean Sheets</th> 
+                                <th className="sortable" onClick={() => Sort("cs")}>CS</th> 
                                 <th className="sortable" onClick={() => Sort("saves")}>Saves</th> 
                             </tr>
                         </thead>

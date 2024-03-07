@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { GameStat } from "../../objects/game-stat";
-import { Average } from "../../utils/game-stats-util";
-
 interface GameStatComponentProps{
     gameStats : GameStat[]    
 }
@@ -53,12 +51,12 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                         <tr>
                             <th>Player</th>  
                             <th className="sortable" onClick={() => Sort("pld")}>Pld</th>
-                            <th className="sortable" onClick={() => Sort("gls")}>Goals</th>
-                            <th className="sortable" onClick={() => Sort("ass")}>Assists</th>
+                            <th className="sortable" onClick={() => Sort("gls")}>Gls</th>
+                            <th className="sortable" onClick={() => Sort("ass")}>Ass</th>
                             <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                             <th className="sortable" onClick={() => Sort("shots")}>Shots</th>
-                            <th className="sortable" onClick={() => Sort("shotsOn")}>Shots On</th>
-                            <th className="sortable" onClick={() => Sort("shotsOff")}>Shots Off</th>
+                            <th className="sortable" onClick={() => Sort("shotsOn")}>On</th>
+                            <th className="sortable" onClick={() => Sort("shotsOff")}>Off</th>
                             <th>CS</th>  
                             <th>Saves</th>  
                         </tr>
@@ -69,14 +67,14 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                             <tr key={f.id}>
                                 <td className="col-3">{f.playerName}</td>                                
                                 <td className="col-1">{f.apps}</td>
-                                <td className="col-1">{f.goals} ({Average(f.goals, f.apps)})</td>
-                                <td className="col-1">{f.assists} ({Average(f.assists, f.apps)})</td>
-                                <td className="col-1">{f.gso} ({Average(f.gso, f.apps)})</td>
-                                <td className="col-1">{f.shots} ({Average(f.shots, f.apps)})</td>
-                                <td className="col-1">{f.shotsOnTarget} ({Average(f.shotsOnTarget, f.shots)})</td>
-                                <td className="col-1">{f.shotsOffTarget} ({Average(f.shotsOffTarget, f.shots)})</td>                                
-                                <td className="col-1">{f.cleanSheets} ({Average(f.cleanSheets, f.apps)})</td>  
-                                <td className="col-1">{f.saves} ({Average(f.saves, f.apps)})</td>  
+                                <td className="col-1">{f.goals}</td>
+                                <td className="col-1">{f.assists}</td>
+                                <td className="col-1">{f.gso}</td>
+                                <td className="col-1">{f.shots}</td>
+                                <td className="col-1">{f.shotsOnTarget}</td>
+                                <td className="col-1">{f.shotsOffTarget}</td>                                
+                                <td className="col-1">{f.cleanSheets}</td>  
+                                <td className="col-1">{f.saves}</td>  
                                 </tr>
                             </>
                         )}

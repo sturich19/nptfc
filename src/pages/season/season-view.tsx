@@ -77,8 +77,8 @@ export default function SeasonView()
     return(  
         <>
         <div className='container-fluid g-0'>
-            <div className='row'>                
-                <div className='col-12 col-md-10 col-lg-11'>                   
+            <div className='row g-0'>                
+                <div className='col-12'>
                     { fixtures ? 
                         <>  
                             <div className='container-fluid'>                                
@@ -121,9 +121,10 @@ export default function SeasonView()
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                            <div className="col-11">                                                                                      
+                                            <div className="col-10">                                                                                      
                                                 <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>                             
                                             </div>
+                                            <div className="col-sm-1 .d-none .d-sm-block"></div>  
                                         </div>   
                                     </> 
                                  :
@@ -137,10 +138,11 @@ export default function SeasonView()
                                             <>
                                                 {gameStats.length > 0 ? 
                                                     <> 
-                                                        <div className="col-1"></div> 
+                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
                                                         <div className="col-10">       
                                                             <GameStatTable gameStats={gameStats}></GameStatTable>
-                                                        </div>                                                        
+                                                        </div>                                               
+                                                        <div className="col-sm-1 .d-none .d-sm-block"></div>          
                                                     </>                                                    
                                                     : <div></div>
                                                 }
@@ -154,8 +156,7 @@ export default function SeasonView()
 
                                {viewGrid ? 
                                     <div className='row'>    
-                                        <div className="col-1"></div>  
-                                        <div className="col-10">                       
+                                        <div className="col-12">
                                             <FixtureGridComponent seasonId={param.id}></FixtureGridComponent>
                                         </div>
                                     </div>
@@ -170,10 +171,11 @@ export default function SeasonView()
                                             <>
                                                 {fantasyStats.length > 0 ? 
                                                     <>
-                                                        <div className="col-1"></div> 
-                                                        <div className="col-10">       
+                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
+                                                        <div className="col-10">              
                                                             <FantasyStatTable fantasyStats={fantasyStats}></FantasyStatTable> : <div></div>
                                                         </div>
+                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
                                                     </>
                                                     : <div></div>}
                                             </>
