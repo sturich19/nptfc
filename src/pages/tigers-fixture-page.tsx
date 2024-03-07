@@ -5,7 +5,6 @@ import { GameStat } from "../objects/game-stat";
 import GameStatTable from "../components/game-stats/game-stat-table";
 import { GetTigersFixture } from "../services/tigers-fixture-service";
 import { TigersFixture } from "../objects/tigers-fixture";
-import SingleFixtureTable from "../components/tigers-fixture/single-tigers-fixture-table";
 import { FantasyStat } from "../objects/fantasy-stat";
 import { GetFixtureFantasyStats } from "../services/fantasy-stat-service";
 import FantasyStatTable from "../components/fantasy/fantasy-stat-table";
@@ -27,28 +26,35 @@ export default function TigersFixturePage()
     return(  
         
          <div className='container-fluid g-0'>
-            <div className='row'>
-                <div className="col-1"></div>
+            <div className='row g-0'>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>  
                 <div className="col-10">
-                    {   fixture ? <SingleFixtureTable fixture={fixture}></SingleFixtureTable> 
+                    {   fixture ? 
+                        <>
+                            <h6>{new Date(fixture.date).toLocaleDateString("en-UK")}</h6>
+                            <h6>{fixture.homeTeam}  {fixture.homeTeamScore}   v  {fixture.awayTeamScore}  {fixture.awayTeam} </h6>                             
+                        </>
                         : <p>Loading Fixture...</p>}
                 </div>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>  
             </div>
             
             <div className='row'>
-                <div className="col-1"></div>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>
                 <div className="col-10">
                     {   gameStats ? <GameStatTable gameStats={gameStats}></GameStatTable>
                         : <p>Loading Stats...</p>}
                 </div>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>
             </div>  
 
             <div className='row'>
-                <div className="col-1"></div>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>
                 <div className="col-10">
                     {   fantasyStats ? <FantasyStatTable fantasyStats={fantasyStats}></FantasyStatTable>
                         : <p>Loading Stats...</p>}
                 </div>
+                <div className="col-sm-1 .d-none .d-sm-block"></div>
             </div>  
             <div className='row'>
                 <div className="col-1"></div>

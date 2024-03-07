@@ -73,7 +73,7 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                             {fantasyStatsProps.fantasyStats.map(f => 
                                 <>
                                     <tr key={f.id}>
-                                        <td className="col-2">{f.playerName} ({PositionString(f.position)})</td>                                                                
+                                        <td className="col-2">{f.playerName}</td>                                                                
                                         <td className="col-1">{f.totalPoints}</td>   
                                         <td className="col-1">{f.apps} ({f.appsPts})</td>
                                         <td className="col-1">{f.goals} ({f.goalPts})</td>

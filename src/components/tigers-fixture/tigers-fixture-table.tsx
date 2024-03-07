@@ -17,7 +17,7 @@ const TigersFixtureTable = (fixturesProps : TigersFixtureComponentProps) => {
    // const [fixtures, setFixture] = useState(fixturesToShow);      
     return(
         <>                       
-        <div className="row">            
+        <div className="row g-0">            
             <div>
                 <table className="table table-hover table-condensed table-responsive">
                     <thead>
