@@ -47,7 +47,8 @@ public class GameStatsController : ControllerBase
             PlayerName = gameStat.Player.Firstname +  " "  + gameStat.Player.Surname,
             ShotsOnTarget = gameStat.ShotsOnTarget,
             ShotsOffTarget = gameStat.ShotsOffTarget,
-            Saves = gameStat.Saves
+            Saves = gameStat.Saves,
+            CleanSheets = gameStat.CleanSheets
         };                   
     }       
 
@@ -74,7 +75,9 @@ public class GameStatsController : ControllerBase
                         PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
                         ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
                         ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
-                        Saves = gameStatGroup.First().gs.Saves
+                        Saves = gameStatGroup.First().gs.Saves,
+                        CleanSheets = gameStatGroup.First().gs.CleanSheets
+
                     })                                                                                         
                     .ToListAsync(); 
 
@@ -99,7 +102,8 @@ public class GameStatsController : ControllerBase
                         PlayerName = gameStat.Player.Firstname +  " "  + gameStat.Player.Surname,
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
-                        Saves = gameStat.Saves
+                        Saves = gameStat.Saves,
+                        CleanSheets = gameStat.CleanSheets
                         
                     })        
                     .Where(g => g.PlayerId == playerId)                                                                
@@ -131,7 +135,8 @@ public class GameStatsController : ControllerBase
                         PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
                         ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
                         ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
-                        Saves = gameStatGroup.First().gs.ShotsOffTarget
+                        Saves = gameStatGroup.First().gs.Saves,
+                        CleanSheets = gameStatGroup.First().gs.CleanSheets
                     })                                                                                         
                     .ToListAsync();                   
     }   
@@ -156,6 +161,7 @@ public class GameStatsController : ControllerBase
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
+                        CleanSheets = gameStat.CleanSheets
                     })        
                     .Where(g => g.FixtureId == fixtureId)                                                                
                     .ToListAsync();                   
@@ -180,7 +186,8 @@ public class GameStatsController : ControllerBase
                         PlayerName = gameStat.Player.Firstname + " " + gameStat.Player.Surname,
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
-                        Saves = gameStat.Saves
+                        Saves = gameStat.Saves,
+                        CleanSheets = gameStat.CleanSheets
                     })        
                     .Where(g => playerId == g.PlayerId)      
                     .Where(g => g.SeasonId == seasonId)                                          
