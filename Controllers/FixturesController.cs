@@ -181,9 +181,15 @@ public class FixturesController : ControllerBase
     }    
 
     [HttpGet("results/{seasonId},{teamId}", Name = "GetResultsForTeam")]
-    public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetResultsForTeam(int seasonId, int teamId)
+    public async Task<ActionResult<TeamsFixturesDTO>> GetResultsForTeam(int seasonId, int teamId)
     {
-        return await _context.Fixtures
+         var team = await _context.Teams
+            .FirstOrDefaultAsync(lt => lt.Id == teamId);
+
+        if (team == null)
+            return BadRequest();
+
+        List<FixtureDTO> fixtures = await _context.Fixtures
                     .Select(fixture => new FixtureDTO
                     {
                         Id = fixture.Id,
@@ -201,6 +207,8 @@ public class FixturesController : ControllerBase
                     .Where(f=> seasonId == f.SeasonId)  
                     .Where(f=> teamId == f.HomeTeamId || teamId == f.AwayTeamId)                  
                     .ToListAsync();
+
+        return new TeamsFixturesDTO() { Id = team.Id, Fixtures = fixtures, TeamName = team.Name};
     }    
 
     // POST: api/Fixtures

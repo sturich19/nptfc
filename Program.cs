@@ -25,26 +25,26 @@ string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
                     .AllowAnyHeader();
             });
         });
-/*builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-    builder =>
-    {
-        builder.AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowAnyOrigin()
-            .AllowAnyHeader();
-    });
-});
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+            builder =>
+            {
+                builder.AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowAnyOrigin()
+                    .AllowAnyHeader();
+            });
+        });
 
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-  {
-    policy
-        .WithOrigins("http://localhost:3000")
-        .AllowAnyMethod()
-        .AllowAnyOrigin()
-        .AllowAnyHeader();
-  }));*/
+        builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+        {
+            policy
+                .WithOrigins("http://localhost:3000")
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowAnyHeader();
+        }));
 
 
 var app = builder.Build();
