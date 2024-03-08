@@ -1,5 +1,5 @@
 import axios from 'axios';
-const API_URL = 'https://nptfc-backend.azurewebsites.net/api/FantasyFootball';
+const API_URL = process.env.REACT_APP_API_URL + 'FantasyFootball';
 
 export const GetAgeGroupFantasyStats = async (ageGroup : number) => {
     try {

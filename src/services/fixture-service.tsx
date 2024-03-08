@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Fixture } from '../objects/fixture';
-const API_URL = 'https://nptfc-backend.azurewebsites.net/api/fixtures';
+const API_URL = process.env.REACT_APP_API_URL + 'fixtures';
 
 export const GetFixturesForSeason = async (seasonId : any) => {
     const url = API_URL + '/season/';

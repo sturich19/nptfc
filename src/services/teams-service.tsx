@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Team } from '../objects/team';
-const API_URL = 'https://nptfc-backend.azurewebsites.net/api/Teams';
+const API_URL = process.env.REACT_APP_API_URL + 'Teams';
 
 export const GetTeams = async () => {
     
