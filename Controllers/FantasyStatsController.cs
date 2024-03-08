@@ -49,7 +49,7 @@ public class FantasyStatsController : ControllerBase
                         Tackles = gameStatGroup.Sum(x => x.gs.Tackles),
                         PlayerId =  gameStatGroup.First().p.Id,
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
-                        PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
+                        PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                     })                                                                                         
@@ -99,7 +99,7 @@ public class FantasyStatsController : ControllerBase
                         Tackles = gameStatGroup.Sum(x => x.gs.Tackles),
                         PlayerId =  gameStatGroup.First().p.Id,
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
-                        PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
+                        PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                     })                                                                                         
@@ -139,7 +139,7 @@ public class FantasyStatsController : ControllerBase
                         Tackles = gameStatGroup.Sum(x => x.gs.Tackles),
                         PlayerId =  gameStatGroup.First().p.Id,
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
-                        PlayerName = gameStatGroup.First().p.Firstname + " " + gameStatGroup.First().p.Surname,
+                        PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves)
                     })                                                                                         
