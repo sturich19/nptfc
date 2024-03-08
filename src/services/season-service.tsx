@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Season } from '../objects/season';
-const API_URL = 'https://nptfc-backend.azurewebsites.net/api/seasons';
+const API_URL = process.env.REACT_APP_API_URL + 'seasons';
 
 export const GetSeasons = async () => {
     try {

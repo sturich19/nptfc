@@ -9,8 +9,9 @@ const FixtureTable = (fixturesProps : FixtureComponentProps) => {
   
     return(
         <>                       
-        <div className="row">            
-            <div>
+        <div className="row">    
+            <div className="col-sm-1 .d-none .d-sm-block"></div>  
+            <div className='col-10'>
                 <table className="table table-hover table-condensed table-responsive">
                     <thead>
                         <tr>
@@ -27,6 +28,7 @@ const FixtureTable = (fixturesProps : FixtureComponentProps) => {
                     </tbody>
                 </table>                          
             </div>
+            <div className="col-sm-1 .d-none .d-sm-block"></div>  
         </div>                
         </>
     );

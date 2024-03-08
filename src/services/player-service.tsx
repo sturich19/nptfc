@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Player } from '../objects/player';
-const API_URL = 'https://nptfc-backend.azurewebsites.net/api/players';
+const API_URL = process.env.REACT_APP_API_URL + 'players';
+
 
 export const GetPlayers = async () => {
     try {

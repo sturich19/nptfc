@@ -23,7 +23,7 @@ const LeagueTableComponent = (leagueTableProps : LeagueTableComponentProps) => {
                             <th>GA</th>  
                             <th>GD</th>  
                             <th>Pts</th>   
-                            <th>Ach Pts</th>  
+                            <th>Max Pts</th>  
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">                        

@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { LeagueTable } from '../../objects/league-table';
+import './league-table-styles.css';
 
 interface LeagueTableRowComponentProps
 {
@@ -10,10 +11,16 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
     
     const navigate = useNavigate();
     const handleClick = (leagueTable : LeagueTable) => navigate(`/LeagueResults/${leagueTable.seasonId}/${leagueTable.teamId}`);
-    
+    var classesToAdd;
+
+    if (leagueTableProps.leagueTableRow.teamId === 1 || leagueTableProps.leagueTableRow.teamId === 3)
+    {
+        classesToAdd = ' tigers-highlight' ;
+    }
+
     return(  
         <>
-        <tr onClick={() => handleClick(leagueTableProps.leagueTableRow)}>
+        <tr className={classesToAdd} onClick={() => handleClick(leagueTableProps.leagueTableRow)}>
             <td className='col-3'>{leagueTableProps.leagueTableRow.teamName}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.pld}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.won}</td>
