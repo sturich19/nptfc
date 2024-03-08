@@ -2,5 +2,6 @@ export interface Player{
     id : number,
     firstname?: string,
     surname? : string,
-    position : number
+    position : number,
+    nickname : string
 }

@@ -26,7 +26,7 @@ export default function LeagueResultsPage()
                         : <div></div>
                     }
                 </div>
-                <div className="col-2">
+                <div className="col-2 button-area">
                     <button className="btn btn-secondary" onClick={()=> navigate('/season/' + id)}>Back</button>                        
                 </div>
             </div>            

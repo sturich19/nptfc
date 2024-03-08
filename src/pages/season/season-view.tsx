@@ -100,7 +100,7 @@ export default function SeasonView()
                                     <div className="row">
                                         <div className="col-sm-1 .d-none .d-sm-block"></div>
                                         {   leagueTable ? 
-                                                <div className="col-10">  
+                                                <div className="col-12 col-sm-10">  
                                                     {leagueTable.length > 0 ? <LeagueTableComponent leagueTableRows={leagueTable}></LeagueTableComponent> : <div></div>}
                                                 </div>
                                             : <p>Loading Table...</p>}
@@ -121,7 +121,7 @@ export default function SeasonView()
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                            <div className="col-10">                                                                                      
+                                            <div className="col-12 col-sm-10">                                                                                      
                                                 <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>                             
                                             </div>
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>  

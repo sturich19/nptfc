@@ -39,6 +39,14 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
             case "shotsOff":
                 gameStatProps.gameStats.sort((a , b) => b.shotsOffTarget - a.shotsOffTarget)
                 break;
+
+            case "saves":
+                gameStatProps.gameStats.sort((a , b) => b.saves - a.saves)
+                break;
+
+            case "cs":
+                gameStatProps.gameStats.sort((a , b) => b.cleanSheets - a.cleanSheets)
+                break;
         }
         setSort(sort + 1);
     }
@@ -56,9 +64,9 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                             <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                             <th className="sortable" onClick={() => Sort("shots")}>Shots</th>
                             <th className="sortable" onClick={() => Sort("shotsOn")}>On</th>
-                            <th className="sortable" onClick={() => Sort("shotsOff")}>Off</th>
-                            <th>CS</th>  
-                            <th>Saves</th>  
+                            <th className="sortable" onClick={() => Sort("shotsOff")}>Off</th>                            
+                            <th className="sortable" onClick={() => Sort("cs")}>CS</th>
+                            <th className="sortable" onClick={() => Sort("saves")}>Saves</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">

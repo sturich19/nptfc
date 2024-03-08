@@ -1,5 +1,3 @@
-import './header-styles.css';
-
 interface HeaderAtomProps{
     headerText? : string
 }
