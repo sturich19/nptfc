@@ -12,9 +12,9 @@ const AdminPlayer = ()  =>
     const filteredPositionOptions = positions.filter(option => !isNaN(Number(option.key)))
 
     const formik = useFormik({
-        initialValues :{ firstname: "", surname: "", position : 0},
+        initialValues :{ firstname: "", surname: "", position : 0, nickname : ""},
         onSubmit : values => {
-            const player : Player = {id : 0, firstname: values.firstname, surname: values.surname, position : parseInt(values.position.toString())}
+            const player : Player = {id : 0, firstname: values.firstname, surname: values.surname, position : parseInt(values.position.toString()), nickname : values.nickname}
             PostPlayer(player).then(formik.resetForm);
         }
     });
@@ -29,6 +29,9 @@ const AdminPlayer = ()  =>
                         </div>
                         <div className="col-3">
                             <TextField label="Surname" name="surname" formik={formik}/>
+                        </div>  
+                        <div className="col-3">
+                            <TextField label="Nickname" name="nickname" formik={formik}/>
                         </div>  
                         <div className="col-3">
                             <label htmlFor="position" className="col-form-label">Game Type
