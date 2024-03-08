@@ -10,6 +10,7 @@ import { GetPlayers } from "../../services/player-service";
 import { GameStat } from "../../objects/game-stat";
 import { PostGameStat } from "../../services/game-stat-service";
 import TextField from "../../atoms/textfield/textfield";
+import { FormatDate } from "../../utils/formatter-util";
 
 const AdminGameStats = ()  =>
 {   
@@ -57,7 +58,7 @@ const AdminGameStats = ()  =>
                                 <select id="fixture" className="form-control" {...formik.getFieldProps("fixture")}>                                     
                                     <option>Select your option</option>
                                     {fixtures?.map(option => (
-                                        <option key={option.id} value={option.id}>{new Date(option.date).toLocaleDateString("en-UK") + " - " + option.homeTeam + " vs " + option.awayTeam}</option>
+                                        <option key={option.id} value={option.id}>{FormatDate(option.date) + " - " + option.homeTeam + " vs " + option.awayTeam}</option>
                                     ))}
                                 </select>
                             </label>

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { GetFixtureGrid } from "../../services/fixture-service";
 import { FixtureGrid } from "../../objects/fixture-grid";
 import { useNavigate } from 'react-router-dom';
+import { FormatDate } from '../../utils/formatter-util';
 
 
 interface FixtureGridProps
@@ -51,11 +52,11 @@ const FixtureGridComponent = (seasonId : FixtureGridProps) =>
                                                 :                                                  
                                                 (fixture.knownScore ?
                                                     <td key={index} className="table-success" onClick={( ) => handleResultClick(fixture.id)}>
-                                                        {fixture.homeTeamScore + ' v ' + fixture.awayTeamScore} ({new Date(fixture.date).toLocaleDateString("en-UK")})
+                                                        {fixture.homeTeamScore + ' v ' + fixture.awayTeamScore} ({FormatDate(fixture.date)})
                                                     </td> 
                                                     :
-                                                    <td key={index} className="table-success" onClick={( ) => handleResultClick(fixture.id)}>
-                                                        {new Date(fixture.date).toLocaleDateString("en-UK")}
+                                                    <td key={index} onClick={( ) => handleResultClick(fixture.id)}>
+                                                        {FormatDate(fixture.date)}
                                                     </td>
                                                 )            
                                     )}                                  

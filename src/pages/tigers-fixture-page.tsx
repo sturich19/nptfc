@@ -8,6 +8,7 @@ import { TigersFixture } from "../objects/tigers-fixture";
 import { FantasyStat } from "../objects/fantasy-stat";
 import { GetFixtureFantasyStats } from "../services/fantasy-stat-service";
 import FantasyStatTable from "../components/fantasy/fantasy-stat-table";
+import { FormatDate } from "../utils/formatter-util";
 
 export default function TigersFixturePage()
 {
@@ -31,7 +32,7 @@ export default function TigersFixturePage()
                 <div className="col-10">
                     {   fixture ? 
                         <>
-                            <h6>{new Date(fixture.date).toLocaleDateString("en-UK")}</h6>
+                            <h6>{FormatDate(fixture.date)}</h6>
                             <h6>{fixture.homeTeam}  {fixture.homeTeamScore}   v  {fixture.awayTeamScore}  {fixture.awayTeam} </h6>                             
                         </>
                         : <p>Loading Fixture...</p>}

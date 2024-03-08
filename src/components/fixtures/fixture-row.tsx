@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Fixture } from '../../objects/fixture';
+import { FormatDate } from '../../utils/formatter-util';
 
 interface FixtureItemComponentProps
 {
@@ -20,7 +21,7 @@ const FixtureRow = ({fixture} : FixtureItemComponentProps) => {
     return(  
         
         <tr onClick={( ) => handleResultClick(fixture.id)}>
-            <td className='col-1'>{new Date(fixture.date).toLocaleDateString("en-UK")}</td>            
+            <td className='col-1'>{FormatDate(fixture.date)}</td>            
             <td className='col-3'>{fixture.homeTeam}</td>
             <td className='col-1'>{fixture.homeTeamScore}</td>
             <td className='col-1'>V</td>

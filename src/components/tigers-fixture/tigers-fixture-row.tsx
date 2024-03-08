@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { TigersFixture } from '../../objects/tigers-fixture';
 import './tigers-fixtures.css';
+import { FormatDate } from '../../utils/formatter-util';
 
 interface TigersFixtureItemComponentProps
 {
@@ -22,15 +23,15 @@ const TigersFixtureRow = ({fixture} : TigersFixtureItemComponentProps) => {
     switch(fixture.result)
     {
         case 0:
-            resultClassToAdd = "table-success col-1";
+            resultClassToAdd = "table-success";
             result = "W";
             break;
         case 1:            
-            resultClassToAdd = "table-danger col-1";
+            resultClassToAdd = "table-danger";
             result = "L";
             break;
         case 2:
-            resultClassToAdd = "table-secondary col-1";
+            resultClassToAdd = "table-secondary";
             result = "D";
             break;
     }    
@@ -51,14 +52,14 @@ const TigersFixtureRow = ({fixture} : TigersFixtureItemComponentProps) => {
     return(  
         
         <tr onClick={() => handleClick(fixture.id)}>
-            <td className='col-1'>{new Date(fixture.date).toLocaleDateString("en-UK")}</td>                        
+            <td >{FormatDate(fixture.date)}</td>                        
             <td className={resultClassToAdd}>{result}</td>
-            <td className='col-3'>{fixture.homeTeam}</td>
-            <td className='col-1'>{fixture.homeTeamScore}</td>
-            <td className='col-1'>V</td>
-            <td className='col-1'>{fixture.awayTeamScore}</td>            
-            <td className='col-3'>{fixture.awayTeam}</td>
-            <td className='col-1'>{gameType}</td>
+            <td >{fixture.homeTeam}</td>
+            <td >{fixture.homeTeamScore}</td>
+            <td >V</td>
+            <td >{fixture.awayTeamScore}</td>            
+            <td >{fixture.awayTeam}</td>
+            <td >{gameType}</td>
         </tr>                
         
     )
