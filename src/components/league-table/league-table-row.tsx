@@ -30,7 +30,6 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
             <td className='col-1'>{leagueTableProps.leagueTableRow.glsA}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.gd}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.points}</td>  
-            <td className='col-1'>{leagueTableProps.leagueTableRow.achieveablePoints}</td>
         </tr>                
         </>   
     )
