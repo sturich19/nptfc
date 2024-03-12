@@ -180,6 +180,31 @@ public class FixturesController : ControllerBase
                     .ToListAsync();
     }    
 
+
+    [HttpGet("date/{seasonId},{date}", Name = "GetFixturesForDate")]
+    public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetFixturesForDate(int seasonId, DateTime date)
+    {
+
+        return await _context.Fixtures
+                .Select(fixture => new FixtureDTO
+                {
+                    Id = fixture.Id,
+                    Date = fixture.Date,
+                    AwayTeam = fixture.AwayTeam.Name,
+                    AwayTeamId = fixture.AwayTeam.Id,
+                    AwayTeamScore = fixture.AwayTeamScore,
+                    HomeTeam = fixture.HomeTeam.Name,
+                    HomeTeamId = fixture.HomeTeam.Id,
+                    HomeTeamScore = fixture.HomeTeamScore,
+                    KnownScore = fixture.KnownScore,
+                    SeasonId = fixture.SeasonId  
+                })                
+                .Where(f=> seasonId == f.SeasonId)
+                .Where(f => date.Date == f.Date.Date)                    
+                .ToListAsync();
+    }
+
+
     [HttpGet("results/{seasonId},{teamId}", Name = "GetResultsForTeam")]
     public async Task<ActionResult<TeamsFixturesDTO>> GetResultsForTeam(int seasonId, int teamId)
     {
