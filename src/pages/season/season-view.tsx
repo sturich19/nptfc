@@ -18,6 +18,7 @@ import FixtureGridComponent from '../../components/fixtures/fixture-grid';
 import { GetSeason } from '../../services/season-service';
 import { Season } from '../../objects/season';
 import ButtonAtom from '../../atoms/button/button-atom';
+import FixtureList from '../../components/fixtures/fixture-list';
 
 export default function SeasonView()
 {
@@ -87,12 +88,12 @@ export default function SeasonView()
                                 </div>  
 
                                 <div className='row'>  
-                                    <div className='col-2'></div>
-                                    <ButtonAtom label="League" clickHander={() => handleSideBarItemClick(0)}></ButtonAtom>
-                                    <ButtonAtom label="Grid" clickHander={() => handleSideBarItemClick(2)}></ButtonAtom>
-                                    <ButtonAtom label="Stats" clickHander={() => handleSideBarItemClick(1)}></ButtonAtom>
-                                    <ButtonAtom label="Fantasy" clickHander={() => handleSideBarItemClick(3)}></ButtonAtom>
-                                    <div className='col-2'></div>
+                                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
+                                    <ButtonAtom label="League" clickHandler={() => handleSideBarItemClick(0)}></ButtonAtom>
+                                    <ButtonAtom label="Fixtures" clickHandler={() => handleSideBarItemClick(2)}></ButtonAtom>
+                                    <ButtonAtom label="Stats" clickHandler={() => handleSideBarItemClick(1)}></ButtonAtom>
+                                    <ButtonAtom label="Fantasy" clickHandler={() => handleSideBarItemClick(3)}></ButtonAtom>
+                                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
                                 </div>                             
                                
                                 {/* League Table */}
@@ -121,7 +122,7 @@ export default function SeasonView()
                                         </div>
                                         <div className="row">
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                            <div className="col-12 col-sm-10">                                                                                      
+                                            <div className="col-12 col-sm-10">                                                                                                                                      
                                                 <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>                             
                                             </div>
                                             <div className="col-sm-1 .d-none .d-sm-block"></div>  
@@ -154,12 +155,21 @@ export default function SeasonView()
                                  <div></div>
                                } 
 
-                               {viewGrid ? 
-                                    <div className='row'>    
-                                        <div className="col-12">
-                                            <FixtureGridComponent seasonId={param.id}></FixtureGridComponent>
+                               {/* Fantasy Stats */}
+                               {viewGrid ?
+                                    <>
+                                        <div className='row'>    
+                                            <div className="col-12">
+                                                <FixtureList seasonId={param.id} date={new Date()}></FixtureList>
+                                            </div>
                                         </div>
-                                    </div>
+                                        {/* <div className='row'>    
+                                            <div className="col-12">
+                                                <FixtureGridComponent seasonId={param.id}></FixtureGridComponent>
+                                            </div>
+                                        </div> */}
+                                    </> 
+
                                     :
                                     <div></div>
                                 }   

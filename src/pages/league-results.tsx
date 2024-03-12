@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GetResultsForTeam } from "../services/fixture-service";
-import { Fixture } from "../objects/fixture";
 import FixtureTable from "../components/fixtures/fixture-table";
 import { TeamsFixtures } from "../objects/team-fixtures";
 import HeaderAtom from "../atoms/header/header-atom";

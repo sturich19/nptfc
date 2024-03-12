@@ -13,6 +13,17 @@ export const GetFixturesForSeason = async (seasonId : any) => {
     }
 };
 
+export const GetFixturesForDate = async (seasonId : any, date : any) => {
+    const url = API_URL + '/date/';
+
+    try {
+        const response = await axios.get(url + seasonId + "," + date);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
 export const GetResultsForTeam = async (seasonId : any, teamId : any) => {
     const url = API_URL + '/results/';
 
