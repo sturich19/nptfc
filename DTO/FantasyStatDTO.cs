@@ -122,16 +122,16 @@ namespace nptfcBE.DTO
             switch (player.Position)
             {
                 case Position.GK:
-                    return cleanSheets * 2;
+                    return cleanSheets * 4;
 
                 case Position.Defender:
-                    return cleanSheets * 2;
+                    return cleanSheets * 4;
 
                 case Position.Midfielder:
-                    return cleanSheets * 1;
+                    return cleanSheets * 4;
                 
                 case Position.Striker:
-                    return cleanSheets * 1;
+                    return cleanSheets * 4;
             }  
             return 0;
         }
