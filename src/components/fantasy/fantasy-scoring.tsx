@@ -52,7 +52,7 @@ const FantasyScoringTable = () => {
                         </tr>
                         <tr>
                             <td className="col-2">Clean Sheets</td>                                                                
-                            <td className="col-1">2</td>   
+                            <td className="col-1">3</td>   
                             <td className="col-1">0</td>
                             <td className="col-1">0</td>
                             <td className="col-1">0</td>                                
