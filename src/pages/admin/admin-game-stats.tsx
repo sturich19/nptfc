@@ -27,10 +27,10 @@ const AdminGameStats = ()  =>
 
     const navigate = useNavigate();  
     const formik = useFormik({
-        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, tackles : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0},
+        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, tackles : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0},
         onSubmit : values => {
             const gameStat : GameStat = {id : values.id, playerId : values.player, fixtureId : values.fixture, goals : values.goals, assists : values.assists, gso : values.gso, apps : 0, playerName: "", shots : values.shots, tackles : values.tackles, seasonId : values.season,
-                                        shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves}
+                                        shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves, penSaves : values.penSaves}
                                                     
             PostGameStat(gameStat).then(formik.resetForm);
         }
@@ -105,6 +105,10 @@ const AdminGameStats = ()  =>
                         </div>
                         <div className="col-2">
                             <TextField label="Saves" name="saves" formik={formik}/>                            
+                        </div>
+
+                        <div className="col-2">
+                            <TextField label="Pen Saves" name="penSaves" formik={formik}/>                            
                         </div>
                     </div> 
                    

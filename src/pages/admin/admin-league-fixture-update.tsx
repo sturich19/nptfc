@@ -26,7 +26,7 @@ const AdminLeagueFixtureUpdate = ()  =>
             }
         });     
               
-    },[id, fixture])
+    },[])
 
     const formik = useFormik({
         initialValues :{  homeTeamScore : homeTeamScore, awayTeamScore : awayTeamScore },

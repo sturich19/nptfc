@@ -23,5 +23,7 @@ export interface FantasyStat{
     totalPoints : number,
     saves : number, 
     savesPts : number,
-    position : Position
+    position : Position,
+    penSaves : number,
+    penSavesPts : number
 }

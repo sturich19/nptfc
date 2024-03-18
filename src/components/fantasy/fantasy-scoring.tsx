@@ -64,6 +64,13 @@ const FantasyScoringTable = () => {
                             <td className="col-1">0</td>
                             <td className="col-1">0</td>                                
                         </tr>
+                        <tr>
+                            <td className="col-2">Pen Saves</td>                                                                
+                            <td className="col-1">3</td>   
+                            <td className="col-1">3</td>
+                            <td className="col-1">3</td>
+                            <td className="col-1">3</td>                                
+                        </tr>
                     </tbody>
             </table>
             </div>  

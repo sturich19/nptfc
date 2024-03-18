@@ -67,6 +67,7 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                                 <th className="sortable" onClick={() => Sort("shots")}>Shots</th>                                                      
                                 <th className="sortable" onClick={() => Sort("cs")}>CS</th> 
                                 <th className="sortable" onClick={() => Sort("saves")}>Saves</th> 
+                                <th className="sortable" onClick={() => Sort("pens")}>Pen Saves</th> 
                             </tr>
                         </thead>
                         <tbody className="table-group-divider">
@@ -82,6 +83,7 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                                         <td className="col-1">{f.shots} ({f.shotPts})</td>                                
                                         <td className="col-1">{f.cleanSheets} ({f.cleanSheetPoints})</td>  
                                         <td className="col-1">{f.saves} ({f.savesPts})</td>
+                                        <td className="col-1">{f.penSaves} ({f.penSavesPts})</td>
                                     </tr>
                                 </>
                             )}
