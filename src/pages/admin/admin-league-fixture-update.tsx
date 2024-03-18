@@ -43,7 +43,7 @@ const AdminLeagueFixtureUpdate = ()  =>
     return(           
         <form onSubmit={formik.handleSubmit} className="admin-league-fixture-update">
             <div className="row">
-              <h6>{fixture?.homeTeam} {fixture?.awayTeamScore} vs {fixture?.awayTeamScore} {fixture?.awayTeam} </h6>
+              <h6>{fixture?.homeTeam} {fixture?.homeTeamScore} vs {fixture?.awayTeamScore} {fixture?.awayTeam} </h6>
             </div>
             <div className="row admin-controls-body">
                 <div className="col-6">
