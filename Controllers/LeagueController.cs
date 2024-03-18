@@ -83,12 +83,8 @@ public class LeagueController : ControllerBase
         return _context.League.Any(e => e.Id == id);
     }
 
-    internal async void UpdateLeagueWithResult(FixtureDTO fixture, Team homeTeam, Team awayTeam)
+    internal async Task UpdateLeagueWithResult(FixtureDTO fixture, Team homeTeam, Team awayTeam)
     {
-        // Its a score we already know - we dont need to add a league result for this.
-        if (fixture.KnownScore)
-            return;
-
         var existingHomeTeam  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id);
         if (existingHomeTeam == null)
             return;
@@ -120,8 +116,118 @@ public class LeagueController : ControllerBase
         {
             existingHomeTeam.Drawn++;
             existingAwayTeam.Drawn++;
-        }
-
-        
+        } 
     }    
+
+    internal async Task UpdateLeagueAfterScrewUp(FixtureDTO fixture, Team homeTeam, Team awayTeam, Fixture existingFixture)
+    {
+        var homeTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id);
+        if (homeTeamLeagueStats == null)
+            return;
+
+        var awayTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == awayTeam.Id);
+        if (awayTeamLeagueStats == null)
+            return;
+
+        _context.Entry(homeTeamLeagueStats).State = EntityState.Modified;
+        _context.Entry(awayTeamLeagueStats).State = EntityState.Modified;   
+
+        // Reset the goals for the game. Then add on the goals from the updated fixture.
+        homeTeamLeagueStats.GlsFor -= existingFixture.HomeTeamScore;
+        homeTeamLeagueStats.GlsA -= existingFixture.AwayTeamScore;
+        awayTeamLeagueStats.GlsFor -= existingFixture.AwayTeamScore;
+        awayTeamLeagueStats.GlsA -= existingFixture.HomeTeamScore;    
+
+        homeTeamLeagueStats.GlsFor += fixture.HomeTeamScore;
+        homeTeamLeagueStats.GlsA += fixture.AwayTeamScore;
+        awayTeamLeagueStats.GlsFor += fixture.AwayTeamScore;
+        awayTeamLeagueStats.GlsA += fixture.HomeTeamScore;     
+
+        // Goals are updated - we now need to set the WLD correctly.
+        switch (WhoWonTheGame(existingFixture.HomeTeamScore, existingFixture.AwayTeamScore))
+        {
+            case WhoWon.Home:
+            {
+                // Originally the home team won. If thats still the same. Do nothing - could just be a score update.
+                if (fixture.HomeTeamScore > fixture.AwayTeamScore)
+                    break;
+
+                // Originally the home team won. Its now a loss.
+                if (fixture.HomeTeamScore < fixture.AwayTeamScore)
+                {
+                    homeTeamLeagueStats.Won--;
+                    homeTeamLeagueStats.Lost++;
+                    awayTeamLeagueStats.Won++;
+                    awayTeamLeagueStats.Lost--;
+                    break;
+                }
+                    
+                // Originally the home team won. Its now a draw.
+                homeTeamLeagueStats.Won--;
+                homeTeamLeagueStats.Drawn++;
+                awayTeamLeagueStats.Lost--;
+                awayTeamLeagueStats.Drawn++;
+                break;
+            }
+
+            case WhoWon.Away:
+            {
+                 // Originally the away team won. If thats still the same. Do nothing. Could just be a score update.
+                if (fixture.HomeTeamScore < fixture.AwayTeamScore)
+                    break;
+
+                // Originally the away team won. Its now a loss.
+                if (fixture.HomeTeamScore > fixture.AwayTeamScore)
+                {
+                    awayTeamLeagueStats.Won--;
+                    awayTeamLeagueStats.Lost++;
+                    homeTeamLeagueStats.Won++;
+                    homeTeamLeagueStats.Lost--;
+                    break;
+                }
+                    
+                // Originally the away team won. Its now a draw.
+                awayTeamLeagueStats.Won--;
+                awayTeamLeagueStats.Drawn++;
+                homeTeamLeagueStats.Lost--;
+                homeTeamLeagueStats.Drawn++;
+                break;
+            }
+
+            case WhoWon.Draw:
+            {
+                 // Originally it was a draw. If thats still the same. Do nothing.
+                if (fixture.HomeTeamScore == fixture.AwayTeamScore)
+                    break;
+
+                // Originally it was a draw. Its now a home team win
+                if (fixture.HomeTeamScore > fixture.AwayTeamScore)
+                {
+                    homeTeamLeagueStats.Drawn--;
+                    homeTeamLeagueStats.Won++;   
+                    awayTeamLeagueStats.Drawn--;                 
+                    awayTeamLeagueStats.Lost++;  
+                    break;
+                }
+                    
+                // Originally it was a draw. Its now a away team win
+                awayTeamLeagueStats.Won++;
+                awayTeamLeagueStats.Drawn--;
+                homeTeamLeagueStats.Lost++;
+                homeTeamLeagueStats.Drawn--;
+                break;
+            }
+        }   
+    }    
+
+    private WhoWon WhoWonTheGame(int homeScore, int awayScore)
+    {
+        if (homeScore> awayScore)
+            return WhoWon.Home;
+
+        if (awayScore > homeScore)
+            return WhoWon.Away;
+
+        return WhoWon.Draw;        
+    }
 }

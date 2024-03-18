@@ -275,16 +275,34 @@ public class FixturesController : ControllerBase
         if (homeTeam == null || awayTeam == null || season == null)
             return BadRequest();
 
-        Fixture fixtureToUpdate = Fixture.Create(fixture, homeTeam, awayTeam, season);  
+        Fixture originalFixture = await _context.Fixtures.FirstOrDefaultAsync(f => f.Id == fixture.Id);            
+        
+        if (fixture.KnownScore)
+        {
+            // Its a score we already know - we dont need to add a league result for this. We need to update it.
+            await _leagueController.UpdateLeagueAfterScrewUp(fixture, homeTeam, awayTeam, originalFixture);                
+        }   
+        else
+        {
+            await _leagueController.UpdateLeagueWithResult(fixture, homeTeam, awayTeam);
+        }
+
+        await _context.SaveChangesAsync();
+
+        // Now ensure the fixture object itself is updated.
+        Fixture fixtureToUpdate = Fixture.Create(fixture, homeTeam, awayTeam, season); 
         fixtureToUpdate.Id = fixture.Id;
-        fixtureToUpdate.KnownScore = true;
-        _context.Entry(fixtureToUpdate).State = EntityState.Modified;
 
         try
         {
-            // Update the laague with the result.
-            _leagueController.UpdateLeagueWithResult(fixture, homeTeam, awayTeam);
-
+            fixtureToUpdate.KnownScore = true;
+            var existingEntity = _context.Fixtures.Find(fixtureToUpdate.Id);
+            if (existingEntity != null)
+                _context.Entry(existingEntity).State = EntityState.Detached;
+            
+            _context.Fixtures.Attach(fixtureToUpdate);
+            _context.Entry(fixtureToUpdate).State = EntityState.Modified;
+            
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
