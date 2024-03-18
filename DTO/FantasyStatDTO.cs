@@ -26,6 +26,8 @@ namespace nptfcBE.DTO
         public int SavesPts {get; set;}
         public int TotalPoints {get; set;}   
         public Position Position {get; set; }     
+        public int PenSaves {get; set;}   
+        public int PenSavesPts {get; set;}   
 
         public static FantasyStatDTO Create(Player player, GameStatDTO gameStat)
         {
@@ -33,6 +35,7 @@ namespace nptfcBE.DTO
             int gsoPts = CalculateGSOPts(player, gameStat.GSO);      
             int shotPts = CalculateShotPts(player, gameStat.Shots);  
             int cleanSheetPts = CalculateCleanSheetPts(player, gameStat.CleanSheets);     
+            int penSavesPts = CalculatePenSavesPts(player, gameStat.PenSaves);
 
             return new FantasyStatDTO(){
                 Id = gameStat.Id,
@@ -46,7 +49,7 @@ namespace nptfcBE.DTO
                 PlayerId = gameStat.PlayerId,
                 PlayerName = gameStat.PlayerName,
                 SeasonId = gameStat.SeasonId,
-                TotalPoints = (gameStat.Apps * 2) + goalPts + (gameStat.Assists * 3) + gsoPts + shotPts + cleanSheetPts + gameStat.Saves,
+                TotalPoints = (gameStat.Apps * 2) + goalPts + (gameStat.Assists * 3) + gsoPts + shotPts + cleanSheetPts + gameStat.Saves + penSavesPts,
                 Apps = gameStat.Apps,
                 Assists = gameStat.Assists,
                 CleanSheets = gameStat.CleanSheets,
@@ -56,7 +59,9 @@ namespace nptfcBE.DTO
                 Tackles = gameStat.Tackles,
                 Saves = gameStat.Saves,
                 SavesPts = gameStat.Saves,
-                Position = player.Position
+                Position = player.Position,
+                PenSaves = gameStat.PenSaves,
+                PenSavesPts = penSavesPts
             };
         }
 
@@ -135,6 +140,26 @@ namespace nptfcBE.DTO
             }  
             return 0;
         }
+
+        private static int CalculatePenSavesPts(Player player, int penSaves) 
+        {
+            switch (player.Position)
+            {
+                case Position.GK:
+                    return penSaves * 3;
+
+                case Position.Defender:
+                    return penSaves * 3;
+
+                case Position.Midfielder:
+                    return penSaves * 3;
+                
+                case Position.Striker:
+                    return penSaves * 3;
+            }  
+            return 0;
+        }
+        
         
     }
 }

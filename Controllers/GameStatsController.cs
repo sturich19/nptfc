@@ -48,7 +48,8 @@ public class GameStatsController : ControllerBase
             ShotsOnTarget = gameStat.ShotsOnTarget,
             ShotsOffTarget = gameStat.ShotsOffTarget,
             Saves = gameStat.Saves,
-            CleanSheets = gameStat.CleanSheets
+            CleanSheets = gameStat.CleanSheets,
+            PenSaves = gameStat.PenSaves
         };                   
     }       
 
@@ -73,11 +74,11 @@ public class GameStatsController : ControllerBase
                         PlayerId =  gameStatGroup.First().p.Id,
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
                         PlayerName = gameStatGroup.First().p.Nickname,
-                        ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
-                        ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
-                        Saves = gameStatGroup.First().gs.Saves,
-                        CleanSheets = gameStatGroup.First().gs.CleanSheets
-
+                        ShotsOnTarget = gameStatGroup.Sum(x => x.gs.ShotsOnTarget),
+                        ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
+                        Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
                     })                                                                                         
                     .ToListAsync(); 
 
@@ -103,8 +104,8 @@ public class GameStatsController : ControllerBase
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
-                        CleanSheets = gameStat.CleanSheets
-                        
+                        CleanSheets = gameStat.CleanSheets,
+                        PenSaves = gameStat.PenSaves                        
                     })        
                     .Where(g => g.PlayerId == playerId)                                                                
                     .ToListAsync();                   
@@ -133,10 +134,11 @@ public class GameStatsController : ControllerBase
                         PlayerId =  gameStatGroup.First().p.Id,
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
                         PlayerName = gameStatGroup.First().p.Nickname,
-                        ShotsOnTarget = gameStatGroup.First().gs.ShotsOnTarget,
-                        ShotsOffTarget = gameStatGroup.First().gs.ShotsOffTarget,
-                        Saves = gameStatGroup.First().gs.Saves,
-                        CleanSheets = gameStatGroup.First().gs.CleanSheets
+                        ShotsOnTarget = gameStatGroup.Sum(x => x.gs.ShotsOnTarget),
+                        ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
+                        Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
                     })                                                                                         
                     .ToListAsync();                   
     }   
@@ -161,7 +163,8 @@ public class GameStatsController : ControllerBase
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
-                        CleanSheets = gameStat.CleanSheets
+                        CleanSheets = gameStat.CleanSheets,
+                        PenSaves = gameStat.PenSaves,
                     })        
                     .Where(g => g.FixtureId == fixtureId)                                                                
                     .ToListAsync();                   
@@ -187,7 +190,8 @@ public class GameStatsController : ControllerBase
                         ShotsOnTarget = gameStat.ShotsOnTarget,
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
-                        CleanSheets = gameStat.CleanSheets
+                        CleanSheets = gameStat.CleanSheets,
+                        PenSaves = gameStat.PenSaves
                     })        
                     .Where(g => playerId == g.PlayerId)      
                     .Where(g => g.SeasonId == seasonId)                                          

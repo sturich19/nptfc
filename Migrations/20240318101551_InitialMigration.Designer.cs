@@ -12,7 +12,7 @@ using nptfcBE.Models;
 namespace nptfcBE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240308170443_InitialMigration")]
+    [Migration("20240318101551_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -86,6 +86,9 @@ namespace nptfcBE.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Goals")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PenSaves")
                         .HasColumnType("int");
 
                     b.Property<int>("PlayerId")

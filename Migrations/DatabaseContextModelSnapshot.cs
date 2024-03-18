@@ -85,6 +85,9 @@ namespace nptfcBE.Migrations
                     b.Property<int>("Goals")
                         .HasColumnType("int");
 
+                    b.Property<int>("PenSaves")
+                        .HasColumnType("int");
+
                     b.Property<int>("PlayerId")
                         .HasColumnType("int");
 

@@ -20,6 +20,7 @@ namespace nptfcBE.Models
         public int ShotsOnTarget { get; set;}
         public int ShotsOffTarget { get; set;}
         public int Saves { get; set;}
+        public int PenSaves { get; set;}
 
         public GameStat()
         {
@@ -46,7 +47,8 @@ namespace nptfcBE.Models
                 ShotsOnTarget = dto.ShotsOnTarget,    
                 ShotsOffTarget = dto.ShotsOffTarget,
                 Saves = dto.Saves,
-                CleanSheets = dto.CleanSheets
+                CleanSheets = dto.CleanSheets,
+                PenSaves = dto.PenSaves
             };
         }
     }

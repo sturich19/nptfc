@@ -188,7 +188,8 @@ namespace nptfcBE.Migrations
                     CleanSheets = table.Column<int>(type: "int", nullable: false),
                     ShotsOnTarget = table.Column<int>(type: "int", nullable: false),
                     ShotsOffTarget = table.Column<int>(type: "int", nullable: false),
-                    Saves = table.Column<int>(type: "int", nullable: false)
+                    Saves = table.Column<int>(type: "int", nullable: false),
+                    PenSaves = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

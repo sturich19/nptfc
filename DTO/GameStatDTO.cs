@@ -13,6 +13,7 @@ namespace nptfcBE.DTO
         public int Shots {get; set;}
         public int Tackles {get; set;}
         public int CleanSheets {get; set;}
+        public int PenSaves {get; set;}
         public string? PlayerName {get; set;}
         public int ShotsOnTarget { get; set;}
         public int ShotsOffTarget { get; set;}

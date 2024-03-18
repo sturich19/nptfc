@@ -52,6 +52,7 @@ public class FantasyStatsController : ControllerBase
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
                     })                                                                                         
                     .ToListAsync(); 
         
@@ -102,6 +103,7 @@ public class FantasyStatsController : ControllerBase
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
                     })                                                                                         
                     .ToListAsync(); 
         
@@ -141,7 +143,8 @@ public class FantasyStatsController : ControllerBase
                         SeasonId = gameStatGroup.First().gs.SeasonId,                       
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
-                        Saves = gameStatGroup.Sum(x => x.gs.Saves)
+                        Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
                     })                                                                                         
                     .ToListAsync(); 
         
