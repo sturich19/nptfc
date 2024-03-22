@@ -3,5 +3,6 @@ export interface Player{
     firstname?: string,
     surname? : string,
     position : number,
-    nickname : string
+    nickname : string,
+    shirt : number,
 }
