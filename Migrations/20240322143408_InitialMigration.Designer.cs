@@ -12,7 +12,7 @@ using nptfcBE.Models;
 namespace nptfcBE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240318101551_InitialMigration")]
+    [Migration("20240322143408_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -176,6 +176,9 @@ namespace nptfcBE.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Position")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShirtNumber")
                         .HasColumnType("int");
 
                     b.Property<string>("Surname")

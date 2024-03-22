@@ -6,6 +6,7 @@ namespace nptfcBE.Models
         public string? Firstname {get; set;}
         public string? Surname {get; set;}  
         public string? Nickname {get; set;}
+        public int ShirtNumber {get; set;}
 
         public Position Position {get; set; }
         public ICollection<GameStat> GameStats {get; set;}
