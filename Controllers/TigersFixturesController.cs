@@ -39,7 +39,7 @@ public class TigersFixturesController : ControllerBase
                         GlsA = fixture.GlsA,
                         SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear
                     })
-                    .OrderBy(f  => f.Date)                    
+                    .OrderByDescending(f  => f.Date)                    
                     .ToListAsync();
 
             

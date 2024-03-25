@@ -17,9 +17,7 @@ namespace nptfcBE.DTO
         public int GSOPts {get; set;}
         public int GSO {get; set;}
         public int ShotPts {get; set;}
-        public int Shots {get; set;}
-        public int TacklePts {get; set;}
-        public int Tackles {get; set;}
+        public int Shots {get; set;}        
         public int CleanSheetPoints {get; set;}
         public int CleanSheets {get; set;}
         public int Saves {get; set;}
@@ -43,8 +41,7 @@ namespace nptfcBE.DTO
                 GoalPts = goalPts,
                 AssistsPts = gameStat.Assists * 3,
                 GSOPts = gsoPts,
-                ShotPts = shotPts,
-                TacklePts = gameStat.Tackles,
+                ShotPts = shotPts,                
                 CleanSheetPoints = cleanSheetPts,
                 PlayerId = gameStat.PlayerId,
                 PlayerName = gameStat.PlayerName,
@@ -55,8 +52,7 @@ namespace nptfcBE.DTO
                 CleanSheets = gameStat.CleanSheets,
                 Goals = gameStat.Goals,
                 GSO = gameStat.GSO,
-                Shots = gameStat.Shots,
-                Tackles = gameStat.Tackles,
+                Shots = gameStat.Shots,                
                 Saves = gameStat.Saves,
                 SavesPts = gameStat.Saves,
                 Position = player.Position,

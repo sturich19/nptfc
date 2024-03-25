@@ -11,8 +11,7 @@ namespace nptfcBE.Models
         public int Goals {get; set;}
         public int Assists  {get; set;}
         public int GSO {get; set;}
-        public int Shots {get; set;}
-        public int Tackles {get; set;}
+        public int Shots {get; set;}        
         public int CleanSheets {get; set;}
         public TigersFixture Fixture {get; set;}
         public Player Player {get; set;}
@@ -43,7 +42,6 @@ namespace nptfcBE.Models
                 GSO = dto.GSO,
                 Assists = dto.Assists,
                 Shots = dto.Shots,
-                Tackles = dto.Tackles,  
                 ShotsOnTarget = dto.ShotsOnTarget,    
                 ShotsOffTarget = dto.ShotsOffTarget,
                 Saves = dto.Saves,

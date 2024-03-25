@@ -185,7 +185,6 @@ namespace nptfcBE.Migrations
                     Assists = table.Column<int>(type: "int", nullable: false),
                     GSO = table.Column<int>(type: "int", nullable: false),
                     Shots = table.Column<int>(type: "int", nullable: false),
-                    Tackles = table.Column<int>(type: "int", nullable: false),
                     CleanSheets = table.Column<int>(type: "int", nullable: false),
                     ShotsOnTarget = table.Column<int>(type: "int", nullable: false),
                     ShotsOffTarget = table.Column<int>(type: "int", nullable: false),

@@ -106,9 +106,6 @@ namespace nptfcBE.Migrations
                     b.Property<int>("ShotsOnTarget")
                         .HasColumnType("int");
 
-                    b.Property<int>("Tackles")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("FixtureId");

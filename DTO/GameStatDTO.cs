@@ -11,7 +11,6 @@ namespace nptfcBE.DTO
         public int Assists  {get; set;}
         public int GSO {get; set;}
         public int Shots {get; set;}
-        public int Tackles {get; set;}
         public int CleanSheets {get; set;}
         public int PenSaves {get; set;}
         public string? PlayerName {get; set;}
