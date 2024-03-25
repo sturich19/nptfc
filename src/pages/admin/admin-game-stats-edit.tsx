@@ -10,7 +10,7 @@ const AdminGameStatsEdit = (adminProps : AdminGameStatProps)  =>
 
     const [gameStats, setGameStats] = useState(adminProps.players?.map(player => ({
         PlayerId: player.id,
-        id : 0, playerId : player.id, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: player.firstname + ' ' + player.surname, shots : 0, tackles : 0, season : 0
+        id : 0, playerId : player.id, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: player.firstname + ' ' + player.surname, shots : 0, season : 0
     })));
 
     const handleStatChange = (playerId : number, field : any, value : string) => {

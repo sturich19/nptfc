@@ -14,8 +14,7 @@ export interface FantasyStat{
     gso : number,
     gsoPts : number,
     shots : number,
-    shotPts : number,
-    tackles : number,
+    shotPts : number
     tacklePts : number,
     cleanSheets : number,
     cleanSheetPoints : number,
