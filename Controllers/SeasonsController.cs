@@ -21,8 +21,8 @@ public class SeasonsController : ControllerBase
     public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
     {
         return await _context.Seasons.ToListAsync();
-    }
-
+    }  
+    
     // GET: api/Seasons/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Season>> GetSeason(int id)
@@ -32,6 +32,13 @@ public class SeasonsController : ControllerBase
             return NotFound();        
 
         return season;
+    }
+
+      // GET: api/AgeGroups/5
+    [HttpGet("ageGroup/{id}")]
+    public async Task<ActionResult<IEnumerable<Season>>> GetSeasonsForAgeGroup(int id)
+    {
+        return await _context.Seasons.Where(s => s.AgeGroupId == id).ToListAsync();
     }
     #endregion Get Methods
 

@@ -15,7 +15,7 @@ public class DatabaseContext : DbContext
     public DbSet<TigersFixture> TigersFixtures { get; set; } = null!;
     public DbSet<Player> Players { get; set; } = null!;
     public DbSet<Team> Teams { get; set; } = null!;
-
+    public DbSet<AgeGroup> AgeGroups {get; set;} = null!;
     public DbSet<GameStat> GameStats { get; set; } = null!;
     public DbSet<League> League { get; set; } = null!;
 
@@ -23,6 +23,7 @@ public class DatabaseContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {        
+        modelBuilder.Entity<Season>().ToTable("AgeGroup");
         modelBuilder.Entity<Season>().ToTable("Season");
         modelBuilder.Entity<TigersFixture>().ToTable("TigersFixture")
             .HasOne(f => f.HomeTeam)
@@ -62,6 +63,6 @@ public class DatabaseContext : DbContext
             .HasOne(f => f.Player)            
             .WithMany(p => p.GameStats)
             .HasForeignKey(p => p.PlayerId);
-        modelBuilder.Entity<League>().ToTable("League");
+        modelBuilder.Entity<League>().ToTable("League");      
     }
 }

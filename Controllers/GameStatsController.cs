@@ -192,6 +192,40 @@ public class GameStatsController : ControllerBase
                     .ToListAsync();                   
     }   
 
+    [HttpGet("ageGroup/{ageGroupId}", Name = "GetGameStatsForAgeGroup")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForAgeGroup(int ageGroupId)
+    {
+
+            List<int> seasonsForAgeGroup = await _context.Seasons.Where(s => s.AgeGroupId == ageGroupId).Select(season => season.Id).ToListAsync();
+
+            // This is joining game stat with the players based on the season passed. Then summing up the data points for each "player"
+            return await _context.GameStats
+                    .Where(gameStat => seasonsForAgeGroup.Contains(gameStat.SeasonId))
+                    .Join(_context.Players,
+                        gs => gs.PlayerId, 
+                        p => p.Id,
+                        (gs, p) => new {gs, p})
+                    .GroupBy(x => x.gs.PlayerId)                    
+                    .Select(gameStatGroup => new GameStatDTO
+                    {
+                        Id = gameStatGroup.Key,
+                        Apps = gameStatGroup.Count(),
+                        Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        Assists = gameStatGroup.Sum(x => x.gs.Assists),
+                        GSO = gameStatGroup.Sum(x => x.gs.GSO),
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),                        
+                        PlayerId =  gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        PlayerName = gameStatGroup.First().p.Nickname,
+                        ShotsOnTarget = gameStatGroup.Sum(x => x.gs.ShotsOnTarget),
+                        ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
+                        Saves = gameStatGroup.Sum(x => x.gs.Saves),
+                        CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
+                    })                                                                                         
+                    .ToListAsync();                   
+    }  
+
 
     // POST: api/GameStat
     [HttpPost]

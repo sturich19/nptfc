@@ -12,7 +12,7 @@ using nptfcBE.Models;
 namespace nptfcBE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240322143408_InitialMigration")]
+    [Migration("20240510154728_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -24,6 +24,28 @@ namespace nptfcBE.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("nptfcBE.Models.AgeGroup", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EndYear")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StartYear")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AgeGroups");
+                });
 
             modelBuilder.Entity("nptfcBE.Models.Fixture", b =>
                 {
@@ -175,7 +197,7 @@ namespace nptfcBE.Migrations
                     b.Property<int>("Position")
                         .HasColumnType("int");
 
-                    b.Property<int>("ShirtNumber")
+                    b.Property<int?>("Shirt")
                         .HasColumnType("int");
 
                     b.Property<string>("Surname")
@@ -195,6 +217,9 @@ namespace nptfcBE.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AgeGroup")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AgeGroupId")
                         .HasColumnType("int");
 
                     b.Property<int>("Division")

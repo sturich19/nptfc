@@ -8,6 +8,7 @@ namespace nptfcBE.Models
         public int AgeGroup {get; set;}
         public string MonthStart {get; set;}
         public string MonthEnd {get; set;}
+        public int  AgeGroupId {get; set;}
 
         public int Division {get; set;}
 

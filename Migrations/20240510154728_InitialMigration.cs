@@ -12,6 +12,21 @@ namespace nptfcBE.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "AgeGroups",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StartYear = table.Column<int>(type: "int", nullable: false),
+                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    Age = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AgeGroups", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Player",
                 columns: table => new
                 {
@@ -20,7 +35,7 @@ namespace nptfcBE.Migrations
                     Firstname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Nickname = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ShirtNumber = table.Column<int>(type: "int", nullable: false),
+                    Shirt = table.Column<int>(type: "int", nullable: true),
                     Position = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -39,6 +54,7 @@ namespace nptfcBE.Migrations
                     AgeGroup = table.Column<int>(type: "int", nullable: false),
                     MonthStart = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MonthEnd = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AgeGroupId = table.Column<int>(type: "int", nullable: false),
                     Division = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -273,6 +289,9 @@ namespace nptfcBE.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AgeGroups");
+
             migrationBuilder.DropTable(
                 name: "Fixture");
 
