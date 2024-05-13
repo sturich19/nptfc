@@ -73,11 +73,11 @@ public class FantasyStatsController : ControllerBase
     /// </summary>
     /// <param name="ageGroup"></param>
     /// <returns></returns>
-    [HttpGet("ageGroup/{ageGroup}", Name = "GetFantasyStatsByAgeGroup")]
-    public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStatsByAgeGroup(int ageGroup)
+    [HttpGet("ageGroup/{ageGroupID}", Name = "GetFantasyStatsByAgeGroup")]
+    public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStatsByAgeGroup(int ageGroupId)
     {
         var seasonIds = _context.Seasons
-            .Where(s => s.AgeGroup == ageGroup)
+            .Where(s => s.AgeGroupId == ageGroupId)
             .Select(s => s.Id);
 
         // load all the stats for the season passed in - group by the player
