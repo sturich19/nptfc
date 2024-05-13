@@ -14,13 +14,7 @@ const HeaderMenuNav = () => {
                 sx={{ my: 2, color: 'white', display: 'block' }}
             >
             Players
-            </Button>              
-            <Button key={"fantasy"}
-                href="/Fantasy"
-                sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-            Fantasy
-            </Button>  
+            </Button>                         
             <Button key={"admin"}
                 href="/Admin"
                 sx={{ my: 2, color: 'white', display: 'block' }}

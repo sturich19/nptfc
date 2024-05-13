@@ -11,6 +11,17 @@ export const GetSeasons = async () => {
     }
 };
 
+export const GetSeasonsForAgeGroup = async (id: any) => {
+    const url = API_URL + '/ageGroup/';
+    
+    try {
+        const response = await axios.get(url + id);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
 export const GetSeason = async (id : any) => {
     const url = API_URL + '/';
 

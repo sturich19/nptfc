@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { FantasyStat } from '../objects/fantasy-stat';
 import { GetAgeGroupFantasyStats } from '../services/fantasy-stat-service';
 import FantasyStatTable from '../components/fantasy/fantasy-stat-table';
-import FantasyScoringTable from '../components/fantasy/fantasy-scoring';
 
 export default function FantasyStats()
 {
@@ -20,7 +19,7 @@ export default function FantasyStats()
                         <div className="row">
                             <FantasyStatTable fantasyStats={stats}></FantasyStatTable>
                         </div>  
-                        <FantasyScoringTable></FantasyScoringTable>  
+                        {/* <FantasyScoringTable></FantasyScoringTable>   */}
                     </div>        
                 </> 
             : <p>Loading...</p>}

@@ -53,16 +53,6 @@ const HeaderMenuCollapsed = () => {
                         </Typography>
                     </MenuItem>  
 
-                    <MenuItem key={"fantasy"} >
-                        <Typography 
-                            component="a" 
-                            href="/Fantasy" 
-                            textAlign="center" 
-                            sx={{mr: 2,display: { xs: 'flex', md: 'none' },flexGrow: 1,color: 'inherit',textDecoration: 'none',}}>
-                        Fantasy
-                        </Typography>
-                    </MenuItem>  
-
                     <MenuItem key={"admin"} >
                         <Typography 
                             component="a" 

@@ -33,6 +33,18 @@ export const GetSeasonGameStats = async (seasonId : any) => {
     }
 };
 
+export const GetAgeGroupGameStats = async (ageGroupId : any) => {
+    try {
+        
+        const url = API_URL + '/AgeGroup/';
+        const response = await axios.get(url + ageGroupId);
+        return response.data;
+        
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
 export const GetSeasonGameStatsForPlayer = async (seasonId : number, playerId : number) => {
     try {
         
