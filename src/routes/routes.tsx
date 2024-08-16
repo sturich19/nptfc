@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import {Route, Routes } from 'react-router-dom';
 import Layout from '../pages/layout';
 import Home from '../pages/home';
 import TigersFixturePage from '../pages/tigers-fixture-page';
@@ -13,36 +13,38 @@ import AdminTeam from '../pages/admin/admin-team';
 import AdminGameStats from '../pages/admin/admin-game-stats';
 import Players from '../pages/players';
 import AdminFixture from '../pages/admin/admin-fixture';
-import LeagueResultsPage from '../pages/league-results';
+import LeagueFixturesPage from '../pages/league-fixtures';
 import AdminLeagueFixtureUpdate from '../pages/admin/admin-league-fixture-update';
 import SeasonSelection from '../pages/season-selection';
+import LeagueFixtureHistory from '../pages/league-fixture-history';
+import Logout from '../pages/logout';
 
 const AppRoutes = () => {
 
-    return(
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Layout/>}>
-                    <Route index element={<Home/>}></Route>     
-                    <Route path="/season/:id" element={<SeasonView/>}></Route>
-                    <Route path="/seasons/:id" element={<SeasonSelection/>}></Route>
-                    <Route path="/players" element={<Players/>}></Route>
-                    <Route path="/TigersFixture/:id" element={<TigersFixturePage/>}></Route>
-                    <Route path="/LeagueResults/:id/:id2" element={<LeagueResultsPage/>}></Route>
-                    <Route path="/league/:id" element={<LeagueTablePage/>}></Route>
-                    <Route path="/admin" element={<Admin/>}></Route>
-                    <Route path="/AdminLeagueTableUpdate" element={<AdminLeagueTableUpdate/>}></Route>
-                    <Route path="/AdminFixture" element={<AdminFixture/>}></Route>
-                    <Route path="/AdminTigersFixture" element={<AdminTigersFixture/>}></Route>
-                    <Route path="/AdminSeason" element={<AdminSeason/>}></Route>                    
-                    <Route path="/AdminPlayer" element={<AdminPlayer/>}></Route>  
-                    <Route path="/AdminTeam" element={<AdminTeam/>}></Route>  
-                    <Route path="/AdminGameStats" element={<AdminGameStats/>}></Route>  
-                    <Route path="/AdminLeagueFixtureUpdate/:id" element={<AdminLeagueFixtureUpdate/>}></Route>                    
-                    <Route path="*" element={<Home/>}></Route>
-                </Route>
-            </Routes>
-        </BrowserRouter>   
+    return(        
+        <Routes>
+            <Route path="/" element={<Layout/>}>
+                <Route index element={<Home/>}></Route>     
+                <Route path="/season/:id" element={<SeasonView/>}></Route>
+                <Route path="/seasons/:id" element={<SeasonSelection/>}></Route>
+                <Route path="/players" element={<Players/>}></Route>
+                <Route path="/TigersFixture/:id" element={<TigersFixturePage/>}></Route>
+                <Route path="/LeagueFixtures/:id/:id2" element={<LeagueFixturesPage/>}></Route>
+                <Route path="/league/:id" element={<LeagueTablePage/>}></Route>
+                <Route path="/admin" element={<Admin/>}></Route>
+                <Route path="/AdminLeagueTableUpdate" element={<AdminLeagueTableUpdate/>}></Route>
+                <Route path="/AdminFixture" element={<AdminFixture/>}></Route>
+                <Route path="/AdminTigersFixture" element={<AdminTigersFixture/>}></Route>
+                <Route path="/AdminSeason" element={<AdminSeason/>}></Route>                    
+                <Route path="/AdminPlayer" element={<AdminPlayer/>}></Route>  
+                <Route path="/AdminTeam" element={<AdminTeam/>}></Route>  
+                <Route path="/AdminGameStats" element={<AdminGameStats/>}></Route>  
+                <Route path="/AdminLeagueFixtureUpdate/:id" element={<AdminLeagueFixtureUpdate/>}></Route>                    
+                <Route path="/LeagueFixtureHistory/:id" element={<LeagueFixtureHistory/>}></Route>  
+                <Route path="/Logout" element={<Logout/>}></Route>
+                <Route path="*" element={<Home/>}></Route>
+            </Route>
+        </Routes>        
     )
 }
 

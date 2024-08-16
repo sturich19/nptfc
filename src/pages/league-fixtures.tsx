@@ -5,7 +5,7 @@ import FixtureTable from "../components/fixtures/fixture-table";
 import { TeamsFixtures } from "../objects/team-fixtures";
 import HeaderAtom from "../atoms/header/header-atom";
 
-export default function LeagueResultsPage()
+export default function LeagueFixturesPage()
 {
     const navigate = useNavigate(); 
     const {id, id2} = useParams();

@@ -15,7 +15,8 @@ const FixtureRow = ({fixture} : FixtureItemComponentProps) => {
     const navigate = useNavigate();
     function handleResultClick(fixtureId : number)
     {
-        navigate('/AdminLeagueFixtureUpdate/' + fixtureId);
+         navigate('/AdminLeagueFixtureUpdate/' + fixtureId);
+        //navigate('/LeagueFixtureHistory/' + fixtureId);
     }
 
     return(  

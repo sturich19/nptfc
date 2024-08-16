@@ -46,7 +46,7 @@ const SeasonSelection = () => {
                 </div>  
                 <div className="row">
                     <h3>Fantasy Stats</h3>
-                    <FantasyStats></FantasyStats>
+                    <FantasyStats ageGroup={param.id}></FantasyStats>
                 </div>
             </div>
 

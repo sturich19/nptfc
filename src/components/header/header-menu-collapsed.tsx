@@ -53,6 +53,16 @@ const HeaderMenuCollapsed = () => {
                         </Typography>
                     </MenuItem>  
 
+                    <MenuItem key={"logout"} >
+                    <Typography 
+                            component="a" 
+                            href="/logout" 
+                            textAlign="center" 
+                            sx={{mr: 2,display: { xs: 'flex', md: 'none' },flexGrow: 1,color: 'inherit',textDecoration: 'none',}}>
+                        Logout
+                        </Typography>
+                    </MenuItem>  
+
                     <MenuItem key={"admin"} >
                         <Typography 
                             component="a" 

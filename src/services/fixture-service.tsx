@@ -79,4 +79,15 @@ export const GetFixture = async (fixtureId : any) => {
     }
 };
 
+export const GetHistoryFixture = async (fixtureId : any) => {
+    const url = API_URL + "/History/";
+
+    try {
+        const response = await axios.get(url + fixtureId);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
 

@@ -20,7 +20,13 @@ const HeaderMenuNav = () => {
                 sx={{ my: 2, color: 'white', display: 'block' }}
             >
             Admin
-            </Button>           
+            </Button>    
+            <Button key={"logout"}
+                href="/Logout"
+                sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+            Logout
+            </Button>            
         </Box>        
     )
 }

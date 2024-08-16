@@ -10,7 +10,7 @@ interface LeagueTableRowComponentProps
 const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
     
     const navigate = useNavigate();
-    const handleClick = (leagueTable : LeagueTable) => navigate(`/LeagueResults/${leagueTable.seasonId}/${leagueTable.teamId}`);
+    const handleClick = (leagueTable : LeagueTable) => navigate(`/LeagueFixtures/${leagueTable.seasonId}/${leagueTable.teamId}`);
     var classesToAdd;
 
     if (leagueTableProps.leagueTableRow.teamId === 1 || leagueTableProps.leagueTableRow.teamId === 3)

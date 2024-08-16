@@ -3,12 +3,16 @@ import { FantasyStat } from '../objects/fantasy-stat';
 import { GetAgeGroupFantasyStats } from '../services/fantasy-stat-service';
 import FantasyStatTable from '../components/fantasy/fantasy-stat-table';
 
-export default function FantasyStats()
+interface fantastyStatProps{
+    ageGroup : any    
+}
+
+export default function FantasyStats( fantastyStats : fantastyStatProps)
 {
     const [stats, setStats] = useState<FantasyStat[] | null>(null);
     
     useEffect(() => {
-        GetAgeGroupFantasyStats(9).then(stats => setStats(stats));
+        GetAgeGroupFantasyStats(fantastyStats.ageGroup).then(stats => setStats(stats));
     }, []); 
     
     return(        
