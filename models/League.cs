@@ -10,13 +10,13 @@ namespace nptfcBE.Models
         public int Drawn {get; set;}
         public int GlsFor {get; set;}
         public int GlsA {get; set;}
-        public Season Season {get; set;}
+        //public Season Season {get; set;}
         public Team Team {get; set;}
 
         public League()
         {
             this.Team = new Team();
-            this.Season = new Season();            
+            //this.Season = new Season();            
         }
     }
 }

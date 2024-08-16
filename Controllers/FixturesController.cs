@@ -19,6 +19,30 @@ public class FixturesController : ControllerBase
         _leagueController = new LeagueController(databaseContext);
     }    
 
+
+     [HttpGet("history/{id}")]
+    public async Task<ActionResult<IEnumerable<Fixture>>> GetFixtureHistory(int id)
+    {
+        var fixture = await _context.Fixtures
+                .Where(f=> f.Id == id)
+                .Include(f => f.AwayTeam)
+                .Include(f => f.HomeTeam)                        
+                .FirstOrDefaultAsync();
+
+        if (fixture == null)
+        {
+            return NotFound();
+        }
+
+        // You have the fixture - now get all the other fixtures where the home id or away id is included
+        return await _context.Fixtures
+                .Where(f => (f.HomeTeamId == fixture.HomeTeamId && f.AwayTeamId == fixture.AwayTeamId) || (f.HomeTeamId == fixture.AwayTeamId && f.AwayTeamId == fixture.HomeTeamId))                
+                .Include(f => f.AwayTeam)
+                .Include(f => f.HomeTeam)                        
+                .Include(f => f.Season)
+                .ToListAsync();                            
+    }
+
     [HttpGet(Name = "GetFixtures")]
     public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetFixtures()
     {
@@ -42,7 +66,7 @@ public class FixturesController : ControllerBase
             
     }
 
-     [HttpGet("{id}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult<FixtureDTO>> GetFixture(int id)
     {
              var fixture = await _context.Fixtures
@@ -253,7 +277,7 @@ public class FixturesController : ControllerBase
             return BadRequest();
        
         Fixture fixtureToAdd = Fixture.Create(fixture, homeTeam, awayTeam, season);      
-        EntityEntry<Fixture> addedFixture = _context.Fixtures.Add(fixtureToAdd);
+        EntityEntry<Fixture> addedFixture = _context.Fixtures.Add(fixtureToAdd);        
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(PostFixture), new { id = addedFixture.Entity.Id }, fixture);

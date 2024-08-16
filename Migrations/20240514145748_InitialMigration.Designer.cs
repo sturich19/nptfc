@@ -12,7 +12,7 @@ using nptfcBE.Models;
 namespace nptfcBE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240510154728_InitialMigration")]
+    [Migration("20240514145748_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -172,8 +172,6 @@ namespace nptfcBE.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("SeasonId");
 
                     b.HasIndex("TeamId");
 
@@ -380,19 +378,11 @@ namespace nptfcBE.Migrations
 
             modelBuilder.Entity("nptfcBE.Models.League", b =>
                 {
-                    b.HasOne("nptfcBE.Models.Season", "Season")
-                        .WithMany()
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("nptfcBE.Models.Team", "Team")
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Season");
 
                     b.Navigation("Team");
                 });

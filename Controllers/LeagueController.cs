@@ -22,6 +22,7 @@ public class LeagueController : ControllerBase
     public async Task<ActionResult<IEnumerable<LeagueDTO>>> GetLeagueTable(int seasonId)
     {
         return await _context.League
+            .Include(t => t.Team)
             .Select(leagueTeam => new LeagueDTO
             {
                 Id = leagueTeam.Id,
@@ -48,16 +49,25 @@ public class LeagueController : ControllerBase
     public async Task<IActionResult> PutLeague(League leagueResult)
     {
         var existingEntry = await _context.League
-            .FirstOrDefaultAsync(lt => lt.TeamId == leagueResult.TeamId);
+            .FirstOrDefaultAsync(lt => (lt.TeamId == leagueResult.TeamId) && (lt.SeasonId == leagueResult.SeasonId));
 
         if (existingEntry == null)
-            return NotFound();
-
-        existingEntry.Won += leagueResult.Won;
-        existingEntry.Drawn += leagueResult.Drawn;
-        existingEntry.Lost += leagueResult.Lost;
-        existingEntry.GlsFor += leagueResult.GlsFor;
-        existingEntry.GlsA += leagueResult.GlsA;
+        {
+            _context.League.Add(new League() {
+                TeamId = leagueResult.TeamId,
+                SeasonId = leagueResult.SeasonId
+            });            
+        }
+        else
+        {
+            existingEntry.Won += leagueResult.Won;
+            existingEntry.Drawn += leagueResult.Drawn;
+            existingEntry.Lost += leagueResult.Lost;
+            existingEntry.GlsFor += leagueResult.GlsFor;
+            existingEntry.GlsA += leagueResult.GlsA;
+            _context.League.Attach(existingEntry);
+            _context.Entry(existingEntry).State = EntityState.Modified;
+        }
 
         try
         {
@@ -76,7 +86,7 @@ public class LeagueController : ControllerBase
         }
 
         return NoContent();
-    }   
+    } 
 
     private bool LeagueTeamExists(int id)
     {

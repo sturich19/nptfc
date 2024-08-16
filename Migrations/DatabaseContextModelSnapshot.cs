@@ -170,8 +170,6 @@ namespace nptfcBE.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SeasonId");
-
                     b.HasIndex("TeamId");
 
                     b.ToTable("League", (string)null);
@@ -377,19 +375,11 @@ namespace nptfcBE.Migrations
 
             modelBuilder.Entity("nptfcBE.Models.League", b =>
                 {
-                    b.HasOne("nptfcBE.Models.Season", "Season")
-                        .WithMany()
-                        .HasForeignKey("SeasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("nptfcBE.Models.Team", "Team")
                         .WithMany()
                         .HasForeignKey("TeamId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Season");
 
                     b.Navigation("Team");
                 });

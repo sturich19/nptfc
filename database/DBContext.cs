@@ -63,6 +63,6 @@ public class DatabaseContext : DbContext
             .HasOne(f => f.Player)            
             .WithMany(p => p.GameStats)
             .HasForeignKey(p => p.PlayerId);
-        modelBuilder.Entity<League>().ToTable("League");      
+        modelBuilder.Entity<League>().ToTable("League");          
     }
 }
