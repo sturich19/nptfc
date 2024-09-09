@@ -12,7 +12,7 @@ using nptfcBE.Models;
 namespace nptfcBE.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240514145748_InitialMigration")]
+    [Migration("20240909083009_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -125,10 +125,16 @@ namespace nptfcBE.Migrations
                     b.Property<int>("Shots")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShotsLeft")
+                        .HasColumnType("int");
+
                     b.Property<int>("ShotsOffTarget")
                         .HasColumnType("int");
 
                     b.Property<int>("ShotsOnTarget")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShotsRight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

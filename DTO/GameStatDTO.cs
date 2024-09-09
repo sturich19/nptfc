@@ -17,5 +17,7 @@ namespace nptfcBE.DTO
         public int ShotsOnTarget { get; set;}
         public int ShotsOffTarget { get; set;}
         public int Saves { get; set;}
+        public int ShotsLeft { get; set;}
+        public int ShotsRight { get; set;}
     }
 }

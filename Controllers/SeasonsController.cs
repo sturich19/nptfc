@@ -20,7 +20,7 @@ public class SeasonsController : ControllerBase
     [HttpGet(Name = "GetSeasons")]
     public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
     {
-        return await _context.Seasons.ToListAsync();
+        return await _context.Seasons.OrderByDescending(s => s.EndYear).ToListAsync();
     }  
     
     // GET: api/Seasons/5

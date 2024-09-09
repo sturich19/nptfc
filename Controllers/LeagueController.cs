@@ -39,7 +39,7 @@ public class LeagueController : ControllerBase
                 GD = leagueTeam.GlsFor - leagueTeam.GlsA,
                 AchieveablePoints = 33 - (leagueTeam.Lost * 3) - (leagueTeam.Drawn * 2)
             })
-            .OrderByDescending(f  => f.Points)
+            .OrderByDescending(f  => f.Points).ThenByDescending(f => f.GD)
             .Where(f=> seasonId == f.SeasonId)                    
             .ToListAsync();
     }   

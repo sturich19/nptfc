@@ -16,11 +16,18 @@ public class AgeGroupsController  : ControllerBase
     }
 
     #region Get Methods
+    // GET: api/AgeGroup
+    [HttpGet( Name = "Get")]
+    public async Task<ActionResult<AgeGroup>> Get()
+    {   
+        return await _context.AgeGroups.OrderByDescending(a => a.Age).FirstAsync();
+    }  
+
     // GET: api/AgeGroups
-    [HttpGet(Name = "GetAgeGroups")]
+    [HttpGet("all", Name = "GetAgeGroups")]
     public async Task<ActionResult<IEnumerable<AgeGroup>>> GetAgeGroups()
     {   
-        return await _context.AgeGroups.ToListAsync();
+        return await _context.AgeGroups.OrderByDescending(a => a.Age).ToListAsync();
     }  
     #endregion Get Methods
 }

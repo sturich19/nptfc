@@ -122,10 +122,16 @@ namespace nptfcBE.Migrations
                     b.Property<int>("Shots")
                         .HasColumnType("int");
 
+                    b.Property<int>("ShotsLeft")
+                        .HasColumnType("int");
+
                     b.Property<int>("ShotsOffTarget")
                         .HasColumnType("int");
 
                     b.Property<int>("ShotsOnTarget")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ShotsRight")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

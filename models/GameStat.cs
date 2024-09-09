@@ -18,6 +18,8 @@ namespace nptfcBE.Models
         public Season Season {get; set;}
         public int ShotsOnTarget { get; set;}
         public int ShotsOffTarget { get; set;}
+        public int ShotsLeft { get; set;}
+        public int ShotsRight { get; set;}
         public int Saves { get; set;}
         public int PenSaves { get; set;}
 
@@ -46,7 +48,9 @@ namespace nptfcBE.Models
                 ShotsOffTarget = dto.ShotsOffTarget,
                 Saves = dto.Saves,
                 CleanSheets = dto.CleanSheets,
-                PenSaves = dto.PenSaves
+                PenSaves = dto.PenSaves,
+                ShotsLeft = dto.ShotsLeft,
+                ShotsRight = dto.ShotsRight
             };
         }
     }

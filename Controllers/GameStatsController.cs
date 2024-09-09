@@ -48,7 +48,9 @@ public class GameStatsController : ControllerBase
             ShotsOffTarget = gameStat.ShotsOffTarget,
             Saves = gameStat.Saves,
             CleanSheets = gameStat.CleanSheets,
-            PenSaves = gameStat.PenSaves
+            PenSaves = gameStat.PenSaves,
+            ShotsLeft = gameStat.ShotsLeft,
+            ShotsRight = gameStat.ShotsRight
         };                   
     }       
 
@@ -76,7 +78,9 @@ public class GameStatsController : ControllerBase
                         ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
-                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
+                        ShotsLeft = gameStatGroup.Sum(x => x.gs.ShotsLeft),
+                        ShotsRight = gameStatGroup.Sum(x => x.gs.ShotsRight)
                     })                                                                                         
                     .ToListAsync(); 
 
@@ -102,7 +106,9 @@ public class GameStatsController : ControllerBase
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
                         CleanSheets = gameStat.CleanSheets,
-                        PenSaves = gameStat.PenSaves                        
+                        PenSaves = gameStat.PenSaves   ,
+                        ShotsLeft = gameStat.ShotsLeft,
+                        ShotsRight = gameStat.ShotsRight                     
                     })        
                     .Where(g => g.PlayerId == playerId)                                                                
                     .ToListAsync();                   
@@ -134,7 +140,9 @@ public class GameStatsController : ControllerBase
                         ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
-                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
+                        ShotsLeft = gameStatGroup.Sum(x => x.gs.ShotsLeft),
+                        ShotsRight = gameStatGroup.Sum(x => x.gs.ShotsRight),
                     })                                                                                         
                     .ToListAsync();                   
     }   
@@ -160,6 +168,8 @@ public class GameStatsController : ControllerBase
                         Saves = gameStat.Saves,
                         CleanSheets = gameStat.CleanSheets,
                         PenSaves = gameStat.PenSaves,
+                        ShotsLeft = gameStat.ShotsLeft,
+                        ShotsRight = gameStat.ShotsRight
                     })        
                     .Where(g => g.FixtureId == fixtureId)                                                                
                     .ToListAsync();                   
@@ -185,7 +195,9 @@ public class GameStatsController : ControllerBase
                         ShotsOffTarget = gameStat.ShotsOffTarget,
                         Saves = gameStat.Saves,
                         CleanSheets = gameStat.CleanSheets,
-                        PenSaves = gameStat.PenSaves
+                        PenSaves = gameStat.PenSaves,
+                        ShotsLeft = gameStat.ShotsLeft,
+                        ShotsRight = gameStat.ShotsRight
                     })        
                     .Where(g => playerId == g.PlayerId)      
                     .Where(g => g.SeasonId == seasonId)                                          
@@ -221,7 +233,9 @@ public class GameStatsController : ControllerBase
                         ShotsOffTarget = gameStatGroup.Sum(x => x.gs.ShotsOffTarget),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
-                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves)
+                        PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
+                        ShotsLeft = gameStatGroup.Sum(x => x.gs.ShotsLeft),
+                        ShotsRight = gameStatGroup.Sum(x => x.gs.ShotsRight)
                     })                                                                                         
                     .ToListAsync();                   
     }  
