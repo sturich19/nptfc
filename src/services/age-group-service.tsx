@@ -3,6 +3,16 @@ const API_URL = process.env.REACT_APP_API_URL + 'AgeGroups';
 
 export const GetAgeGroups = async () => {
     try {
+        const url = API_URL + '/all';
+        const response = await axios.get(url);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching data: ", error);
+    }
+};
+
+export const GetAgeGroup = async () => {
+    try {
         const response = await axios.get(`${API_URL}`);
         return response.data;
     } catch (error) {

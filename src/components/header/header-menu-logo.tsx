@@ -8,7 +8,7 @@ const HeaderMenuLogo = () => {
         <>
             {/* This is seen when display > xs  */}
             <TitleIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, color: 'white' }} />
-            <Typography variant="h6" noWrap component="a" href="/Home"
+            <Typography variant="h6" noWrap component="a" href="/AgeGroups"
                 sx={{
                     mr: 2,
                     display: { xs: 'none', md: 'flex' },
@@ -24,7 +24,7 @@ const HeaderMenuLogo = () => {
 
             {/* This is seen when display < md  */}
             <TitleIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1, color: 'white' }} />
-            <Typography variant="h5" noWrap component="a" href="/Home"
+            <Typography variant="h5" noWrap component="a" href="/AgeGroups"
                 sx={{
                     mr: 2,
                     display: { xs: 'flex', md: 'none' },

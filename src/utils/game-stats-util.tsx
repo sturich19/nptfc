@@ -40,6 +40,18 @@ export function GetTotalShots (gameStatProps : GameStatsProps) {
      return totalShots + gameStat.shots;
 },0)} 
 
+export function GetTotalShotsLeftFoot (gameStatProps : GameStatsProps) {    
+
+    return gameStatProps.gameStats.reduce((totalShotsLeft, gameStat) => {
+     return totalShotsLeft + gameStat.shotsLeft;
+},0)} 
+
+export function GetTotalShotsRightFoot (gameStatProps : GameStatsProps) {    
+
+    return gameStatProps.gameStats.reduce((totalShotsRightFoot, gameStat) => {
+     return totalShotsRightFoot + gameStat.shotsRight;
+},0)} 
+
 export function PositionString (playerPosition : Position)
 {
     var position = "";

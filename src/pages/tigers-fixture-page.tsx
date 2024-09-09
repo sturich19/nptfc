@@ -41,14 +41,14 @@ export default function TigersFixturePage()
                 <div className="col-sm-1 .d-none .d-sm-block"></div>  
             </div>
             
-            <div className='row'>
+            {/* <div className='row'>
                 <div className="col-sm-1 .d-none .d-sm-block"></div>
                 <div className="col-10">
                     {   gameStats ? <GameStatTable gameStats={gameStats}></GameStatTable>
                         : <p>Loading Stats...</p>}
                 </div>
                 <div className="col-sm-1 .d-none .d-sm-block"></div>
-            </div>  
+            </div>   */}
 
             <div className='row'>
                 <div className="col-sm-1 .d-none .d-sm-block"></div>

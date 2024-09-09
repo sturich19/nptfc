@@ -1,9 +1,8 @@
 import { AppBar, Container, ThemeProvider, Toolbar, createTheme } from '@mui/material';
 import './header.css';
 import { green, lightBlue} from '@mui/material/colors';
-import HeaderMenuCollapsed from './header-menu-collapsed';
 import HeaderMenuLogo from './header-menu-logo';
-import HeaderMenuNav from './header-menu-nav';
+import DrawerAtom from '../../atoms/drawer/drawer';
 
 const theme = createTheme({
     palette: {
@@ -24,11 +23,10 @@ const Header = () => {
         <ThemeProvider theme={theme}>
             <AppBar position="static">
                 <Container>
-                <Toolbar >  
-                    <HeaderMenuCollapsed/>
-                    <HeaderMenuLogo/>
-                    <HeaderMenuNav/>                  
-                </Toolbar>
+                  <Toolbar >                                   
+                      <DrawerAtom/>
+                      <HeaderMenuLogo/>    
+                  </Toolbar>
                 </Container>
         </AppBar>    
       </ThemeProvider>

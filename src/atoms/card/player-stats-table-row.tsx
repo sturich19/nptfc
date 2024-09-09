@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Player } from "../../objects/player";
 import { GameStat } from "../../objects/game-stat";
-import { GetTotalAssists, GetTotalGSO, GetTotalGames, GetTotalGoals, GetTotalShots } from "../../utils/game-stats-util";
+import { GetTotalAssists, GetTotalGSO, GetTotalGames, GetTotalGoals, GetTotalShots, GetTotalShotsLeftFoot, GetTotalShotsRightFoot } from "../../utils/game-stats-util";
 import { Season } from "../../objects/season";
 import { GetSeasonGameStatsForPlayer } from "../../services/game-stat-service";
 
@@ -17,7 +17,7 @@ const PlayerStatsTableRow = (playerStatsProps : playerStatsProps) => {
     const [totalGoals, setGoals] = useState(0);
     const [totalAssist, setAssistGoals] = useState(0);
     const [totalGSOs, setGSOs] = useState(0);    
-    const [totalShots, setShots] = useState(0);
+    const [totalShots, setShots] = useState(0);    
 
     useEffect(() =>
     {
@@ -31,7 +31,7 @@ const PlayerStatsTableRow = (playerStatsProps : playerStatsProps) => {
             setGoals(GetTotalGoals({gameStats : gameStats}));
             setAssistGoals(GetTotalAssists({gameStats : gameStats}));
             setGSOs(GetTotalGSO({gameStats : gameStats}));            
-            setShots(GetTotalShots({gameStats : gameStats}));
+            setShots(GetTotalShots({gameStats : gameStats}));            
         }
     }, [gameStats]);    
 

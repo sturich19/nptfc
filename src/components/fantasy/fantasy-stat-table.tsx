@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { FantasyStat } from "../../objects/fantasy-stat";
-import { PositionString } from "../../utils/game-stats-util";
-
 interface FantasyStatComponentProps{
     fantasyStats : FantasyStat[]    
 }

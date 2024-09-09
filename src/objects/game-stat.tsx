@@ -13,5 +13,7 @@ export interface GameStat{
     shotsOffTarget : number,
     saves : number,
     cleanSheets : number,
-    penSaves : number
+    penSaves : number,
+    shotsLeft : number,
+    shotsRight : number
 }

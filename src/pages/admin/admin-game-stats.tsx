@@ -27,10 +27,10 @@ const AdminGameStats = ()  =>
 
     const navigate = useNavigate();  
     const formik = useFormik({
-        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0},
+        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0, shotsLeft : 0, shotsRight : 0},
         onSubmit : values => {
             const gameStat : GameStat = {id : values.id, playerId : values.player, fixtureId : values.fixture, goals : values.goals, assists : values.assists, gso : values.gso, apps : 0, playerName: "", shots : values.shots, seasonId : values.season,
-                                        shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves, penSaves : values.penSaves}
+                                        shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves, penSaves : values.penSaves, shotsLeft : values.shotsLeft, shotsRight : values.shotsRight }
                                                     
             PostGameStat(gameStat).then(formik.resetForm);
         }
@@ -98,6 +98,12 @@ const AdminGameStats = ()  =>
                             <TextField label="Shots Off Target" name="shotsOffTarget" formik={formik}/>                            
                         </div>
                         <div className="col-2">
+                            <TextField label="Shots Left" name="shotsLeft" formik={formik}/>                            
+                        </div>
+                        <div className="col-2">
+                            <TextField label="Shots Right" name="shotsRight" formik={formik}/>                            
+                        </div>
+                        <div className="col-2">
                             <TextField label="Clean Sheets" name="cleanSheets" formik={formik}/>                            
                         </div>
                         <div className="col-2">
@@ -106,7 +112,7 @@ const AdminGameStats = ()  =>
 
                         <div className="col-2">
                             <TextField label="Pen Saves" name="penSaves" formik={formik}/>                            
-                        </div>
+                        </div>                       
                     </div> 
                    
                     <div className="row">

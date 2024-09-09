@@ -18,7 +18,7 @@ const SeasonSelection = () => {
     useEffect(() => {
         GetSeasonsForAgeGroup(param.id).then(seasons => setData(seasons));
         GetAgeGroupGameStats(param.id).then(gameStats => setGameStats(gameStats));
-    }, []);   
+    }, [param.id]);   
 
     const handleClick = (seasonId : any) => navigate('/Season/' + seasonId);
 

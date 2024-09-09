@@ -18,6 +18,7 @@ import AdminLeagueFixtureUpdate from '../pages/admin/admin-league-fixture-update
 import SeasonSelection from '../pages/season-selection';
 import LeagueFixtureHistory from '../pages/league-fixture-history';
 import Logout from '../pages/logout';
+import AgeGroups from '../pages/ageGroups/age-groups';
 
 const AppRoutes = () => {
 
@@ -26,7 +27,8 @@ const AppRoutes = () => {
             <Route path="/" element={<Layout/>}>
                 <Route index element={<Home/>}></Route>     
                 <Route path="/season/:id" element={<SeasonView/>}></Route>
-                <Route path="/seasons/:id" element={<SeasonSelection/>}></Route>
+                <Route path="/AgeGroups" element={<AgeGroups/>}></Route>
+                <Route path="/AgeGroup/:id" element={<SeasonSelection/>}></Route>
                 <Route path="/players" element={<Players/>}></Route>
                 <Route path="/TigersFixture/:id" element={<TigersFixturePage/>}></Route>
                 <Route path="/LeagueFixtures/:id/:id2" element={<LeagueFixturesPage/>}></Route>
