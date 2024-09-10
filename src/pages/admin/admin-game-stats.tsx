@@ -27,9 +27,9 @@ const AdminGameStats = ()  =>
 
     const navigate = useNavigate();  
     const formik = useFormik({
-        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0, shotsLeft : 0, shotsRight : 0},
+        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, goalsLeft : 0, goalsRight : 0, goalsOther : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0, shotsLeft : 0, shotsRight : 0},
         onSubmit : values => {
-            const gameStat : GameStat = {id : values.id, playerId : values.player, fixtureId : values.fixture, goals : values.goals, assists : values.assists, gso : values.gso, apps : 0, playerName: "", shots : values.shots, seasonId : values.season,
+            const gameStat : GameStat = {id : values.id, playerId : values.player, fixtureId : values.fixture, goals : values.goals, goalsLeft : values.goalsLeft, goalsRight : values.goalsRight, goalsOther : values.goalsOther, assists : values.assists, gso : values.gso, apps : 0, playerName: "", shots : values.shots, seasonId : values.season,
                                         shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves, penSaves : values.penSaves, shotsLeft : values.shotsLeft, shotsRight : values.shotsRight }
                                                     
             PostGameStat(gameStat).then(formik.resetForm);
@@ -77,6 +77,18 @@ const AdminGameStats = ()  =>
                     <div className="row">
                         <div className="col-2">
                             <TextField label="Goals" name="goals" formik={formik}/>
+                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
+                        </div>
+                        <div className="col-2">
+                            <TextField label="Goals Left" name="goalsLeft" formik={formik}/>
+                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
+                        </div>
+                        <div className="col-2">
+                            <TextField label="Goals Right" name="goalsRight" formik={formik}/>
+                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
+                        </div>
+                        <div className="col-2">
+                            <TextField label="Goals Other" name="goalsOther" formik={formik}/>
                             {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
                         </div>
                         <div className="col-2">

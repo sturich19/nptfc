@@ -12,14 +12,18 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetSeasons } from "../../services/season-service";
 import { Season } from "../../objects/season";
+import { GetAgeGroups } from "../../services/age-group-service";
+import { AgeGroup } from "../../objects/age-group";
 
 const DrawerAtom = () => {
 
     const [open, setOpen] = useState(false);    
     const [seasons, setSeasons] = useState<Season[] | null>(null);
+    const [ageGroups, setAgeGroups] = useState<AgeGroup[] | null>(null);
     const navigate = useNavigate();
     
     useEffect(() => {
+        GetAgeGroups().then(ageGroups => setAgeGroups(ageGroups));
         GetSeasons().then(seasons => setSeasons(seasons));
     }, []);  
 
@@ -42,21 +46,33 @@ const DrawerAtom = () => {
                             </ListItemButton>                           
                         </ListItem>
 
-                        {/* Age Groups */}
-                        <ListSubheader component="div" id="ageGroups-subheader">
-                            Age Groups
-                        </ListSubheader>
-                        <List component="div" disablePadding>
-                            {seasons?.map(season => 
-                                <ListItem key={season.id} disablePadding onClick={() => navigate('/season/' + season.id)}> 
+                        {/* Age Groups */}                        
+                        {ageGroups?.map(ageGroup => (
+                            <>
+                                 <ListSubheader component="div" id="ageGroups-subheader">
+                                        {"U" + ageGroup.age + " seasons"}
+                                </ListSubheader>
+
+                                <ListItem key={ageGroup.id} disablePadding onClick={() => navigate('/AgeGroup/' + ageGroup.id)}> 
                                     <ListItemButton>
                                         <ListItemIcon><SportsSoccerIcon/></ListItemIcon>
-                                        <ListItemText primary={"U" + season.ageGroup + "s Div - " + season.division} />
+                                        <ListItemText primary={"U" + ageGroup.age + " Overview"} />
                                     </ListItemButton>                           
                                 </ListItem>
-                            )}
-                        </List>
-                        
+
+                                {seasons?.filter(season => season.ageGroup === ageGroup.age).map(season => 
+                                    <ListItem key={season.id} disablePadding onClick={() => navigate('/season/' + season.id)}> 
+                                        <ListItemButton>
+                                            <ListItemIcon><SportsSoccerIcon/></ListItemIcon>
+                                            <ListItemText primary={"U" + season.ageGroup + "s Div - " + season.division} />
+                                        </ListItemButton>                           
+                                    </ListItem>
+                                )}
+                            </>
+
+                        ))}
+
+                        <ListItem key={"divider"} divider disablePadding/>
                         <ListItem key={"players"} divider disablePadding>
                             <ListItemButton onClick={() => navigate('/Players')}>
                                 <ListItemIcon><DirectionsRunIcon/></ListItemIcon>

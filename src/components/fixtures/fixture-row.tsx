@@ -19,9 +19,11 @@ const FixtureRow = ({fixture} : FixtureItemComponentProps) => {
         //navigate('/LeagueFixtureHistory/' + fixtureId);
     }
 
+    const fixtureStyleToAdd = ((fixture.homeTeamId === 1 || fixture.awayTeamId === 1)  ? "table-success" : "")
+
     return(  
         
-        <tr onClick={( ) => handleResultClick(fixture.id)}>
+        <tr className={fixtureStyleToAdd} onClick={( ) => handleResultClick(fixture.id)}>
             <td className='col-1'>{FormatDate(fixture.date)}</td>            
             <td className='col-3'>{fixture.homeTeam}</td>
             <td className='col-1'>{fixture.homeTeamScore}</td>

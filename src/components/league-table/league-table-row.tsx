@@ -15,7 +15,7 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
 
     if (leagueTableProps.leagueTableRow.teamId === 1 || leagueTableProps.leagueTableRow.teamId === 3)
     {
-        classesToAdd = ' tigers-highlight' ;
+        classesToAdd = ' table-success' ;
     }
 
     return(  

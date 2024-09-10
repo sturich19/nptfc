@@ -20,6 +20,18 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                 gameStatProps.gameStats.sort((a , b) => b.goals - a.goals)
                 break;
 
+            case "glsL":
+                gameStatProps.gameStats.sort((a , b) => b.goalsLeft - a.goalsLeft)
+                break;
+
+            case "glsR":
+                gameStatProps.gameStats.sort((a , b) => b.goalsRight - a.goalsRight)
+                break;
+
+            case "glsO":
+                gameStatProps.gameStats.sort((a , b) => b.goalsOther - a.goalsOther)
+                break;
+
             case "ass":
                 gameStatProps.gameStats.sort((a , b) => b.assists - a.assists)
                 break;
@@ -64,6 +76,9 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                             <th>Player</th>  
                             <th className="sortable" onClick={() => Sort("pld")}>Pld</th>
                             <th className="sortable" onClick={() => Sort("gls")}>Gls</th>
+                            <th className="sortable" onClick={() => Sort("glsL")}>Gls L</th>
+                            <th className="sortable" onClick={() => Sort("glsR")}>Gls R</th>
+                            <th className="sortable" onClick={() => Sort("glsO")}>Gls O</th>
                             <th className="sortable" onClick={() => Sort("ass")}>Ass</th>
                             <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                             <th className="sortable" onClick={() => Sort("shots")}>Shots</th>
@@ -78,9 +93,12 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                         {gameStatProps.gameStats.map(f => 
                             <>
                             <tr key={f.id}>
-                                <td className="col-3">{f.playerName}</td>                                
+                                <td className="col-1">{f.playerName}</td>                                
                                 <td className="col-1">{f.apps}</td>
                                 <td className="col-1">{f.goals}</td>
+                                <td className="col-1">{f.goalsLeft}</td>
+                                <td className="col-1">{f.goalsRight}</td>
+                                <td className="col-1">{f.goalsOther}</td>
                                 <td className="col-1">{f.assists}</td>
                                 <td className="col-1">{f.gso}</td>
                                 <td className="col-1">{f.shots}</td>
