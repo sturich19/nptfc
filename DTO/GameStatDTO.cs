@@ -8,6 +8,9 @@ namespace nptfcBE.DTO
         public int FixtureId  {get; set;}
         public int SeasonId  {get; set;}
         public int Goals {get; set;}
+        public int GoalsLeft {get; set;}
+        public int GoalsRight {get; set;}
+        public int GoalsOther {get; set;}
         public int Assists  {get; set;}
         public int GSO {get; set;}
         public int Shots {get; set;}

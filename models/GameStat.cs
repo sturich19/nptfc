@@ -9,6 +9,9 @@ namespace nptfcBE.Models
         public int FixtureId  {get; set;}
         public int SeasonId  {get; set;}
         public int Goals {get; set;}
+        public int GoalsLeft {get; set;}
+        public int GoalsRight {get; set;}
+        public int GoalsOther {get; set;}
         public int Assists  {get; set;}
         public int GSO {get; set;}
         public int Shots {get; set;}        
@@ -41,6 +44,9 @@ namespace nptfcBE.Models
                 SeasonId = season.Id,
                 Season = season,
                 Goals = dto.Goals,
+                GoalsLeft = dto.GoalsLeft,
+                GoalsRight = dto.GoalsRight,
+                GoalsOther = dto.GoalsOther,
                 GSO = dto.GSO,
                 Assists = dto.Assists,
                 Shots = dto.Shots,

@@ -12,6 +12,9 @@ namespace nptfcBE.DTO
         public int Apps {get; set;}     
         public int GoalPts {get; set;}
         public int Goals {get; set;}
+        public int GoalsLeft {get; set;}
+        public int GoalsRight {get; set;}
+        public int GoalsOther {get; set;}
         public int AssistsPts  {get; set;}
         public int Assists  {get; set;}
         public int GSOPts {get; set;}
@@ -51,6 +54,9 @@ namespace nptfcBE.DTO
                 Assists = gameStat.Assists,
                 CleanSheets = gameStat.CleanSheets,
                 Goals = gameStat.Goals,
+                GoalsLeft = gameStat.GoalsLeft,
+                GoalsRight = gameStat.GoalsRight,
+                GoalsOther = gameStat.GoalsOther,
                 GSO = gameStat.GSO,
                 Shots = gameStat.Shots,                
                 Saves = gameStat.Saves,

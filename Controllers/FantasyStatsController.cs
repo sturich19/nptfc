@@ -42,6 +42,9 @@ public class FantasyStatsController : ControllerBase
                     {
                         Id = gameStatGroup.Key,
                         Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        GoalsLeft = gameStatGroup.Sum(x => x.gs.GoalsLeft),
+                        GoalsRight = gameStatGroup.Sum(x => x.gs.GoalsRight),
+                        GoalsOther = gameStatGroup.Sum(x => x.gs.GoalsOther),
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
@@ -91,7 +94,9 @@ public class FantasyStatsController : ControllerBase
                     .Select(gameStatGroup => new GameStatDTO
                     {
                         Id = gameStatGroup.Key,
-                        Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        GoalsLeft = gameStatGroup.Sum(x => x.gs.GoalsLeft),
+                        GoalsRight = gameStatGroup.Sum(x => x.gs.GoalsRight),
+                        GoalsOther = gameStatGroup.Sum(x => x.gs.GoalsOther),
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
@@ -132,6 +137,9 @@ public class FantasyStatsController : ControllerBase
                     {
                         Id = gameStatGroup.Key,
                         Goals = gameStatGroup.Sum(x => x.gs.Goals),
+                        GoalsLeft = gameStatGroup.Sum(x => x.gs.GoalsLeft),
+                        GoalsRight = gameStatGroup.Sum(x => x.gs.GoalsRight),
+                        GoalsOther = gameStatGroup.Sum(x => x.gs.GoalsOther),
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
