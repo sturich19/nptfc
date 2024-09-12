@@ -21,7 +21,7 @@ public class FixturesController : ControllerBase
 
 
      [HttpGet("history/{id}")]
-    public async Task<ActionResult<IEnumerable<Fixture>>> GetFixtureHistory(int id)
+    public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetFixtureHistory(int id)
     {
         var fixture = await _context.Fixtures
                 .Where(f=> f.Id == id)
@@ -40,7 +40,21 @@ public class FixturesController : ControllerBase
                 .Include(f => f.AwayTeam)
                 .Include(f => f.HomeTeam)                        
                 .Include(f => f.Season)
-                .ToListAsync();                            
+                .Select(fixture => new FixtureDTO
+                {
+                    Id = fixture.Id,
+                    Date = fixture.Date,
+                    AwayTeam = fixture.AwayTeam.Name,
+                    AwayTeamId = fixture.AwayTeam.Id,
+                    AwayTeamScore = fixture.AwayTeamScore,
+                    HomeTeam = fixture.HomeTeam.Name,
+                    HomeTeamId = fixture.HomeTeam.Id,
+                    HomeTeamScore = fixture.HomeTeamScore,
+                    SeasonId = fixture.SeasonId,
+                    KnownScore = fixture.KnownScore         
+                })
+                .OrderBy(f  => f.Date)                    
+                .ToListAsync();                                      
     }
 
     [HttpGet(Name = "GetFixtures")]
