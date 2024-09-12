@@ -22,7 +22,7 @@ const SeasonSummaryTable = (seasonSummary : SeasonSummaryTableProps) => {
         <div className = 'row'>
             
             <div >
-                <table className="table table-hover table-condensed table-responsive">
+                <table className="table table-hover table-condensed table-responsive table-sm">
                     <thead>
                         <tr>
                             <th>PLD</th>

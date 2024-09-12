@@ -31,10 +31,15 @@ export default function TigersFixturePage()
                 <div className="col-sm-1 .d-none .d-sm-block"></div>  
                 <div className="col-12">
                     {   fixture ? 
-                        <>                        
+                        <>  
                             <h6 className="header">{fixture.homeTeam}  {fixture.homeTeamScore}   v  {fixture.awayTeamScore}  {fixture.awayTeam} </h6>
                             <h6 className="header">{FormatDate(fixture.date)}</h6>
 
+                            {fixture.videoUrl ? 
+                                <h6 className="header"><a target="_blank" href={fixture.videoUrl}>Video</a></h6>
+                            :
+                                <h6 className="header">No Video Uploaded</h6>
+                            }   
                         </>
                         : <p>Loading Fixture...</p>}
                 </div>

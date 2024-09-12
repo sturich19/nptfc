@@ -21,23 +21,34 @@ const AgeGroupOverview = () => {
     return(
         <>
             <div className="container-fluid">                
+                <div className='row page-header'>
+                    <h3>U{seasons != null ? seasons[0].ageGroup : ""} Overview</h3>
+                </div>
                 <div className="row">
+                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
                     {   gameStats ? 
                         <>
                             {gameStats.length > 0 ? 
-                                <> 
-                                    <h3>U{seasons != null ? seasons[0].ageGroup : ""} Age Group Stats</h3>
-                                    <GameStatTable gameStats={gameStats}></GameStatTable>
+                                <>    
+                                    <div className="col-12 col-sm-10">                                   
+                                        <h4>Season Stats</h4>
+                                        <GameStatTable gameStats={gameStats}></GameStatTable>
+                                    </div>
                                 </>                                                    
                                 : <div></div>
                             }                            
                         </>
                         : <p>Loading Stats...</p>
                     }
+                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
                 </div>  
                 <div className="row">
-                    <h3>Fantasy Stats</h3>
-                    <FantasyStats ageGroup={param.id}></FantasyStats>
+                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
+                    <div className="col-12 col-sm-10">
+                        <h4>Fantasy Scores</h4>
+                        <FantasyStats ageGroup={param.id}></FantasyStats>
+                    </div>
+                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
                 </div>
             </div>
 

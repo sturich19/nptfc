@@ -19,7 +19,7 @@ const TigersFixtureTable = (fixturesProps : TigersFixtureComponentProps) => {
         <>                       
         <div className="row g-0">            
             <div>
-                <table className="table table-hover table-condensed table-responsive">
+                <table className="table table-hover table-condensed table-responsive table-sm">
                     <thead>
                         <tr>
                             <th>Date</th>                            

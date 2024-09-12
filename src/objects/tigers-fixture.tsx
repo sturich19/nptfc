@@ -13,4 +13,5 @@ export interface TigersFixture{
     glsFor  : number
     glsA  : number
     seasonName? : string
+    videoUrl? : string
 }

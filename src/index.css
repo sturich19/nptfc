@@ -27,6 +27,13 @@ code {
     text-align: center;
 }
 
+.page-header
+{
+    text-align: center;
+    margin-top: 1%;
+    margin-bottom: 3%;
+}
+
 @media only screen and (max-width: 600px) 
 {
   .button-area

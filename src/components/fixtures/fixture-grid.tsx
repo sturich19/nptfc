@@ -27,7 +27,7 @@ const FixtureGridComponent = (seasonId : FixtureGridProps) =>
 
     return(
         <div >
-            <table className="table table-hover table-condensed table-responsive table-bordered">
+            <table className="table table-hover table-condensed table-responsive table-bordered table-sm">
                 <thead>
                     <tr>
                         <th>Team</th>

@@ -70,43 +70,43 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
         <>                       
         <div className="row">            
             <div>
-                <table className="table table-hover table-condensed table-responsive">
-                    <thead>
+                <table className="table table-hover table-condensed table-responsive table-sm">
+                    <thead className="thead-light">
                         <tr>
                             <th>Player</th>  
-                            <th className="sortable" onClick={() => Sort("pld")}>Pld</th>
-                            <th className="sortable" onClick={() => Sort("gls")}>Gls</th>
-                            <th className="sortable" onClick={() => Sort("glsL")}>Gls L</th>
-                            <th className="sortable" onClick={() => Sort("glsR")}>Gls R</th>
-                            <th className="sortable" onClick={() => Sort("glsO")}>Gls O</th>
-                            <th className="sortable" onClick={() => Sort("ass")}>Ass</th>
-                            <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
-                            <th className="sortable" onClick={() => Sort("shots")}>Shots</th>
-                            <th className="sortable" onClick={() => Sort("shotsOn")}>On</th>
-                            <th className="sortable" onClick={() => Sort("shotsOff")}>Off</th>                            
-                            <th className="sortable" onClick={() => Sort("cs")}>CS</th>
-                            <th className="sortable" onClick={() => Sort("saves")}>Saves</th>
-                            <th className="sortable" onClick={() => Sort("penSaves")}>Pens</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("pld")}>Pld</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("gls")}>Gls</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("glsL")}>Gls L</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("glsR")}>Gls R</th>
+                            <th scope="col"className="sortable" onClick={() => Sort("glsO")}>Gls O</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("ass")}>Ass</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("gso")}>GSOs</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("shots")}>Shots</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("shotsOn")}>On</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("shotsOff")}>Off</th>                            
+                            <th scope="col" className="sortable" onClick={() => Sort("cs")}>CS</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("saves")}>Saves</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("penSaves")}>Pens</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">
                         {gameStatProps.gameStats.map(f => 
                             <>
-                            <tr key={f.id}>
-                                <td className="col-1">{f.playerName}</td>                                
-                                <td className="col-1">{f.apps}</td>
-                                <td className="col-1">{f.goals}</td>
-                                <td className="col-1">{f.goalsLeft}</td>
-                                <td className="col-1">{f.goalsRight}</td>
-                                <td className="col-1">{f.goalsOther}</td>
-                                <td className="col-1">{f.assists}</td>
-                                <td className="col-1">{f.gso}</td>
-                                <td className="col-1">{f.shots}</td>
-                                <td className="col-1">{f.shotsOnTarget}</td>
-                                <td className="col-1">{f.shotsOffTarget}</td>                                
-                                <td className="col-1">{f.cleanSheets}</td>  
-                                <td className="col-1">{f.saves}</td>  
-                                <td className="col-1">{f.penSaves}</td>  
+                                <tr key={f.id}>
+                                    <td>{f.playerName}</td>                                
+                                    <td>{f.apps}</td>
+                                    <td>{f.goals}</td>
+                                    <td>{f.goalsLeft}</td>
+                                    <td>{f.goalsRight}</td>
+                                    <td>{f.goalsOther}</td>
+                                    <td>{f.assists}</td>
+                                    <td>{f.gso}</td>
+                                    <td>{f.shots}</td>
+                                    <td>{f.shotsOnTarget}</td>
+                                    <td>{f.shotsOffTarget}</td>                                
+                                    <td>{f.cleanSheets}</td>  
+                                    <td>{f.saves}</td>  
+                                    <td>{f.penSaves}</td>  
                                 </tr>
                             </>
                         )}

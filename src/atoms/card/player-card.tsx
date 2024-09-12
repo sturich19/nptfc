@@ -21,7 +21,7 @@ const PlayerCard = (playerProps : playerProps) => {
                     <h5 className="card-title">{playerProps.player.firstname} {playerProps.player.surname} {playerProps.player.shirt} ({position})</h5>  
                     <div className="row">                        
                         <div className="col-12">
-                            <table className="table table-hover table-condensed table-responsive">
+                            <table className="table table-hover table-condensed table-responsive table-sm">
                                 <thead>
                                     <tr>
                                         <th>Season</th>

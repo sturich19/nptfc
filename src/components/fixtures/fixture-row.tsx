@@ -29,7 +29,7 @@ const FixtureRow = ({fixture} : FixtureItemComponentProps) => {
             <td className='col-1'>{fixture.homeTeamScore}</td>
             <td className='col-1'>V</td>
             <td className='col-1'>{fixture.awayTeamScore}</td>            
-            <td className='col-3'>{fixture.awayTeam}</td>                        
+            <td className='col-3'>{fixture.awayTeam}</td>                                 
         </tr>                
         
     )

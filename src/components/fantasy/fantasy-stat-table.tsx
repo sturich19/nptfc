@@ -53,7 +53,7 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                       
             <div className="row">            
                 <div>
-                    <table className="table table-hover table-condensed table-responsive">
+                    <table className="table table-hover table-condensed table-responsive table-sm">
                         <thead>
                             <tr>
                                 <th>Player</th>                              
@@ -72,16 +72,16 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                             {fantasyStatsProps.fantasyStats.map(f => 
                                 <>
                                     <tr key={f.id}>
-                                        <td className="col-2">{f.playerName}</td>                                                                
-                                        <td className="col-1">{f.totalPoints}</td>   
-                                        <td className="col-1">{f.apps} ({f.appsPts})</td>
-                                        <td className="col-1">{f.goals} ({f.goalPts})</td>
-                                        <td className="col-1">{f.assists} ({f.assistsPts})</td>
-                                        <td className="col-1">{f.gso} ({f.gsoPts})</td>
-                                        <td className="col-1">{f.shots} ({f.shotPts})</td>                                
-                                        <td className="col-1">{f.cleanSheets} ({f.cleanSheetPoints})</td>  
-                                        <td className="col-1">{f.saves} ({f.savesPts})</td>
-                                        <td className="col-1">{f.penSaves} ({f.penSavesPts})</td>
+                                        <td>{f.playerName}</td>                                                                
+                                        <td>{f.totalPoints}</td>   
+                                        <td>{f.apps} ({f.appsPts})</td>
+                                        <td>{f.goals} ({f.goalPts})</td>
+                                        <td>{f.assists} ({f.assistsPts})</td>
+                                        <td>{f.gso} ({f.gsoPts})</td>
+                                        <td>{f.shots} ({f.shotPts})</td>                                
+                                        <td>{f.cleanSheets} ({f.cleanSheetPoints})</td>  
+                                        <td>{f.saves} ({f.savesPts})</td>
+                                        <td>{f.penSaves} ({f.penSavesPts})</td>
                                     </tr>
                                 </>
                             )}

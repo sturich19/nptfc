@@ -38,6 +38,10 @@ table{
     font-size: small;
 }
 
+thead{
+  border-bottom: none;
+}
+
  /* General Media queries  */
 @media screen and (max-device-width: 640px){
   table tr th{

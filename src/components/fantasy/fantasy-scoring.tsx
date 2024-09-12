@@ -4,7 +4,7 @@ const FantasyScoringTable = () => {
         <div className="row">            
             <h4>Scoring</h4>
             <div className="col-6">          
-            <table className="table table-hover table-condensed table-responsive">
+            <table className="table table-hover table-condensed table-responsive table-sm">
                     <thead>
                         <tr>
                             <th>Player</th>                              
