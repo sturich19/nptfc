@@ -8,14 +8,14 @@ import './admin-styles.css';
 
 const AdminLeagueFixtureUpdate = ()  =>
 {
-    const {id} = useParams();
+    const {id, id2} = useParams();
     const navigate = useNavigate();  
     const [fixture, setFixture] = useState<Fixture>();    
     const [homeTeamScore, setHomeTeamScore] = useState(0);  
     const [awayTeamScore, setAwayTeamScore] = useState(0);  
     
     useEffect(() => {
-        GetFixture(id).then((data) =>
+        GetFixture(id2).then((data) =>
         {
             setFixture(data)
             
@@ -26,7 +26,7 @@ const AdminLeagueFixtureUpdate = ()  =>
             }
         });     
               
-    },[id])
+    },[id2])
 
     const formik = useFormik({
         initialValues :{  homeTeamScore : homeTeamScore, awayTeamScore : awayTeamScore },
@@ -56,7 +56,7 @@ const AdminLeagueFixtureUpdate = ()  =>
             
             <div className="row admin-buttons">
                 <div className="col-2 col-sm-1 admin-button">
-                    <button className="btn btn-secondary" onClick={()=> navigate('/season/' + fixture?.seasonId)}>Back</button>    
+                    <button className="btn btn-secondary" onClick={()=> navigate('/season/' + id)}>Back</button>    
                 </div>
                 <div className="col-2 col-sm-1 admin-button">
                     <button className="btn btn-primary" type="submit">Go</button>                                

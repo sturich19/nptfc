@@ -5,6 +5,7 @@ import { FormatDateYYYYMMDD } from "../../utils/formatter-util";
 import { GetClosestSaturday } from "../../utils/date-utils";
 import FixtureTable from "./fixture-table";
 import { ArrowBack, ArrowForward, ArrowRightAlt } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 interface FixtureListProps
 {
@@ -22,6 +23,12 @@ const FixtureList = (fixtureListProps : FixtureListProps) => {
         GetFixturesForSeason(fixtureListProps.seasonId).then(fixtures => setFixtures(fixtures));
         //setFixturesDate(currentFixturesDate);
      }, []);  
+
+     const navigate = useNavigate();
+     function handleResultClick(fixtureId : number)
+     {         
+         navigate(`/LeagueFixtureHistory/${fixtureListProps.seasonId}/${fixtureId}`);
+     }
 
     //  function handlePreviousClick()
     //  {
@@ -45,7 +52,7 @@ const FixtureList = (fixtureListProps : FixtureListProps) => {
                 </div> */}
                 <div className="col-12">
                      {fixtures ? 
-                        <FixtureTable fixtures={fixtures}></FixtureTable> 
+                        <FixtureTable fixtures={fixtures} handleClick={handleResultClick}></FixtureTable> 
                         :
                         <div></div>
                      }

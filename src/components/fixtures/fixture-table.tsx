@@ -3,9 +3,10 @@ import { Fixture } from '../../objects/fixture';
 
 interface FixtureComponentProps{
     fixtures : Fixture[]
+    handleClick : any
 }
 
-const FixtureTable = (fixturesProps : FixtureComponentProps) => {      
+const FixtureTable = ({fixtures, handleClick} : FixtureComponentProps) => {      
   
     return(
         <>                       
@@ -24,8 +25,8 @@ const FixtureTable = (fixturesProps : FixtureComponentProps) => {
                         </tr>
                     </thead>
                     <tbody className='table-group-divider'>     
-                        {fixturesProps.fixtures.map(f => (
-                            <FixtureRow key={f.id} fixture={f} />                            
+                        {fixtures.map(f => (
+                            <FixtureRow key={f.id} fixture={f} handleClick={handleClick} />                            
                         ))}
                     </tbody>
                 </table>                          

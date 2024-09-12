@@ -13,7 +13,12 @@ export default function LeagueFixturesPage()
 
     useEffect(() => {
         GetResultsForTeam(id, id2).then(teamResults => setTeamResults(teamResults));
-     }, [id, id2]);  
+     }, [id, id2]); 
+     
+    function handleResultClick(fixtureId : number)
+    {         
+        navigate(`/LeagueFixtureHistory/${id}/${fixtureId}`);
+    }
     
     return(   
         <>
@@ -21,7 +26,7 @@ export default function LeagueFixturesPage()
                 <HeaderAtom headerText={teamResults?.teamName}/>
                 <div className="row">     
                     {teamResults ?                
-                        <FixtureTable fixtures={teamResults.fixtures}></FixtureTable> 
+                        <FixtureTable fixtures={teamResults.fixtures} handleClick={handleResultClick}></FixtureTable> 
                         : <div></div>
                     }
                 </div>

@@ -41,8 +41,8 @@ const AppRoutes = () => {
                 <Route path="/AdminPlayer" element={<AdminPlayer/>}></Route>  
                 <Route path="/AdminTeam" element={<AdminTeam/>}></Route>  
                 <Route path="/AdminGameStats" element={<AdminGameStats/>}></Route>  
-                <Route path="/AdminLeagueFixtureUpdate/:id" element={<AdminLeagueFixtureUpdate/>}></Route>                    
-                <Route path="/LeagueFixtureHistory/:id" element={<LeagueFixtureHistory/>}></Route>  
+                <Route path="/AdminLeagueFixtureUpdate/:id/:id2" element={<AdminLeagueFixtureUpdate/>}></Route>                    
+                <Route path="/LeagueFixtureHistory/:id/:id2" element={<LeagueFixtureHistory/>}></Route>  
                 <Route path="/Logout" element={<Logout/>}></Route>
                 <Route path="*" element={<Home/>}></Route>
             </Route>
