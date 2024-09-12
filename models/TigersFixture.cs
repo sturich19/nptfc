@@ -20,6 +20,7 @@ namespace nptfcBE.Models
         public int GlsFor {get; set;}
         public int GlsA {get; set;}
         public Season Season {get; set;}
+        public string? VideoUrl {get; set;}
 
         public ICollection<GameStat> GameStats {get; set;}
 
@@ -55,7 +56,8 @@ namespace nptfcBE.Models
                 GlsA = dto.GlsA,
                 HomeTeamScore = dto.HomeTeamScore,
                 AwayTeamScore = dto.AwayTeamScore,
-                Season = season
+                Season = season,
+                VideoUrl = dto.VideoUrl
             };
         }
     }

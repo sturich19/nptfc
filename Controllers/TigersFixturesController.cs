@@ -37,7 +37,8 @@ public class TigersFixturesController : ControllerBase
                         Pts = fixture.Pts,
                         GlsFor = fixture.GlsFor,
                         GlsA = fixture.GlsA,
-                        SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear
+                        SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear,
+                        VideoUrl = fixture.VideoUrl
                     })
                     .OrderByDescending(f  => f.Date)                    
                     .ToListAsync();
@@ -64,7 +65,8 @@ public class TigersFixturesController : ControllerBase
                         Pts = fixture.Pts,
                         GlsFor = fixture.GlsFor,
                         GlsA = fixture.GlsA,
-                        SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear
+                        SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear,
+                        VideoUrl = fixture.VideoUrl
                     })
                     .OrderBy(f  => f.Date)
                     .Where(f=> seasonId == f.SeasonId)                    
@@ -103,7 +105,8 @@ public class TigersFixturesController : ControllerBase
             Pts = fixture.Pts,
             GlsFor = fixture.GlsFor,
             GlsA = fixture.GlsA,
-            SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear
+            SeasonName = "U" + fixture.Season.AgeGroup + " " + fixture.Season.StartYear,
+            VideoUrl = fixture.VideoUrl
         };    
     }
 

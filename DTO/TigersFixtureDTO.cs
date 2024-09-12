@@ -16,5 +16,6 @@ namespace nptfcBE.DTO
         public int Pts {get; set;}
         public int GlsFor {get; set;}
         public int GlsA {get; set;}
+        public string? VideoUrl {get; set;}
     }
 }
