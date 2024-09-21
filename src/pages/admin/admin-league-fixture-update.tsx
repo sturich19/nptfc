@@ -46,10 +46,10 @@ const AdminLeagueFixtureUpdate = ()  =>
               <h6>{fixture?.homeTeam} {fixture?.homeTeamScore} vs {fixture?.awayTeamScore} {fixture?.awayTeam} </h6>
             </div>
             <div className="row admin-controls-body">
-                <div className="col-6">
+                <div className="col-2">
                     <TextField label="Home Score" name="homeTeamScore" formik={formik}/>
                 </div>                    
-                <div className="col-6">
+                <div className="col-2">
                     <TextField label="Away Score" name="awayTeamScore" formik={formik}/>
                 </div>                    
             </div>

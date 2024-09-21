@@ -17,7 +17,7 @@ export function GetTotalGoals (gameStatProps : GameStatsProps) {
 
     if (gameStatProps.gameStats.length === 1)
         return gameStatProps.gameStats[0].goals;
-
+    
     return gameStatProps.gameStats.reduce((totalGoals, gameStat) => {
      return totalGoals + gameStat.goals;
 },0)}  
