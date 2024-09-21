@@ -95,11 +95,11 @@ public class LeagueController : ControllerBase
 
     internal async Task UpdateLeagueWithResult(FixtureDTO fixture, Team homeTeam, Team awayTeam)
     {
-        var existingHomeTeam  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id);
+        var existingHomeTeam  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id && lt.SeasonId == fixture.SeasonId);
         if (existingHomeTeam == null)
             return;
 
-        var existingAwayTeam  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == awayTeam.Id);
+        var existingAwayTeam  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == awayTeam.Id && lt.SeasonId == fixture.SeasonId);
         if (existingAwayTeam == null)
             return;
 
@@ -131,11 +131,11 @@ public class LeagueController : ControllerBase
 
     internal async Task UpdateLeagueAfterScrewUp(FixtureDTO fixture, Team homeTeam, Team awayTeam, Fixture existingFixture)
     {
-        var homeTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id);
+        var homeTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == homeTeam.Id && lt.SeasonId == fixture.SeasonId);
         if (homeTeamLeagueStats == null)
             return;
 
-        var awayTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == awayTeam.Id);
+        var awayTeamLeagueStats  = await _context.League.FirstOrDefaultAsync(lt => lt.TeamId == awayTeam.Id && lt.SeasonId == fixture.SeasonId);
         if (awayTeamLeagueStats == null)
             return;
 
@@ -160,7 +160,7 @@ public class LeagueController : ControllerBase
             {
                 // Originally the home team won. If thats still the same. Do nothing - could just be a score update.
                 if (fixture.HomeTeamScore > fixture.AwayTeamScore)
-                    break;
+                    break;                    
 
                 // Originally the home team won. Its now a loss.
                 if (fixture.HomeTeamScore < fixture.AwayTeamScore)
@@ -232,7 +232,7 @@ public class LeagueController : ControllerBase
 
     private WhoWon WhoWonTheGame(int homeScore, int awayScore)
     {
-        if (homeScore> awayScore)
+        if (homeScore > awayScore)
             return WhoWon.Home;
 
         if (awayScore > homeScore)
