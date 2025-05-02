@@ -119,7 +119,8 @@ public class FixturesController : ControllerBase
                         GlsFor = leagueTeam.GlsFor,
                         GlsA = leagueTeam.GlsA,    
                         GD = leagueTeam.GlsFor - leagueTeam.GlsA,
-                        AchieveablePoints = 36 - (leagueTeam.Lost * 3) - (leagueTeam.Drawn * 2)
+                        AchieveablePoints = 36 - (leagueTeam.Lost * 3) - (leagueTeam.Drawn * 2),
+                        WinPercentage = leagueTeam.WinPercentage
                     })
                     .Where(l => l.SeasonId == seasonId)
                     .OrderBy(l => l.TeamName)

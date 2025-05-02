@@ -16,5 +16,6 @@ namespace nptfcBE.DTO
         public int GlsA {get; set;}
         public int GD {get; set;}
         public int AchieveablePoints {get; set;}
+        public double WinPercentage {get; set;}
     }
 }
