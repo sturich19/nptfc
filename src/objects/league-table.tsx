@@ -12,4 +12,5 @@ export interface LeagueTable{
     glsA  : number
     gd : number
     achieveablePoints : number
+    winPercentage : number
 }

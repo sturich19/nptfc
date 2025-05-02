@@ -21,7 +21,7 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
     return(  
         <>
         <tr className={classesToAdd} onClick={() => handleClick(leagueTableProps.leagueTableRow)}>
-            <td className='col-3'>{leagueTableProps.leagueTableRow.teamName}</td>
+            <td className='col-2'>{leagueTableProps.leagueTableRow.teamName}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.pld}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.won}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.drawn}</td>
@@ -31,6 +31,7 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
             <td className='col-1'>{leagueTableProps.leagueTableRow.gd}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.points}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.achieveablePoints}</td>
+            <td className='col-1'>{Math.round(leagueTableProps.leagueTableRow.winPercentage)}%</td>
         </tr>                
         </>   
     )

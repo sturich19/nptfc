@@ -23,7 +23,7 @@ const AdminLeagueTableUpdate = ()  =>
     const formik = useFormik({
         initialValues :{ team: 0, season: 6, won : 0, lost: 0,drawn : 0, glsFor : 0,glsA : 0 },
         onSubmit : values => {
-            const leageTable : LeagueTable = {id : 1, achieveablePoints: 0, gd : 0, pld : 0, points : 0, teamName : "",drawn : values.drawn,
+            const leageTable : LeagueTable = {id : 1, achieveablePoints: 0, winPercentage: 0,  gd : 0, pld : 0, points : 0, teamName : "",drawn : values.drawn,
                 glsA : values.glsA, glsFor: values.glsFor,lost : values.lost, seasonId : values.season, teamId : values.team, won : values.won
             }
             PostLeagueTableResult(leageTable).then(formik.resetForm);

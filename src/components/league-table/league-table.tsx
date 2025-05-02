@@ -24,6 +24,7 @@ const LeagueTableComponent = (leagueTableProps : LeagueTableComponentProps) => {
                             <th>GD</th>  
                             <th>Pts</th>  
                             <th>AP</th>
+                            <th>W%</th>
                         </tr>
                     </thead>
                     <tbody className="table-group-divider">                        
