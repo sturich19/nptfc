@@ -44,6 +44,14 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                 gameStatProps.gameStats.sort((a , b) => b.shots - a.shots)
                 break;
 
+            case "shotsL":
+                gameStatProps.gameStats.sort((a , b) => b.shotsLeft - a.shotsLeft)
+                break;
+
+            case "shotsR":
+                gameStatProps.gameStats.sort((a , b) => b.shotsRight - a.shotsRight)
+                break;
+
             case "shotsOn":
                 gameStatProps.gameStats.sort((a , b) => b.shotsOnTarget - a.shotsOnTarget)
                 break;
@@ -82,6 +90,8 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                             <th scope="col" className="sortable" onClick={() => Sort("ass")}>Ass</th>
                             <th scope="col" className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                             <th scope="col" className="sortable" onClick={() => Sort("shots")}>Shots</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("shotsL")}>Shots L</th>
+                            <th scope="col" className="sortable" onClick={() => Sort("shotsR")}>Shots R</th>
                             <th scope="col" className="sortable" onClick={() => Sort("shotsOn")}>On</th>
                             <th scope="col" className="sortable" onClick={() => Sort("shotsOff")}>Off</th>                            
                             <th scope="col" className="sortable" onClick={() => Sort("cs")}>CS</th>
@@ -102,6 +112,8 @@ const GameStatTable = (gameStatProps : GameStatComponentProps) => {
                                     <td>{f.assists}</td>
                                     <td>{f.gso}</td>
                                     <td>{f.shots}</td>
+                                    <td>{f.shotsLeft}</td>
+                                    <td>{f.shotsRight}</td>
                                     <td>{f.shotsOnTarget}</td>
                                     <td>{f.shotsOffTarget}</td>                                
                                     <td>{f.cleanSheets}</td>  

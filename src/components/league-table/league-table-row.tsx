@@ -29,8 +29,7 @@ const LeagueTableRow = (leagueTableProps : LeagueTableRowComponentProps) => {
             <td className='col-1'>{leagueTableProps.leagueTableRow.glsFor}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.glsA}</td>
             <td className='col-1'>{leagueTableProps.leagueTableRow.gd}</td>
-            <td className='col-1'>{leagueTableProps.leagueTableRow.points}</td>
-            <td className='col-1'>{leagueTableProps.leagueTableRow.achieveablePoints}</td>
+            <td className='col-1'>{leagueTableProps.leagueTableRow.points}</td>            
             <td className='col-1'>{Math.round(leagueTableProps.leagueTableRow.winPercentage)}%</td>
         </tr>                
         </>   

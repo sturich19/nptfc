@@ -22,8 +22,7 @@ const LeagueTableComponent = (leagueTableProps : LeagueTableComponentProps) => {
                             <th>GF</th>  
                             <th>GA</th>  
                             <th>GD</th>  
-                            <th>Pts</th>  
-                            <th>AP</th>
+                            <th>Pts</th>                              
                             <th>W%</th>
                         </tr>
                     </thead>
