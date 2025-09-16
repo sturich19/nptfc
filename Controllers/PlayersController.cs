@@ -19,14 +19,14 @@ public class PlayersController : ControllerBase
     [HttpGet(Name = "GetPlayers")]
     public async Task<ActionResult<IEnumerable<Player>>> GetPlayers()
     {
-        return await _context.Players.ToListAsync();
+        return await _context.Players.Where(p => p.Active).ToListAsync();
     }
 
     // GET: api/Players/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Player>> GetPlayer(int id)
     {
-        var player = await _context.Players.FindAsync(id);
+        var player = await _context.Players.Where(p => p.Id == id && p.Active).FirstOrDefaultAsync();
 
         if (player == null)
         {

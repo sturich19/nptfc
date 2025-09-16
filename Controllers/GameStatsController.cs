@@ -25,6 +25,7 @@ public class GameStatsController : ControllerBase
                         .Include(f => f.Season)
                         .Include(f => f.Player)
                         .Include(f => f.Fixture)
+                        .Where(f => f.Player.Active)
                         .FirstOrDefaultAsync();
 
         if (gameStat == null)
@@ -60,11 +61,12 @@ public class GameStatsController : ControllerBase
     [HttpGet(Name = "GetGameStats")]
     public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStats()
     {
-          return await _context.GameStats                    
+          return await _context.GameStats
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
+                    .Where(x => x.p.Active)
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {
@@ -96,6 +98,8 @@ public class GameStatsController : ControllerBase
     public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForPlayer(int playerId)
     {
           return await _context.GameStats
+                    .Include(gs => gs.Player)
+                    .Where(gs => gs.Player.Active)
                     .Select(gameStat => new GameStatDTO
                     {
                         Id = gameStat.Id,
@@ -128,11 +132,12 @@ public class GameStatsController : ControllerBase
     {
             // This is joining game stat with the players based on the season passed. Then summing up the data points for each "player"
             return await _context.GameStats
-                    .Where(g => g.SeasonId == seasonId)  
+                    .Where(g => g.SeasonId == seasonId)
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
+                    .Where(x => x.p.Active)
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {
@@ -163,6 +168,8 @@ public class GameStatsController : ControllerBase
     public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForFixture(int fixtureId)
     {
           return await _context.GameStats
+                    .Include(gs => gs.Player)
+                    .Where(gs => gs.Player.Active)
                     .Select(gameStat => new GameStatDTO
                     {
                         Id = gameStat.Id,
@@ -194,6 +201,8 @@ public class GameStatsController : ControllerBase
     public async Task<ActionResult<IEnumerable<GameStatDTO>>> GetGameStatsForPlayerPerSeason(int playerId, int seasonId)
     {
           return await _context.GameStats
+                    .Include(gs => gs.Player)
+                    .Where(gs => gs.Player.Active)
                     .Select(gameStat => new GameStatDTO
                     {
                         Id = gameStat.Id,
@@ -232,9 +241,10 @@ public class GameStatsController : ControllerBase
             return await _context.GameStats
                     .Where(gameStat => seasonsForAgeGroup.Contains(gameStat.SeasonId))
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
+                    .Where(x => x.p.Active)
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {

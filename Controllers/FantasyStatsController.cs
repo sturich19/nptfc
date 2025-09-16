@@ -31,12 +31,12 @@ public class FantasyStatsController : ControllerBase
     public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStats(int seasonId)
     {
         // load all the stats for the season passed in - group by the player
-        var gameStatsPerPlayer = await _context.GameStats                    
+        var gameStatsPerPlayer = await _context.GameStats
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
-                    .Where(g => g.gs.SeasonId == seasonId)                                        
+                    .Where(g => g.gs.SeasonId == seasonId && g.p.Active)                                        
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {
@@ -62,7 +62,7 @@ public class FantasyStatsController : ControllerBase
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
             Player player = _context.Players.Find(gameStat.PlayerId);
-            if (player == null)
+            if (player == null || !player.Active)
                 continue;
 
             fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
@@ -84,12 +84,12 @@ public class FantasyStatsController : ControllerBase
             .Select(s => s.Id);
 
         // load all the stats for the season passed in - group by the player
-        var gameStatsPerPlayer = await _context.GameStats                    
+        var gameStatsPerPlayer = await _context.GameStats
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
-                    .Where(g => seasonIds.Contains(g.gs.SeasonId))                                        
+                    .Where(g => seasonIds.Contains(g.gs.SeasonId) && g.p.Active)                                        
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {
@@ -115,7 +115,7 @@ public class FantasyStatsController : ControllerBase
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
             Player player = _context.Players.Find(gameStat.PlayerId);
-            if (player == null)
+            if (player == null || !player.Active)
                 continue;                        
 
            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
@@ -127,12 +127,12 @@ public class FantasyStatsController : ControllerBase
     [HttpGet("fixture/{fixtureId}", Name = "GetFantasyStatsForFixture")]
     public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStatsForFixture(int fixtureId)
     {
-        var gameStatsPerPlayer = await _context.GameStats                    
+        var gameStatsPerPlayer = await _context.GameStats
                     .Join(_context.Players,
-                        gs => gs.PlayerId, 
+                        gs => gs.PlayerId,
                         p => p.Id,
                         (gs, p) => new {gs, p})
-                    .Where(g => g.gs.FixtureId == fixtureId)                                        
+                    .Where(g => g.gs.FixtureId == fixtureId && g.p.Active)                                        
                     .GroupBy(x => x.gs.PlayerId)                    
                     .Select(gameStatGroup => new GameStatDTO
                     {
@@ -158,7 +158,7 @@ public class FantasyStatsController : ControllerBase
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
             Player player = _context.Players.Find(gameStat.PlayerId);
-            if (player == null)
+            if (player == null || !player.Active)
                 continue;
 
             fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
