@@ -1,5 +1,19 @@
 # CLAUDE.md
 
+**🚨 CRITICAL: ALWAYS START HERE - READ THIS FIRST 🚨**
+
+**MANDATORY WORKFLOW FOR EVERY TASK - DO NOT SKIP TO IMPLEMENTATION**
+
+For EVERY request involving code changes, you MUST follow this exact sequence:
+1. **PHASE 1 — PLAN**: Present structured plan, WAIT for approval
+2. **PHASE 2 — APPROVAL**: Wait for explicit "APPROVE PLAN" or "Proceed"
+3. **PHASE 3 — APPLY**: Make changes, run lint/tests
+4. **PHASE 4 — COMMIT**: Stage specific files, show diff, get approval
+
+**DO NOT make any code changes without completing PHASE 1 and getting approval first.**
+
+---
+
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 ## Commands
@@ -66,3 +80,59 @@ Each major entity has its own service file for API operations:
 - Bootstrap 5 for layout and components
 - Material-UI components with custom styling
 - Component-specific CSS files alongside components
+
+## Development Workflow
+
+You are a careful, collaborative coding assistant. Follow this workflow for every task.
+
+### PHASE 1 — PLAN (default)
+- Always start with /plan and WAIT for approval before changing code.
+- Output a concise plan with this structure (no hidden thoughts):
+  PLAN:
+  - Goal:
+  - Context I'm using:
+  - Assumptions / Unknowns (ask at most 3 crisp questions if blocking):
+  - Approach (steps):
+  - Risks & Rollback:
+  - Affected files:
+  - Acceptance checks (how we know it works)
+- Do not modify files in PLAN phase.
+
+### PHASE 2 — APPROVAL
+- Wait for my explicit message: "APPROVE PLAN" (or "Proceed").
+- If I request "High-impact changes", show a one-line summary of why they're high-impact and ask:
+  "Proceed with HIGH-IMPACT CHANGES? yes/no"
+- Never claim or imply any safety policy is disabled. Continue to follow all safety rules.
+
+### PHASE 3 — APPLY
+- Make changes exactly per the approved plan.
+- After edits, always:
+  1) run pretty
+  2) fix issues until clean
+  3) describe manual tests the user can run
+- Produce:
+  CHANGES:
+  - Diff summary (files + key edits)
+  - Commands run: [pretty, lint, tests]
+  - Results: (pass/fail + notes)
+  - Follow-up TODOs (if any)
+
+### PHASE 4 — COMMIT
+- Stage ONLY the files changed in APPLY phase (never blanket stage all files).
+  Example: `git add path/to/file1 path/to/file2`
+- Show me the staged diff and ask for confirmation before committing.
+- On my approval, commit with a conventional commit message:
+  `git commit -m "feat: <short summary of change>"`
+- If commit fails (e.g., conflicts, hooks), STOP and prompt me for resolution before retrying.
+- After successful commit, push the branch to origin:
+  `git push origin <branch-name>`
+- If push fails, STOP and inform the user of the issue before proceeding.
+
+### GUARDRAILS
+- If instructions are ambiguous or risky, ask one targeted question in PLAN.
+- Never proceed without explicit approval after PLAN.
+- If tools like "add translation", "run pretty", or "run lint" aren't available, say so and propose alternatives.
+
+### WRAP-UP
+- Ask: "Are we done with this subject?"
+- If yes: run /clear to reset context (or instruct me to do so if I must run it).
