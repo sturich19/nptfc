@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 const AdminTeam = ()  =>
 {
     const [teams, setTeams] = useState<Team[]>([]);
+    const [filteredTeams, setFilteredTeams] = useState<Team[]>([]);
+    const [searchTerm, setSearchTerm] = useState('');
     const [editingTeam, setEditingTeam] = useState<Team | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -52,8 +54,22 @@ const AdminTeam = ()  =>
         try {
             const data = await GetTeams();
             setTeams(data || []);
+            setFilteredTeams(data || []);
         } catch (error) {
             console.error('Error loading teams:', error);
+        }
+    };
+
+    const handleSearch = (value: string) => {
+        setSearchTerm(value);
+        if (value.trim() === '') {
+            setFilteredTeams(teams);
+        } else {
+            const filtered = teams.filter(team =>
+                team.name?.toLowerCase().includes(value.toLowerCase()) ||
+                team.id.toString().includes(value)
+            );
+            setFilteredTeams(filtered);
         }
     };
 
@@ -95,35 +111,58 @@ const AdminTeam = ()  =>
     return(
         <>
             <div className="container-fluid">
-                <h3>Team Management</h3>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Team Management</h3>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => navigate('/Admin')}
+                    >
+                        Back to Admin
+                    </button>
+                </div>
 
                 {/* Add New Team Form */}
-                <div className="row mb-4" style={{backgroundColor: '#f8f9fa', padding: '15px', borderRadius: '5px'}}>
-                    <h5>Add New Team</h5>
-                    <form onSubmit={formik.handleSubmit}>
-                        <div className="row">
-                            <div className="col-4">
-                                <TextField label="Team Name" name="name" formik={formik}/>
+                <div className="card mb-4">
+                    <div className="card-header bg-success text-white">
+                        <h5 className="mb-0">Add New Team</h5>
+                    </div>
+                    <div className="card-body">
+                        <form onSubmit={formik.handleSubmit}>
+                            <div className="row">
+                                <div className="col-4">
+                                    <TextField label="Team Name" name="name" formik={formik}/>
+                                </div>
+                                <div className="col-2 d-flex align-items-end">
+                                    <button
+                                        className="btn btn-success me-2"
+                                        type="submit"
+                                        disabled={loading}
+                                    >
+                                        {loading ? 'Adding...' : 'Add Team'}
+                                    </button>
+                                </div>
                             </div>
-                            <div className="col-2 d-flex align-items-end">
-                                <button
-                                    className="btn btn-primary me-2"
-                                    type="submit"
-                                    disabled={loading}
-                                >
-                                    {loading ? 'Adding...' : 'Add Team'}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
 
                 {/* Existing Teams Table */}
                 <div className="row">
                     <div className="col-12">
-                        <h5>Existing Teams</h5>
-                        {teams.length === 0 ? (
-                            <p>No teams found.</p>
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <h5>Existing Teams ({filteredTeams.length} of {teams.length})</h5>
+                            <div className="col-4">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search teams by name or ID..."
+                                    value={searchTerm}
+                                    onChange={(e) => handleSearch(e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        {filteredTeams.length === 0 ? (
+                            <p>{searchTerm ? `No teams found matching "${searchTerm}".` : 'No teams found.'}</p>
                         ) : (
                             <div className="table-responsive">
                                 <table className="table table-striped table-bordered">
@@ -135,7 +174,7 @@ const AdminTeam = ()  =>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {teams.sort((a, b) => a.id - b.id).map(team => (
+                                        {filteredTeams.sort((a, b) => a.id - b.id).map(team => (
                                             <tr key={team.id}>
                                                 {editingTeam?.id === team.id ? (
                                                     // Edit Mode
@@ -199,17 +238,6 @@ const AdminTeam = ()  =>
                     </div>
                 </div>
 
-                {/* Back Button */}
-                <div className="row mt-3">
-                    <div className="col-12">
-                        <button
-                            className="btn btn-secondary"
-                            onClick={() => navigate('/Admin')}
-                        >
-                            Back to Admin
-                        </button>
-                    </div>
-                </div>
             </div>
         </>
     );

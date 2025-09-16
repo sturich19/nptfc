@@ -1,4 +1,3 @@
-import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { Season } from "../../objects/season";
 import { useEffect, useState } from "react";
@@ -8,144 +7,388 @@ import { GetTigersFixtures } from "../../services/tigers-fixture-service";
 import { Player } from "../../objects/player";
 import { GetPlayers } from "../../services/player-service";
 import { GameStat } from "../../objects/game-stat";
-import { PostGameStat } from "../../services/game-stat-service";
-import TextField from "../../atoms/textfield/textfield";
+import { PostGameStatsBulk, GetFixtureGameStats } from "../../services/game-stat-service";
 import { FormatDate } from "../../utils/formatter-util";
 
+interface PlayerStats {
+    playerId: number;
+    playerName: string;
+    goals: number;
+    goalsLeft: number;
+    goalsRight: number;
+    goalsOther: number;
+    assists: number;
+    gso: number;
+    shots: number;
+    shotsOnTarget: number;
+    shotsOffTarget: number;
+    shotsLeft: number;
+    shotsRight: number;
+    cleanSheets: number;
+    saves: number;
+    penSaves: number;
+}
+
 const AdminGameStats = ()  =>
-{   
+{
     const [seasons, setSeasons] = useState<Season []>();
-    const [fixtures, setFixtures] = useState<TigersFixture []>();    
+    const [fixtures, setFixtures] = useState<TigersFixture []>();
     const [players, setPlayers] = useState<Player []>();
+    const [selectedSeason, setSelectedSeason] = useState<number>(0);
+    const [selectedFixture, setSelectedFixture] = useState<number>(0);
+    const [playerStats, setPlayerStats] = useState<PlayerStats[]>([]);
+    const [existingStats, setExistingStats] = useState<GameStat[]>([]);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {        
-        GetSeasons().then((data) => setSeasons(data));
-        GetTigersFixtures().then((data) => {setFixtures(data)});
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        GetSeasons().then((data) => {
+            setSeasons(data);
+            const activeSeason = data.find((season: Season) => season.active);
+            if (activeSeason) {
+                setSelectedSeason(activeSeason.id);
+            }
+        });
         GetPlayers().then((data) => setPlayers(data));
-    },[])
+    },[]);
 
-
-    const navigate = useNavigate();  
-    const formik = useFormik({
-        initialValues :{ id : 0, player : 0, fixture : 0, goals : 0, goalsLeft : 0, goalsRight : 0, goalsOther : 0, assists : 0, gso : 0, apps : 0, playerName: "", shots : 0, season : 6, shotsOnTarget : 0, shotsOffTarget : 0, cleanSheets : 0, saves : 0, penSaves : 0, shotsLeft : 0, shotsRight : 0},
-        onSubmit : values => {
-            const gameStat : GameStat = {id : values.id, playerId : values.player, fixtureId : values.fixture, goals : values.goals, goalsLeft : values.goalsLeft, goalsRight : values.goalsRight, goalsOther : values.goalsOther, assists : values.assists, gso : values.gso, apps : 0, playerName: "", shots : values.shots, seasonId : values.season,
-                                        shotsOnTarget : values.shotsOnTarget, shotsOffTarget : values.shotsOffTarget, cleanSheets : values.cleanSheets, saves : values.saves, penSaves : values.penSaves, shotsLeft : values.shotsLeft, shotsRight : values.shotsRight }
-                                                    
-            PostGameStat(gameStat).then(formik.resetForm);
+    useEffect(() => {
+        if (selectedSeason > 0) {
+            GetTigersFixtures().then((data) => {
+                const seasonFixtures = data.filter((f: TigersFixture) => f.seasonId === selectedSeason);
+                setFixtures(seasonFixtures);
+            });
         }
-    });
+    }, [selectedSeason]);
+
+    useEffect(() => {
+        if (selectedFixture > 0 && players) {
+            // Get existing stats for this fixture
+            GetFixtureGameStats(selectedFixture).then((stats) => {
+                setExistingStats(stats || []);
+
+                // Initialize player stats array with all players
+                const initialStats = players.map(player => {
+                    const existing = stats?.find((s: GameStat) => s.playerId === player.id);
+                    return {
+                        playerId: player.id,
+                        playerName: `${player.firstname} ${player.surname}`,
+                        goals: existing?.goals || 0,
+                        goalsLeft: existing?.goalsLeft || 0,
+                        goalsRight: existing?.goalsRight || 0,
+                        goalsOther: existing?.goalsOther || 0,
+                        assists: existing?.assists || 0,
+                        gso: existing?.gso || 0,
+                        shots: existing?.shots || 0,
+                        shotsOnTarget: existing?.shotsOnTarget || 0,
+                        shotsOffTarget: existing?.shotsOffTarget || 0,
+                        shotsLeft: existing?.shotsLeft || 0,
+                        shotsRight: existing?.shotsRight || 0,
+                        cleanSheets: existing?.cleanSheets || 0,
+                        saves: existing?.saves || 0,
+                        penSaves: existing?.penSaves || 0
+                    };
+                });
+                setPlayerStats(initialStats);
+            });
+        }
+    }, [selectedFixture, players]);
+
+    const handleStatChange = (playerId: number, field: keyof PlayerStats, value: number) => {
+        setPlayerStats(prev =>
+            prev.map(stat =>
+                stat.playerId === playerId
+                    ? { ...stat, [field]: value }
+                    : stat
+            )
+        );
+    };
+
+    const handleSaveAll = async () => {
+        if (!selectedSeason || !selectedFixture) {
+            alert('Please select both season and fixture');
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const gameStatsToSave: GameStat[] = playerStats.map(stat => ({
+                id: existingStats.find(e => e.playerId === stat.playerId)?.id || 0,
+                playerId: stat.playerId,
+                fixtureId: selectedFixture,
+                seasonId: selectedSeason,
+                goals: stat.goals,
+                goalsLeft: stat.goalsLeft,
+                goalsRight: stat.goalsRight,
+                goalsOther: stat.goalsOther,
+                assists: stat.assists,
+                gso: stat.gso,
+                shots: stat.shots,
+                shotsOnTarget: stat.shotsOnTarget,
+                shotsOffTarget: stat.shotsOffTarget,
+                shotsLeft: stat.shotsLeft,
+                shotsRight: stat.shotsRight,
+                cleanSheets: stat.cleanSheets,
+                saves: stat.saves,
+                penSaves: stat.penSaves,
+                apps: 0,
+                playerName: ""
+            }));
+
+            await PostGameStatsBulk(gameStatsToSave);
+            alert('All stats saved successfully!');
+
+            // Refresh existing stats after save
+            const updatedStats = await GetFixtureGameStats(selectedFixture);
+            setExistingStats(updatedStats || []);
+        } catch (error) {
+            console.error('Error saving stats:', error);
+            alert('Error saving stats. Please try again.');
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return(
-        <>     
+        <>
+            <div className="container-fluid">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <h3>Game Stats Entry</h3>
+                    <button
+                        className="btn btn-secondary"
+                        onClick={() => navigate('/Admin')}
+                    >
+                        Back to Admin
+                    </button>
+                </div>
 
-            {/* <AdminGameStatsEdit players={players}></AdminGameStatsEdit> */}            
-            <div>           
-                <form onSubmit={formik.handleSubmit}>
-                    <div className="row">   
-                        <div className="col-2">
-                            <label htmlFor="season" className="col-form-label">Season
-                                <select id="season" className="form-control" {...formik.getFieldProps("season")}>
-                                    <option>Select your option</option>
-                                    {seasons?.map(option => (
-                                        <option key={option.id} value={option.id}>U{option.ageGroup + " " + option.endYear + " (Div " + option.division + ")"}</option>
-                                    ))} 
-                                </select>
-                            </label>
-                        </div>   
-                        <div className="col-3">
-                            <label htmlFor="fixture" className="col-form-label">Fixture
-                                <select id="fixture" className="form-control" {...formik.getFieldProps("fixture")}>                                     
-                                    <option>Select your option</option>
-                                    {fixtures?.map(option => (
-                                        <option key={option.id} value={option.id}>{FormatDate(option.date) + " - " + option.homeTeam + " vs " + option.awayTeam}</option>
-                                    ))}
-                                </select>
-                            </label>
-                        </div>                                                  
-                        <div className="col-2">
-                            <label htmlFor="player" className="col-form-label">Player
-                                <select id="player" className="form-control" {...formik.getFieldProps("player")}>          
-                                    <option>Select your option</option>                           
-                                    {players?.map(option => (
-                                        <option key={option.id} value={option.id}>{option.firstname + " " + option.surname}</option>
-                                    ))}
-                                </select>
-                            </label>
-                        </div>                                            
+                {/* Season and Fixture Selection */}
+                <div className="card mb-4">
+                    <div className="card-header bg-success text-white">
+                        <h5 className="mb-0">Select Season & Fixture</h5>
                     </div>
-                    <div className="row">
-                        <div className="col-2">
-                            <TextField label="Goals" name="goals" formik={formik}/>
-                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
+                    <div className="card-body">
+                        <div className="row">
+                    <div className="col-3">
+                        <label htmlFor="season" className="col-form-label">Season
+                            <select
+                                id="season"
+                                className="form-control"
+                                value={selectedSeason}
+                                onChange={(e) => setSelectedSeason(Number(e.target.value))}
+                            >
+                                <option value={0}>Select your option</option>
+                                {seasons?.map(option => (
+                                    <option key={option.id} value={option.id}>U{option.ageGroup + " " + option.endYear + " (Div " + option.division + ")"}</option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+                    <div className="col-4">
+                        <label htmlFor="fixture" className="col-form-label">Fixture
+                            <select
+                                id="fixture"
+                                className="form-control"
+                                value={selectedFixture}
+                                onChange={(e) => setSelectedFixture(Number(e.target.value))}
+                                disabled={!selectedSeason}
+                            >
+                                <option value={0}>Select your option</option>
+                                {fixtures?.map(option => (
+                                    <option key={option.id} value={option.id}>
+                                        {FormatDate(option.date) + " - " + option.homeTeam + " vs " + option.awayTeam}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
                         </div>
-                        <div className="col-2">
-                            <TextField label="Goals Left" name="goalsLeft" formik={formik}/>
-                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Goals Right" name="goalsRight" formik={formik}/>
-                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Goals Other" name="goalsOther" formik={formik}/>
-                            {/* {formik.errors.goals && formik.touched.goals ? <span>{formik.errors.goals}</span> : null} */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Assists" name="assists" formik={formik}/>
-                            {/* {formik.errors.assists && formik.touched.assists ? <span>{formik.errors.assists}</span> : null} */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="GSO" name="gso" formik={formik}/>
-                            {/* {formik.errors.gso && formik.touched.gso ? <span>{formik.errors.gso}</span> : null} */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Shots" name="shots" formik={formik}/>
-                            {/* {formik.errors.shots && formik.touched.shots ? <span>{formik.errors.shots}</span> : null}  */}
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Shots On Target" name="shotsOnTarget" formik={formik}/>                            
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Shots Off Target" name="shotsOffTarget" formik={formik}/>                            
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Shots Left" name="shotsLeft" formik={formik}/>                            
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Shots Right" name="shotsRight" formik={formik}/>                            
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Clean Sheets" name="cleanSheets" formik={formik}/>                            
-                        </div>
-                        <div className="col-2">
-                            <TextField label="Saves" name="saves" formik={formik}/>                            
-                        </div>
+                    </div>
+                </div>
 
-                        <div className="col-2">
-                            <TextField label="Pen Saves" name="penSaves" formik={formik}/>                            
-                        </div>                       
-                    </div> 
-                   
-                    <div className="row">
-                        <div className="col-2">
-                            <button className="btn btn-secondary" type="button" onClick={()=> navigate('/Admin')}>Back</button>    
-                            <button className="btn btn-primary" type="submit">Go</button>    
+                {/* Player Stats Grid */}
+                {selectedFixture > 0 && playerStats.length > 0 && (
+                    <div className="table-responsive">
+                        <table className="table table-striped table-bordered">
+                            <thead className="table-dark">
+                                <tr>
+                                    <th>Player</th>
+                                    <th>Goals</th>
+                                    <th>G Left</th>
+                                    <th>G Right</th>
+                                    <th>G Other</th>
+                                    <th>Assists</th>
+                                    <th>GSO</th>
+                                    <th>Shots</th>
+                                    <th>On Target</th>
+                                    <th>Off Target</th>
+                                    <th>S Left</th>
+                                    <th>S Right</th>
+                                    <th>Clean Sheets</th>
+                                    <th>Saves</th>
+                                    <th>Pen Saves</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {playerStats.map(stat => (
+                                    <tr key={stat.playerId}>
+                                        <td style={{fontWeight: 'bold', minWidth: '150px'}}>
+                                            {stat.playerName}
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.goals}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'goals', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.goalsLeft}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'goalsLeft', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.goalsRight}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'goalsRight', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.goalsOther}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'goalsOther', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.assists}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'assists', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.gso}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'gso', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.shots}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'shots', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.shotsOnTarget}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'shotsOnTarget', Number(e.target.value))}
+                                                style={{width: '70px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.shotsOffTarget}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'shotsOffTarget', Number(e.target.value))}
+                                                style={{width: '70px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.shotsLeft}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'shotsLeft', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.shotsRight}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'shotsRight', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.cleanSheets}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'cleanSheets', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.saves}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'saves', Number(e.target.value))}
+                                                style={{width: '60px'}}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input
+                                                type="number"
+                                                className="form-control form-control-sm"
+                                                value={stat.penSaves}
+                                                onChange={(e) => handleStatChange(stat.playerId, 'penSaves', Number(e.target.value))}
+                                                style={{width: '70px'}}
+                                            />
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                )}
+
+                {selectedFixture > 0 && playerStats.length > 0 && (
+                    <div className="row mt-3">
+                        <div className="col-12">
+                            <button
+                                className="btn btn-primary"
+                                type="button"
+                                onClick={handleSaveAll}
+                                disabled={!selectedFixture || loading}
+                            >
+                                {loading ? 'Saving...' : 'Save All Stats'}
+                            </button>
                         </div>
-                    </div> 
-                </form>            
+                    </div>
+                )}
             </div>
         </>
     );
 }
 
 export default AdminGameStats;
-
-
-
-
-// import { useFormik } from "formik";
-// import { useNavigate } from "react-router-dom";
 // import { Season } from "../../objects/season";
 // import { useEffect, useState } from "react";
 // import { GetSeasons } from "../../services/season-service";

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Season } from '../objects/season';
+import { SeasonSetupDTO } from '../objects/season-setup-dto';
 const API_URL = process.env.REACT_APP_API_URL + 'seasons';
 
 export const GetSeasons = async () => {
@@ -41,5 +42,17 @@ export const PostSeason = async (season : Season) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching data: ", error);
+    }
+};
+
+export const PostSeasonSetup = async (seasonSetup : SeasonSetupDTO) => {
+    const url = API_URL + '/setup';
+
+    try {
+        const response = await axios.post(url, seasonSetup);
+        return response.data;
+    } catch (error) {
+        console.error("Error posting season setup: ", error);
+        throw error;
     }
 };

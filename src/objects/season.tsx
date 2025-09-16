@@ -5,5 +5,6 @@ export interface Season{
     ageGroup : number,
     division : number,
     monthStart : string,
-    monthEnd : string
+    monthEnd : string,
+    active : boolean
 }

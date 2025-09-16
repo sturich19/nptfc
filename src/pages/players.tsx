@@ -9,25 +9,61 @@ export default function Players()
 {
     const [players, setPlayers] = useState<Player[] | null>(null);
     const [seasons, setSeasons] = useState<Season[] | undefined>();
-    
+    const [showAllSeasons, setShowAllSeasons] = useState(false);
+
     useEffect(() => {
         GetPlayers().then(player => setPlayers(player));
-        GetSeasons().then(seasons => setSeasons(seasons));   
-    }, []);  
-    
-    return(        
-        <div>
-            { players ? 
-                <>  
-                    <div className='container-fluid'>
-                        {/* Players  */}
-                        <div className="row">
-                            {players.map((item) => (
-                                <PlayerCard key={item.id} player={item} seasons={seasons}></PlayerCard>))}
-                        </div>    
-                    </div>        
-                </> 
-            : <p>Loading...</p>}
-        </div>                
+        GetSeasons().then(seasons => setSeasons(seasons));
+    }, []);
+
+    const getFilteredSeasons = () => {
+        if (!seasons || showAllSeasons) return seasons;
+        // Show only the 2 most recent seasons by default
+        return seasons.slice(0, 2);
+    };
+
+    return(
+        <div className="container-fluid">
+            {/* Modern Compact Header */}
+            <div className="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                <div>
+                    <h5 className="mb-0 text-success fw-bold">
+                        <i className="bi bi-people-fill me-2"></i>
+                        Player Statistics
+                    </h5>
+                    <small className="text-muted">
+                        {showAllSeasons ? 'All seasons' : 'Recent seasons (last 2)'} • {players?.length || 0} players
+                    </small>
+                </div>
+                <div className="d-flex gap-2">
+                    <button
+                        className={`btn btn-sm ${!showAllSeasons ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setShowAllSeasons(false)}
+                    >
+                        Recent
+                    </button>
+                    <button
+                        className={`btn btn-sm ${showAllSeasons ? 'btn-success' : 'btn-outline-success'}`}
+                        onClick={() => setShowAllSeasons(true)}
+                    >
+                        All Seasons
+                    </button>
+                </div>
+            </div>
+
+            {players ? (
+                <div className="row g-2">
+                    {players.map((item) => (
+                        <PlayerCard key={item.id} player={item} seasons={getFilteredSeasons()}></PlayerCard>
+                    ))}
+                </div>
+            ) : (
+                <div className="text-center p-4">
+                    <div className="spinner-border text-success" role="status">
+                        <span className="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            )}
+        </div>
     )
 }

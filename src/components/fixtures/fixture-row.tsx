@@ -18,12 +18,11 @@ const FixtureRow = ( {fixture, handleClick} : any) => {
     return(  
         
         <tr className={fixtureStyleToAdd} onClick={( ) => handleClick(fixture.id)}>
-            <td className='col-1'>{FormatDate(fixture.date)}</td>            
-            <td className='col-3'>{fixture.homeTeam}</td>
+            <td className='col-4'>{fixture.homeTeam}</td>
             <td className='col-1'>{fixture.homeTeamScore}</td>
             <td className='col-1'>V</td>
-            <td className='col-1'>{fixture.awayTeamScore}</td>            
-            <td className='col-3'>{fixture.awayTeam}</td>                                 
+            <td className='col-1'>{fixture.awayTeamScore}</td>
+            <td className='col-4'>{fixture.awayTeam}</td>
         </tr>                
         
     )

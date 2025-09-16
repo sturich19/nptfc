@@ -13,15 +13,14 @@ const FixtureTable = ({fixtures, handleClick} : FixtureComponentProps) => {
         <div className="row">    
             <div className="col-sm-1 d-none d-sm-block"></div>  
             <div className='col-12 col-sm-10'>
-                <table className="table table-hover table-condensed table-responsive table-sm">
+                <table className="table table-hover table-condensed table-responsive table-sm mb-0" style={{borderBottom: 'none'}}>
                     <thead>
                         <tr>
-                            <th>Date</th>
-                            <th>Home Team</th>                            
+                            <th>Home Team</th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>Away Team</th>  
+                            <th>Away Team</th>
                         </tr>
                     </thead>
                     <tbody className='table-group-divider'>     

@@ -82,118 +82,142 @@ export default function SeasonView()
                 <div className='col-12'>
                     { fixtures ? 
                         <>  
-                            <div className='container-fluid'>                                
-                                <div className="season-header">
-                                    <h4>U{currentSeason?.ageGroup}'s Divison {currentSeason?.division} - {currentSeason?.monthStart} to {currentSeason?.monthEnd}</h4>
-                                </div>  
+                            <div className='container-fluid'>
+                                {/* Modern Compact Header */}
+                                <div className="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                                    <div>
+                                        <h5 className="mb-0 text-success fw-bold">
+                                            U{currentSeason?.ageGroup}'s Division {currentSeason?.division}
+                                        </h5>
+                                        <small className="text-muted">
+                                            {currentSeason?.monthStart} to {currentSeason?.monthEnd}
+                                        </small>
+                                    </div>
 
-                                <div className='row'>  
-                                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
-                                    <ButtonAtom label="League" clickHandler={() => handleSideBarItemClick(0)}></ButtonAtom>
-                                    <ButtonAtom label="Fixtures" clickHandler={() => handleSideBarItemClick(2)}></ButtonAtom>
-                                    <ButtonAtom label="Stats" clickHandler={() => handleSideBarItemClick(1)}></ButtonAtom>
-                                    <ButtonAtom label="Fantasy" clickHandler={() => handleSideBarItemClick(3)}></ButtonAtom>
-                                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
+                                    {/* Modern Tab Navigation */}
+                                    <div className="d-flex gap-1">
+                                        <ButtonAtom label="League" clickHandler={() => handleSideBarItemClick(0)} isActive={viewDetails}></ButtonAtom>
+                                        <ButtonAtom label="Fixtures" clickHandler={() => handleSideBarItemClick(2)} isActive={viewGrid}></ButtonAtom>
+                                        <ButtonAtom label="Stats" clickHandler={() => handleSideBarItemClick(1)} isActive={viewStats}></ButtonAtom>
+                                        <ButtonAtom label="Fantasy" clickHandler={() => handleSideBarItemClick(3)} isActive={viewFantasy}></ButtonAtom>
+                                    </div>
                                 </div>                             
                                
                                 {/* League Table */}
-                                {viewDetails ?                                 
-                                    <div className="row">
-                                        <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                        {   leagueTable ? 
-                                                <div className="col-12 col-sm-10">  
-                                                    {leagueTable.length > 0 ? <LeagueTableComponent leagueTableRows={leagueTable}></LeagueTableComponent> : <div></div>}
-                                                </div>
-                                            : <p>Loading Table...</p>}
-                                        <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                    </div>  
-                                  :
-                                  <div></div>
-                                }   
-                                
-                                {/* Results - league */}
-                                {viewDetails ? 
-                                    <>
-                                        <div className="row">
-                                            <div className="col-sm-1 .d-none .d-sm-block"></div>  
-                                            <div className="col-11">
-                                            <h6>Tigers results - click a row to see the match data</h6>
-                                            </div>  
+                                {viewDetails && (
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-header bg-light border-bottom">
+                                            <h6 className="mb-0 text-success fw-semibold">
+                                                <i className="bi bi-table me-2"></i>
+                                                League Table
+                                            </h6>
+                                            <small className="text-muted">Current season standings</small>
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-1 .d-none .d-sm-block"></div>
-                                            <div className="col-12 col-sm-10">                                                                                                                                      
-                                                <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>                             
-                                            </div>
-                                            <div className="col-sm-1 .d-none .d-sm-block"></div>  
-                                        </div>   
-                                    </> 
-                                 :
-                                 <div></div>
-                               }    
+                                        <div className="card-body p-0">
+                                            {leagueTable ? (
+                                                leagueTable.length > 0 ? (
+                                                    <LeagueTableComponent leagueTableRows={leagueTable}></LeagueTableComponent>
+                                                ) : (
+                                                    <div className="text-center p-4 text-muted">No league data available</div>
+                                                )
+                                            ) : (
+                                                <div className="text-center p-4">
+                                                    <div className="spinner-border text-success" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}   
+                                
+                                {/* Tigers Results */}
+                                {viewDetails && (
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-header bg-light border-bottom">
+                                            <h6 className="mb-0 text-success fw-semibold">
+                                                <i className="bi bi-trophy-fill me-2"></i>
+                                                Tigers Results
+                                            </h6>
+                                            <small className="text-muted">Click a row to see match details</small>
+                                        </div>
+                                        <div className="card-body p-0">
+                                            <FixtureTable fixtures={fixtures} gameType={GameType.Any}></FixtureTable>
+                                        </div>
+                                    </div>
+                                )}    
 
                                 {/* Team Stats */}
-                                {viewStats ?  
-                                    <div className="row">
-                                        {   gameStats ? 
-                                            <>
-                                                {gameStats.length > 0 ? 
-                                                    <> 
-                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
-                                                        <div className="col-10">       
-                                                            <GameStatTable gameStats={gameStats}></GameStatTable>
-                                                        </div>                                               
-                                                        <div className="col-sm-1 .d-none .d-sm-block"></div>          
-                                                    </>                                                    
-                                                    : <div></div>
-                                                }
-                                                
-                                            </>
-                                            : <p>Loading Stats...</p>}
-                                    </div>  
-                                :
-                                 <div></div>
-                               } 
-
-                               {/* Fantasy Stats */}
-                               {viewGrid ?
-                                    <>
-                                        <div className='row'>    
-                                            <div className="col-12">
-                                                <FixtureList seasonId={param.id} date={new Date()}></FixtureList>
-                                            </div>
+                                {viewStats && (
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-header bg-light border-bottom">
+                                            <h6 className="mb-0 text-success fw-semibold">
+                                                <i className="bi bi-graph-up me-2"></i>
+                                                Player Statistics
+                                            </h6>
+                                            <small className="text-muted">Season performance data</small>
                                         </div>
-                                        {/* <div className='row'>    
-                                            <div className="col-12">
-                                                <FixtureGridComponent seasonId={param.id}></FixtureGridComponent>
-                                            </div>
-                                        </div> */}
-                                    </> 
+                                        <div className="card-body p-0">
+                                            {gameStats ? (
+                                                gameStats.length > 0 ? (
+                                                    <GameStatTable gameStats={gameStats}></GameStatTable>
+                                                ) : (
+                                                    <div className="text-center p-4 text-muted">No stats available</div>
+                                                )
+                                            ) : (
+                                                <div className="text-center p-4">
+                                                    <div className="spinner-border text-success" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )} 
 
-                                    :
-                                    <div></div>
-                                }   
+                               {/* Fixtures */}
+                               {viewGrid && (
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-header bg-light border-bottom">
+                                            <h6 className="mb-0 text-success fw-semibold">
+                                                <i className="bi bi-calendar-event me-2"></i>
+                                                Season Fixtures
+                                            </h6>
+                                            <small className="text-muted">All matches organized by date</small>
+                                        </div>
+                                        <div className="card-body p-0">
+                                            <FixtureList seasonId={param.id} date={new Date()}></FixtureList>
+                                        </div>
+                                    </div>
+                               )}   
 
                                 {/* Fantasy Stats */}
-                                {viewFantasy ?  
-                                    <div className="row">
-                                        {   fantasyStats ? 
-                                            <>
-                                                {fantasyStats.length > 0 ? 
-                                                    <>
-                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
-                                                        <div className="col-10">              
-                                                            <FantasyStatTable fantasyStats={fantasyStats}></FantasyStatTable> : <div></div>
-                                                        </div>
-                                                        <div className="col-sm-1 .d-none .d-sm-block"></div> 
-                                                    </>
-                                                    : <div></div>}
-                                            </>
-                                            : <p>Loading Stats...</p>}
-                                    </div> 
-                                    :
-                                    <div></div>
-                               }    
+                                {viewFantasy && (
+                                    <div className="card shadow-sm mb-4">
+                                        <div className="card-header bg-light border-bottom">
+                                            <h6 className="mb-0 text-success fw-semibold">
+                                                <i className="bi bi-star-fill me-2"></i>
+                                                Fantasy Statistics
+                                            </h6>
+                                            <small className="text-muted">Fantasy football scoring data</small>
+                                        </div>
+                                        <div className="card-body p-0">
+                                            {fantasyStats ? (
+                                                fantasyStats.length > 0 ? (
+                                                    <FantasyStatTable fantasyStats={fantasyStats}></FantasyStatTable>
+                                                ) : (
+                                                    <div className="text-center p-4 text-muted">No fantasy data available</div>
+                                                )
+                                            ) : (
+                                                <div className="text-center p-4">
+                                                    <div className="spinner-border text-success" role="status">
+                                                        <span className="visually-hidden">Loading...</span>
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}    
                             </div>                         
                         </> 
                     : <p>Loading...</p>}

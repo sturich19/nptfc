@@ -77,3 +77,15 @@ export const PostGameStat = async (gameStat : GameStat) => {
         console.error("Error fetching data: ", error);
     }
 };
+
+export const PostGameStatsBulk = async (gameStats : GameStat[]) => {
+    const url = API_URL + '/Bulk';
+
+    try {
+        const response = await axios.post(url, gameStats);
+        return response.data;
+    } catch (error) {
+        console.error("Error posting bulk game stats: ", error);
+        throw error;
+    }
+};

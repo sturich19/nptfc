@@ -29,7 +29,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Architecture
 
-This is a React TypeScript application for NPTFC (North Park Tigers Football Club) built with Create React App.
+This is a React TypeScript application for NPTFC (Newport Pagnell Tigers Football Club) built with Create React App.
 
 ### Tech Stack
 - **Frontend**: React 18 with TypeScript
@@ -109,13 +109,7 @@ You are a careful, collaborative coding assistant. Follow this workflow for ever
 - After edits, always:
   1) run pretty
   2) fix issues until clean
-  3) describe manual tests the user can run
-- Produce:
-  CHANGES:
-  - Diff summary (files + key edits)
-  - Commands run: [pretty, lint, tests]
-  - Results: (pass/fail + notes)
-  - Follow-up TODOs (if any)
+  3) describe manual tests the user can run to test the changes
 
 ### PHASE 4 — COMMIT
 - Stage ONLY the files changed in APPLY phase (never blanket stage all files).

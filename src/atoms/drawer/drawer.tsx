@@ -1,10 +1,9 @@
-import { Box, Collapse, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material";
+import { Box, Collapse, Divider, Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import HomeIcon from '@mui/icons-material/Home';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import InboxIcon from '@mui/icons-material/Inbox';
 import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import SignoutIcon from '@mui/icons-material/ExitToApp';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
@@ -17,9 +16,11 @@ import { AgeGroup } from "../../objects/age-group";
 
 const DrawerAtom = () => {
 
-    const [open, setOpen] = useState(false);    
+    const [open, setOpen] = useState(false);
     const [seasons, setSeasons] = useState<Season[] | null>(null);
     const [ageGroups, setAgeGroups] = useState<AgeGroup[] | null>(null);
+    const [expandedAgeGroups, setExpandedAgeGroups] = useState<{[key: number]: boolean}>({});
+    const [seasonsExpanded, setSeasonsExpanded] = useState(false);
     const navigate = useNavigate();
     
     useEffect(() => {
@@ -30,6 +31,14 @@ const DrawerAtom = () => {
     const toggleDrawer = (newOpen: boolean) => () => {
       setOpen(newOpen);
     };
+
+    const handleAgeGroupClick = (ageGroupId: number, event: React.MouseEvent) => {
+        event.stopPropagation();
+        setExpandedAgeGroups(prev => ({
+            ...prev,
+            [ageGroupId]: !prev[ageGroupId]
+        }));
+    };
    
     return (
         <>
@@ -37,61 +46,76 @@ const DrawerAtom = () => {
                 <MenuIcon/>   
             </IconButton>            
             <Drawer open={open} onClose={toggleDrawer(false)}>
-                <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
-                    <List>  
+                <Box sx={{ width: 250 }} role="presentation">
+                    <List>
                         <ListItem key={"home"} divider disablePadding>
-                            <ListItemButton onClick={() => navigate('/AgeGroups')}>
+                            <ListItemButton onClick={() => { navigate('/'); setOpen(false); }}>
                                 <ListItemIcon><HomeIcon/></ListItemIcon>
                                 <ListItemText primary={'Home'} />
-                            </ListItemButton>                           
+                            </ListItemButton>
                         </ListItem>
 
-                        {/* Age Groups */}                        
-                        {ageGroups?.map(ageGroup => (
-                            <>
-                                 <ListSubheader component="div" id="ageGroups-subheader">
-                                        {"U" + ageGroup.age + " seasons"}
-                                </ListSubheader>
+                        {/* Seasons - Top Level */}
+                        <ListItem divider disablePadding>
+                            <ListItemButton onClick={(e) => { e.stopPropagation(); setSeasonsExpanded(!seasonsExpanded); }}>
+                                <ListItemIcon><SportsSoccerIcon/></ListItemIcon>
+                                <ListItemText primary={'Seasons'} />
+                                {seasonsExpanded ? <ExpandLess /> : <ExpandMore />}
+                            </ListItemButton>
+                        </ListItem>
 
-                                <ListItem key={ageGroup.id} disablePadding onClick={() => navigate('/AgeGroup/' + ageGroup.id)}> 
-                                    <ListItemButton>
-                                        <ListItemIcon><SportsSoccerIcon/></ListItemIcon>
-                                        <ListItemText primary={"U" + ageGroup.age + " Overview"} />
-                                    </ListItemButton>                           
-                                </ListItem>
-
-                                {seasons?.filter(season => season.ageGroup === ageGroup.age).map(season => 
-                                    <ListItem key={season.id} disablePadding onClick={() => navigate('/season/' + season.id)}> 
-                                        <ListItemButton>
-                                            <ListItemIcon><SportsSoccerIcon/></ListItemIcon>
-                                            <ListItemText primary={"U" + season.ageGroup + "s Div - " + season.division} />
-                                        </ListItemButton>                           
+                        {/* Age Groups under Seasons */}
+                        <Collapse in={seasonsExpanded} timeout="auto" unmountOnExit>
+                            {ageGroups?.map(ageGroup => (
+                                <div key={ageGroup.id}>
+                                    <ListItem disablePadding sx={{ pl: 4 }}>
+                                        <ListItemButton onClick={(e) => handleAgeGroupClick(ageGroup.id, e)}>
+                                            <ListItemText primary={"U" + ageGroup.age + " Seasons"} />
+                                            {expandedAgeGroups[ageGroup.id] ? <ExpandLess /> : <ExpandMore />}
+                                        </ListItemButton>
                                     </ListItem>
-                                )}
-                            </>
 
-                        ))}
+                                    <Collapse in={expandedAgeGroups[ageGroup.id]} timeout="auto" unmountOnExit>
+                                        <List component="div" disablePadding>
+                                            <ListItem disablePadding sx={{ pl: 8 }}>
+                                                <ListItemButton onClick={() => { navigate('/AgeGroup/' + ageGroup.id); setOpen(false); }}>
+                                                    <ListItemText primary={"Overview"} />
+                                                </ListItemButton>
+                                            </ListItem>
+
+                                            {seasons?.filter(season => season.ageGroup === ageGroup.age).map(season =>
+                                                <ListItem key={season.id} disablePadding sx={{ pl: 8 }}>
+                                                    <ListItemButton onClick={() => { navigate('/season/' + season.id); setOpen(false); }}>
+                                                        <ListItemText primary={"Division " + season.division} />
+                                                    </ListItemButton>
+                                                </ListItem>
+                                            )}
+                                        </List>
+                                    </Collapse>
+                                </div>
+                            ))}
+                        </Collapse>
 
                         <ListItem key={"divider"} divider disablePadding/>
                         <ListItem key={"players"} divider disablePadding>
-                            <ListItemButton onClick={() => navigate('/Players')}>
+                            <ListItemButton onClick={() => { navigate('/Players'); setOpen(false); }}>
                                 <ListItemIcon><DirectionsRunIcon/></ListItemIcon>
                                 <ListItemText primary={'Players'} />
-                            </ListItemButton>                           
+                            </ListItemButton>
                         </ListItem>
-                        
+
                         <ListItem key={"admin"} divider disablePadding>
-                            <ListItemButton onClick={() => navigate('/Admin')}>
+                            <ListItemButton onClick={() => { navigate('/Admin'); setOpen(false); }}>
                                 <ListItemIcon><AdminIcon/></ListItemIcon>
                                 <ListItemText primary={'Admin'} />
-                            </ListItemButton>                           
+                            </ListItemButton>
                         </ListItem>
 
                         <ListItem key={"signout"} divider disablePadding>
-                            <ListItemButton onClick={() => navigate('/Logout')}>
+                            <ListItemButton onClick={() => { navigate('/Logout'); setOpen(false); }}>
                                 <ListItemIcon><SignoutIcon/></ListItemIcon>
                                 <ListItemText primary={'Logout'} />
-                            </ListItemButton>                           
+                            </ListItemButton>
                         </ListItem>
 
 

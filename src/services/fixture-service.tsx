@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { Fixture } from '../objects/fixture';
+import { BulkFixtureDTO } from '../objects/fixture-dto';
 const API_URL = process.env.REACT_APP_API_URL + 'fixtures';
 
 export const GetFixturesForSeason = async (seasonId : any) => {
@@ -87,6 +88,18 @@ export const GetHistoryFixture = async (fixtureId : any) => {
         return response.data;
     } catch (error) {
         console.error("Error fetching data: ", error);
+    }
+};
+
+export const PostBulkFixtures = async (bulkFixtures : BulkFixtureDTO) => {
+    const url = API_URL + '/bulk';
+
+    try {
+        const response = await axios.post(url, bulkFixtures);
+        return response.data;
+    } catch (error) {
+        console.error("Error posting bulk fixtures: ", error);
+        throw error;
     }
 };
 

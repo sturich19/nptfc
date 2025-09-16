@@ -20,35 +20,55 @@ const AgeGroupOverview = () => {
 
     return(
         <>
-            <div className="container-fluid">                
-                <div className='row page-header'>
-                    <h3>U{seasons != null ? seasons[0].ageGroup : ""} Overview</h3>
+            <div className="container-fluid">
+                {/* Modern Compact Header */}
+                <div className="d-flex justify-content-between align-items-center mb-3 p-3 bg-light rounded">
+                    <div>
+                        <h5 className="mb-0 text-success fw-bold">
+                            U{seasons != null ? seasons[0].ageGroup : ""} Overview
+                        </h5>
+                        <small className="text-muted">
+                            Season statistics and fantasy scores
+                        </small>
+                    </div>
                 </div>
-                <div className="row">
-                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
-                    {   gameStats ? 
-                        <>
-                            {gameStats.length > 0 ? 
-                                <>    
-                                    <div className="col-12 col-sm-10">                                   
-                                        <h4>Season Stats</h4>
-                                        <GameStatTable gameStats={gameStats}></GameStatTable>
-                                    </div>
-                                </>                                                    
-                                : <div></div>
-                            }                            
-                        </>
-                        : <p>Loading Stats...</p>
-                    }
-                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
-                </div>  
-                <div className="row">
-                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
-                    <div className="col-12 col-sm-10">
-                        <h4>Fantasy Scores</h4>
+
+                {/* Season Stats */}
+                <div className="card shadow-sm mb-4">
+                    <div className="card-header bg-light border-bottom">
+                        <h6 className="mb-0 text-success fw-semibold">
+                            <i className="bi bi-graph-up me-2"></i>
+                            Season Stats
+                        </h6>
+                    </div>
+                    <div className="card-body p-0">
+                        {gameStats ? (
+                            gameStats.length > 0 ? (
+                                <GameStatTable gameStats={gameStats}></GameStatTable>
+                            ) : (
+                                <div className="text-center p-4 text-muted">No stats available</div>
+                            )
+                        ) : (
+                            <div className="text-center p-4">
+                                <div className="spinner-border text-success" role="status">
+                                    <span className="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Fantasy Scores */}
+                <div className="card shadow-sm mb-4">
+                    <div className="card-header bg-light border-bottom">
+                        <h6 className="mb-0 text-success fw-semibold">
+                            <i className="bi bi-star-fill me-2"></i>
+                            Fantasy Scores
+                        </h6>
+                    </div>
+                    <div className="card-body p-0">
                         <FantasyStats ageGroup={param.id}></FantasyStats>
                     </div>
-                    <div className='col-sm-1 .d-none .d-sm-block"'></div>
                 </div>
             </div>
 

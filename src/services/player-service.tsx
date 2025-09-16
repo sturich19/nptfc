@@ -33,3 +33,25 @@ export const PostPlayer = async (player : Player) => {
         console.error("Error fetching data: ", error);
     }
 };
+
+export const PutPlayer = async (player : Player) => {
+    const url = API_URL + '/' + player.id;
+
+    try {
+        const response = await axios.put(url, player);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating player: ", error);
+    }
+};
+
+export const DeletePlayer = async (id : number) => {
+    const url = API_URL + '/' + id;
+
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting player: ", error);
+    }
+};

@@ -44,24 +44,62 @@ const FixtureList = (fixtureListProps : FixtureListProps) => {
     //     GetFixturesForDate(fixtureListProps.seasonId, FormatDateYYYYMMDD(newDate)).then(fixtures => setFixtures(fixtures));   
     //  }
     
-    return(   
+    // Group fixtures by date
+    const groupFixturesByDate = (fixtures: Fixture[]) => {
+        const grouped: { [key: string]: Fixture[] } = {};
+
+        fixtures.forEach(fixture => {
+            const dateKey = new Date(fixture.date).toDateString();
+            if (!grouped[dateKey]) {
+                grouped[dateKey] = [];
+            }
+            grouped[dateKey].push(fixture);
+        });
+
+        // Sort dates chronologically
+        return Object.keys(grouped)
+            .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+            .map(dateKey => ({
+                date: dateKey,
+                fixtures: grouped[dateKey]
+            }));
+    };
+
+    const formatDateHeader = (dateString: string) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
+    return(
         <>
-            <div className="row"> 
-                {/* <div className="col-1">
-                    <ArrowBack onClick={() => handlePreviousClick()}></ArrowBack>                    
-                </div> */}
+            <div className="row">
                 <div className="col-12">
-                     {fixtures ? 
-                        <FixtureTable fixtures={fixtures} handleClick={handleResultClick}></FixtureTable> 
-                        :
+                     {fixtures ? (
+                        <div>
+                            {groupFixturesByDate(fixtures).map((group, index) => (
+                                <div key={group.date} className="mb-3">
+                                    {index > 0 && <div className="mb-2"></div>}
+                                    <div className="d-flex align-items-center my-2 px-3">
+                                        <small className="text-success fw-semibold me-3" style={{fontSize: '0.9rem'}}>
+                                            {formatDateHeader(group.date)}
+                                        </small>
+                                        <div className="flex-grow-1" style={{height: '1px', backgroundColor: '#28a745'}}></div>
+                                    </div>
+                                    <FixtureTable fixtures={group.fixtures} handleClick={handleResultClick} />
+                                </div>
+                            ))}
+                        </div>
+                     ) : (
                         <div></div>
-                     }
+                     )}
                 </div>
-                {/* <div className="col-1">
-                <ArrowForward onClick={() => handleNextClick()}></ArrowForward>                
-                </div> */}
-            </div>            
-        </>              
+            </div>
+        </>
     )
 }
 
