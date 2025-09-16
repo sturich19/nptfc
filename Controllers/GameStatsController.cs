@@ -277,11 +277,61 @@ public class GameStatsController : ControllerBase
 
         if (fixture == null || player == null || season == null)
             return BadRequest();
-       
-        GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);      
+
+        GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);
         EntityEntry<GameStat> addedGameStat = _context.GameStats.Add(gameStatToAdd);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(PostGameStat), new { id = addedGameStat.Entity.Id }, gameStatDTO);
+    }
+
+    // POST: api/GameStat/bulk
+    [HttpPost("bulk")]
+    public async Task<ActionResult<IEnumerable<GameStatDTO>>> PostGameStatsBulk(List<GameStatDTO> gameStatDTOs)
+    {
+        if (gameStatDTOs == null || !gameStatDTOs.Any())
+            return BadRequest("No game stats provided");
+
+        var addedGameStats = new List<GameStatDTO>();
+        var errors = new List<string>();
+
+        foreach (var gameStatDTO in gameStatDTOs)
+        {
+            var fixture = await _context.TigersFixtures
+                .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.FixtureId);
+
+            var player = await _context.Players
+                .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.PlayerId);
+
+            var season = await _context.Seasons
+                .FirstOrDefaultAsync(lt => lt.Id == gameStatDTO.SeasonId);
+
+            if (fixture == null || player == null || season == null)
+            {
+                errors.Add($"Invalid data for game stat: PlayerId={gameStatDTO.PlayerId}, FixtureId={gameStatDTO.FixtureId}, SeasonId={gameStatDTO.SeasonId}");
+                continue;
+            }
+
+            GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);
+            _context.GameStats.Add(gameStatToAdd);
+            addedGameStats.Add(gameStatDTO);
+        }
+
+        if (addedGameStats.Any())
+        {
+            await _context.SaveChangesAsync();
+        }
+
+        if (errors.Any() && !addedGameStats.Any())
+        {
+            return BadRequest(new { errors });
+        }
+
+        if (errors.Any())
+        {
+            return Ok(new { addedGameStats, errors });
+        }
+
+        return Ok(addedGameStats);
     }
 }

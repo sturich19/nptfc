@@ -15,8 +15,9 @@ namespace nptfcBE.Models
 
         public League()
         {
-            this.Team = new Team();
-            //this.Season = new Season();            
+            // Don't initialize navigation properties to avoid EF Core tracking issues
+            // this.Team = new Team();
+            //this.Season = new Season();
         }
 
         // New property to calculate %Wins

@@ -11,6 +11,7 @@ namespace nptfcBE.Models
         public int  AgeGroupId {get; set;}
 
         public int Division {get; set;}
+        public bool Active {get; set;}
 
         public ICollection<GameStat> GameStats {get; set;}
 

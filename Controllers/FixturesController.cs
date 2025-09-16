@@ -359,6 +359,120 @@ public class FixturesController : ControllerBase
         return NoContent();
     }   
 
+    // POST: api/Fixtures/bulk
+    [HttpPost("bulk")]
+    public async Task<ActionResult> PostBulkFixtures(BulkFixtureDTO bulkOperation)
+    {
+        if (bulkOperation?.Fixtures == null || !bulkOperation.Fixtures.Any())
+        {
+            return BadRequest("No fixtures provided");
+        }
+
+        // Get all fixture IDs that have an Id to check if they exist
+        var fixtureIdsToCheck = bulkOperation.Fixtures
+            .Where(f => f.Id > 0)
+            .Select(f => f.Id)
+            .ToList();
+
+        var existingFixtureIds = (await _context.Fixtures
+            .Where(f => fixtureIdsToCheck.Contains(f.Id))
+            .Select(f => f.Id)
+            .ToListAsync()).ToHashSet();
+
+        // Validate all teams and seasons exist upfront
+        var teamIds = bulkOperation.Fixtures.SelectMany(f => new[] { f.HomeTeamId, f.AwayTeamId }).Distinct().ToList();
+        var seasonIds = bulkOperation.Fixtures.Select(f => f.SeasonId).Distinct().ToList();
+
+        var existingTeams = await _context.Teams
+            .Where(t => teamIds.Contains(t.Id))
+            .ToDictionaryAsync(t => t.Id, t => t);
+
+        var existingSeasons = await _context.Seasons
+            .Where(s => seasonIds.Contains(s.Id))
+            .ToDictionaryAsync(s => s.Id, s => s);
+
+        // Process each fixture
+        foreach (var fixtureDTO in bulkOperation.Fixtures)
+        {
+            // Validate teams and season exist
+            if (!existingTeams.ContainsKey(fixtureDTO.HomeTeamId) ||
+                !existingTeams.ContainsKey(fixtureDTO.AwayTeamId) ||
+                !existingSeasons.ContainsKey(fixtureDTO.SeasonId))
+            {
+                return BadRequest($"Invalid team or season IDs for fixture: HomeTeam={fixtureDTO.HomeTeamId}, AwayTeam={fixtureDTO.AwayTeamId}, Season={fixtureDTO.SeasonId}");
+            }
+
+            var homeTeam = existingTeams[fixtureDTO.HomeTeamId];
+            var awayTeam = existingTeams[fixtureDTO.AwayTeamId];
+            var season = existingSeasons[fixtureDTO.SeasonId];
+
+            // Auto-detect operation type
+            if (fixtureDTO.Id == 0)
+            {
+                // No ID provided - it's a new fixture (ADD)
+                var newFixture = new Fixture
+                {
+                    HomeTeamId = fixtureDTO.HomeTeamId,
+                    AwayTeamId = fixtureDTO.AwayTeamId,
+                    HomeTeamScore = fixtureDTO.HomeTeamScore,
+                    AwayTeamScore = fixtureDTO.AwayTeamScore,
+                    Date = fixtureDTO.Date,
+                    SeasonId = fixtureDTO.SeasonId,
+                    KnownScore = fixtureDTO.KnownScore
+                };
+
+                _context.Fixtures.Add(newFixture);
+                await _context.SaveChangesAsync(); // Save to get the ID
+
+                // Update league if score is known
+                if (fixtureDTO.KnownScore)
+                {
+                    fixtureDTO.Id = newFixture.Id; // Set ID for league update
+                    await _leagueController.UpdateLeagueWithResult(fixtureDTO, homeTeam, awayTeam);
+                }
+            }
+            else if (existingFixtureIds.Contains(fixtureDTO.Id))
+            {
+                // ID provided and exists in database - it's an update (UPDATE)
+                var existingFixture = await _context.Fixtures.FindAsync(fixtureDTO.Id);
+
+                // Store original for league update
+                var originalFixture = new Fixture
+                {
+                    HomeTeamScore = existingFixture.HomeTeamScore,
+                    AwayTeamScore = existingFixture.AwayTeamScore
+                };
+
+                // Update fixture
+                existingFixture.HomeTeamId = fixtureDTO.HomeTeamId;
+                existingFixture.AwayTeamId = fixtureDTO.AwayTeamId;
+                existingFixture.HomeTeamScore = fixtureDTO.HomeTeamScore;
+                existingFixture.AwayTeamScore = fixtureDTO.AwayTeamScore;
+                existingFixture.Date = fixtureDTO.Date;
+                existingFixture.SeasonId = fixtureDTO.SeasonId;
+                existingFixture.KnownScore = fixtureDTO.KnownScore;
+
+                _context.Entry(existingFixture).State = EntityState.Modified;
+
+                // Update league if score is known
+                if (fixtureDTO.KnownScore)
+                {
+                    await _leagueController.UpdateLeagueAfterScrewUp(fixtureDTO, homeTeam, awayTeam, originalFixture);
+                }
+            }
+            else
+            {
+                // ID provided but doesn't exist - error
+                return BadRequest($"Fixture with ID {fixtureDTO.Id} not found for update");
+            }
+        }
+
+        // Save all changes
+        await _context.SaveChangesAsync();
+
+        return Ok();
+    }
+
     private bool FixtureExists(int id)
     {
         return _context.Fixtures.Any(e => e.Id == id);

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using nptfcBE.Models;
+using nptfcBE.DTO;
 
 namespace nptfcBE.Controllers;
 
@@ -48,6 +49,117 @@ public class SeasonsController : ControllerBase
     public async Task<ActionResult<Season>> PostSeason(Season season)
     {
         _context.Seasons.Add(season);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetSeason), new { id = season.Id }, season);
+    }
+
+    // POST: api/Seasons/setup
+    [HttpPost("setup")]
+    public async Task<ActionResult<Season>> PostSeasonSetup(SeasonSetupDTO seasonSetup)
+    {
+        if (seasonSetup.TeamIds == null || !seasonSetup.TeamIds.Any())
+        {
+            return BadRequest("At least one team must be selected for the season");
+        }
+
+        // Validate that all teams exist
+        var validTeamIds = await _context.Teams
+            .Where(t => seasonSetup.TeamIds.Contains(t.Id))
+            .Select(t => t.Id)
+            .ToListAsync();
+
+        if (validTeamIds.Count != seasonSetup.TeamIds.Count)
+        {
+            return BadRequest("One or more selected teams do not exist");
+        }
+
+        Season season;
+
+        // Check if we're updating an existing season or creating a new one
+        if (seasonSetup.Id.HasValue && seasonSetup.Id > 0)
+        {
+            // Update existing season
+            season = await _context.Seasons.FindAsync(seasonSetup.Id.Value);
+            if (season == null)
+            {
+                return NotFound($"Season with ID {seasonSetup.Id} not found");
+            }
+
+            // Update season properties
+            season.StartYear = seasonSetup.StartYear;
+            season.EndYear = seasonSetup.EndYear;
+            season.AgeGroup = seasonSetup.AgeGroup;
+            season.MonthStart = seasonSetup.MonthStart;
+            season.MonthEnd = seasonSetup.MonthEnd;
+            season.AgeGroupId = seasonSetup.AgeGroupId;
+            season.Division = seasonSetup.Division;
+            season.Active = seasonSetup.Active;
+
+            _context.Entry(season).State = EntityState.Modified;
+        }
+        else
+        {
+            // Create new season
+            season = new Season
+            {
+                StartYear = seasonSetup.StartYear,
+                EndYear = seasonSetup.EndYear,
+                AgeGroup = seasonSetup.AgeGroup,
+                MonthStart = seasonSetup.MonthStart,
+                MonthEnd = seasonSetup.MonthEnd,
+                AgeGroupId = seasonSetup.AgeGroupId,
+                Division = seasonSetup.Division,
+                Active = seasonSetup.Active
+            };
+
+            _context.Seasons.Add(season);
+        }
+
+        await _context.SaveChangesAsync();
+
+        // Get existing league entries for this season
+        var existingLeagueTeamIds = await _context.League
+            .Where(l => l.SeasonId == season.Id)
+            .Select(l => l.TeamId)
+            .ToListAsync();
+
+        // Find teams that need to be added (not already in league)
+        var teamsToAdd = seasonSetup.TeamIds
+            .Where(teamId => !existingLeagueTeamIds.Contains(teamId))
+            .ToList();
+
+        // Add new league entries only for teams not already in the season
+        if (teamsToAdd.Any())
+        {
+            var leagueEntries = teamsToAdd.Select(teamId => new League
+            {
+                TeamId = teamId,
+                SeasonId = season.Id,
+                Won = 0,
+                Lost = 0,
+                Drawn = 0,
+                GlsFor = 0,
+                GlsA = 0
+            }).ToList();
+
+            _context.League.AddRange(leagueEntries);
+        }
+
+        // Remove teams that are no longer selected
+        var teamsToRemove = existingLeagueTeamIds
+            .Where(teamId => !seasonSetup.TeamIds.Contains(teamId))
+            .ToList();
+
+        if (teamsToRemove.Any())
+        {
+            var leagueEntriesToRemove = await _context.League
+                .Where(l => l.SeasonId == season.Id && teamsToRemove.Contains(l.TeamId))
+                .ToListAsync();
+
+            _context.League.RemoveRange(leagueEntriesToRemove);
+        }
+
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetSeason), new { id = season.Id }, season);

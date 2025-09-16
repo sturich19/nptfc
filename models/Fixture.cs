@@ -18,9 +18,10 @@ namespace nptfcBE.Models
 
         public Fixture()
         {
-            this.HomeTeam = new Team();
-            this.AwayTeam = new Team();
-            this.Season = new Season();            
+            // Don't initialize navigation properties to avoid EF Core tracking issues
+            // this.HomeTeam = new Team();
+            // this.AwayTeam = new Team();
+            // this.Season = new Season();
         }
 
         public static Fixture Create(FixtureDTO dto, Team homeTeam, Team awayTeam, Season season)
