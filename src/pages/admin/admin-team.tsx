@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { GetTeams, PostTeam, PutTeam, DeleteTeam } from "../../services/teams-service";
 import { Team } from "../../objects/team";
 import { useEffect, useState } from "react";
+import { EditButton, DeleteButton, SaveButton, CancelButton } from "../../atoms/buttons/admin-action-buttons";
 
 const AdminTeam = ()  =>
 {
@@ -111,20 +112,36 @@ const AdminTeam = ()  =>
     return(
         <>
             <div className="container-fluid">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <h3>Team Management</h3>
+                {/* Modern Compact Header - Responsive */}
+                <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-3 p-3 bg-light rounded">
+                    <div className="text-center text-md-start mb-3 mb-md-0">
+                        <h5 className="mb-0 text-success fw-bold">
+                            <i className="bi bi-shield-shaded me-2"></i>
+                            Team Management
+                        </h5>
+                        <small className="text-muted">
+                            Add and manage teams in the system
+                        </small>
+                    </div>
                     <button
                         className="btn btn-secondary"
                         onClick={() => navigate('/Admin')}
                     >
+                        <i className="bi bi-arrow-left me-1"></i>
                         Back to Admin
                     </button>
                 </div>
 
                 {/* Add New Team Form */}
-                <div className="card mb-4">
-                    <div className="card-header bg-success text-white">
-                        <h5 className="mb-0">Add New Team</h5>
+                <div className="card shadow-sm mb-4">
+                    <div className="card-header bg-light border-bottom">
+                        <h6 className="mb-0 text-success fw-semibold">
+                            <i className="bi bi-plus-square me-2"></i>
+                            Add New Team
+                        </h6>
+                        <small className="text-muted">
+                            Enter team name to add to the system
+                        </small>
                     </div>
                     <div className="card-body">
                         <form onSubmit={formik.handleSubmit}>
@@ -147,33 +164,46 @@ const AdminTeam = ()  =>
                 </div>
 
                 {/* Existing Teams Table */}
-                <div className="row">
-                    <div className="col-12">
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h5>Existing Teams ({filteredTeams.length} of {teams.length})</h5>
-                            <div className="col-4">
+                <div className="card shadow-sm">
+                    <div className="card-header bg-light border-bottom">
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center">
+                            <div className="mb-2 mb-md-0">
+                                <h6 className="mb-0 text-success fw-semibold">
+                                    <i className="bi bi-list-ul me-2"></i>
+                                    Existing Teams ({filteredTeams.length} of {teams.length})
+                                </h6>
+                                <small className="text-muted">
+                                    Search and manage teams in the system
+                                </small>
+                            </div>
+                            <div className="col-12 col-md-4">
                                 <input
                                     type="text"
-                                    className="form-control"
+                                    className="form-control form-control-sm"
                                     placeholder="Search teams by name or ID..."
                                     value={searchTerm}
                                     onChange={(e) => handleSearch(e.target.value)}
                                 />
                             </div>
                         </div>
+                    </div>
+                    <div className="card-body p-0">
                         {filteredTeams.length === 0 ? (
-                            <p>{searchTerm ? `No teams found matching "${searchTerm}".` : 'No teams found.'}</p>
+                            <div className="text-center py-4 text-muted">
+                                <i className="bi bi-search display-4"></i>
+                                <p className="mt-2">{searchTerm ? `No teams found matching "${searchTerm}".` : 'No teams found.'}</p>
+                            </div>
                         ) : (
                             <div className="table-responsive">
-                                <table className="table table-striped table-bordered">
-                                    <thead className="table-dark">
+                                <table className="table table-hover table-condensed table-responsive table-sm mb-0">
+                                    <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>Team Name</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="table-group-divider">
                                         {filteredTeams.sort((a, b) => a.id - b.id).map(team => (
                                             <tr key={team.id}>
                                                 {editingTeam?.id === team.id ? (
@@ -190,20 +220,15 @@ const AdminTeam = ()  =>
                                                             />
                                                         </td>
                                                         <td>
-                                                            <button
-                                                                className="btn btn-success btn-sm me-1"
+                                                            <SaveButton
                                                                 onClick={() => editFormik.handleSubmit()}
-                                                                disabled={loading}
-                                                            >
-                                                                Save
-                                                            </button>
-                                                            <button
-                                                                className="btn btn-secondary btn-sm"
+                                                                loading={loading}
+                                                                className="me-1"
+                                                            />
+                                                            <CancelButton
                                                                 onClick={handleCancelEdit}
                                                                 disabled={loading}
-                                                            >
-                                                                Cancel
-                                                            </button>
+                                                            />
                                                         </td>
                                                     </>
                                                 ) : (
@@ -212,20 +237,15 @@ const AdminTeam = ()  =>
                                                         <td>{team.id}</td>
                                                         <td>{team.name || ''}</td>
                                                         <td>
-                                                            <button
-                                                                className="btn btn-warning btn-sm me-1"
+                                                            <EditButton
                                                                 onClick={() => handleEdit(team)}
                                                                 disabled={loading || editingTeam !== null}
-                                                            >
-                                                                Edit
-                                                            </button>
-                                                            <button
-                                                                className="btn btn-danger btn-sm"
+                                                                className="me-1"
+                                                            />
+                                                            <DeleteButton
                                                                 onClick={() => handleDelete(team.id, team.name || '')}
                                                                 disabled={loading || editingTeam !== null}
-                                                            >
-                                                                Delete
-                                                            </button>
+                                                            />
                                                         </td>
                                                     </>
                                                 )}

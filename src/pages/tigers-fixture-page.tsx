@@ -12,62 +12,85 @@ import { FormatDate } from "../utils/formatter-util";
 
 export default function TigersFixturePage()
 {
-    const navigate = useNavigate();  
+    const navigate = useNavigate();
     const param = useParams();
     const [fixture, setFixture] = useState<TigersFixture | null>(null);
     const [gameStats, setGameStats] = useState<GameStat[] | null>(null);
     const [fantasyStats, setFantasyStats] = useState<FantasyStat[] | null>(null);
-    
+
     useEffect(() => {
         GetTigersFixture(param.id).then(fixture => setFixture(fixture));
         GetFixtureGameStats(param.id).then(gameStats => setGameStats(gameStats));
         GetFixtureFantasyStats(param.id).then(fantasyStats => setFantasyStats(fantasyStats));
-    }, [param.id]);  
+    }, [param.id]);
 
-    return(  
-        
-         <div className='container-fluid g-0'>
-            <div className='row g-0'>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>  
-                <div className="col-12">
-                    {   fixture ? 
-                        <>  
-                            <h6 className="header">{fixture.homeTeam}  {fixture.homeTeamScore}   v  {fixture.awayTeamScore}  {fixture.awayTeam} </h6>
-                            <h6 className="header">{FormatDate(fixture.date)}</h6>
-
-                            {fixture.videoUrl ? 
-                                <h6 className="header"><a target="_blank" href={fixture.videoUrl}>Video</a></h6>
-                            :
-                                <h6 className="header">No Video Uploaded</h6>
-                            }   
+    return(
+        <div className="container-fluid">
+            {/* Modern Compact Header - Responsive */}
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-3 p-3 bg-light rounded">
+                <div className="text-center text-md-start mb-3 mb-md-0">
+                    {fixture ? (
+                        <>
+                            <h5 className="mb-0 text-success fw-bold">
+                                <i className="bi bi-trophy me-2"></i>
+                                {fixture.homeTeam} {fixture.homeTeamScore} - {fixture.awayTeamScore} {fixture.awayTeam}
+                            </h5>
+                            <small className="text-muted">
+                                <i className="bi bi-calendar3 me-1"></i>
+                                {FormatDate(fixture.date)}
+                                {fixture.videoUrl && (
+                                    <span className="ms-3">
+                                        <i className="bi bi-camera-video me-1"></i>
+                                        <a href={fixture.videoUrl} target="_blank" rel="noreferrer" className="text-primary">
+                                            Match Video Available
+                                        </a>
+                                    </span>
+                                )}
+                            </small>
                         </>
-                        : <p>Loading Fixture...</p>}
+                    ) : (
+                        <>
+                            <h5 className="mb-0 text-success fw-bold">
+                                <i className="bi bi-trophy me-2"></i>
+                                Loading Fixture...
+                            </h5>
+                            <small className="text-muted">Please wait while we load the match details</small>
+                        </>
+                    )}
                 </div>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>  
+                <button
+                    className="btn btn-secondary"
+                    onClick={() => navigate('/season/' + fixture?.seasonId)}
+                >
+                    <i className="bi bi-arrow-left me-1"></i>
+                    Back to Season
+                </button>
             </div>
             
-            {/* <div className='row'>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>
-                <div className="col-10">
-                    {   gameStats ? <GameStatTable gameStats={gameStats}></GameStatTable>
-                        : <p>Loading Stats...</p>}
+            {/* Fantasy Statistics */}
+            <div className="card shadow-sm mb-4">
+                <div className="card-header bg-light border-bottom">
+                    <h6 className="mb-0 text-success fw-semibold">
+                        <i className="bi bi-star me-2"></i>
+                        Fantasy Statistics
+                    </h6>
+                    <small className="text-muted">
+                        Player performance statistics for this match
+                    </small>
                 </div>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>
-            </div>   */}
-
-            <div className='row'>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>
-                <div className="col-10">
-                    {   fantasyStats ? <FantasyStatTable fantasyStats={fantasyStats}></FantasyStatTable>
-                        : <p>Loading Stats...</p>}
+                <div className="card-body p-0">
+                    {fantasyStats ? (
+                        <FantasyStatTable fantasyStats={fantasyStats} />
+                    ) : (
+                        <div className="text-center py-4 text-muted">
+                            <div className="spinner-border text-success" role="status">
+                                <span className="visually-hidden">Loading...</span>
+                            </div>
+                            <p className="mt-2">Loading match statistics...</p>
+                        </div>
+                    )}
                 </div>
-                <div className="col-sm-1 .d-none .d-sm-block"></div>
-            </div>  
-            <div className='row'>                
-                <div className="col-2 button-area">
-                    <button className="btn btn-secondary" onClick={()=> navigate('/season/' + fixture?.seasonId)}>Back</button>    
-                </div>
-            </div>  
-        </div>       
+            </div>
+        </div>
     )
 }

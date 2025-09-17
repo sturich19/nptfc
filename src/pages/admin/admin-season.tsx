@@ -140,13 +140,24 @@ const AdminSeason = ()  =>
             <div>
                 {!showTeamSetup ? (
                     <>
-                        <div className="d-flex justify-content-between align-items-center mb-3">
-                            <h4>Manage Seasons</h4>
-                            <div>
-                                <button className="btn btn-secondary me-2" onClick={() => navigate('/Admin')}>
+                        {/* Modern Compact Header - Responsive */}
+                        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-3 p-3 bg-light rounded">
+                            <div className="text-center text-md-start mb-3 mb-md-0">
+                                <h5 className="mb-0 text-success fw-bold">
+                                    <i className="bi bi-calendar3 me-2"></i>
+                                    Manage Seasons
+                                </h5>
+                                <small className="text-muted">
+                                    Create and configure season information
+                                </small>
+                            </div>
+                            <div className="d-flex gap-2">
+                                <button className="btn btn-secondary" onClick={() => navigate('/Admin')}>
+                                    <i className="bi bi-arrow-left me-1"></i>
                                     Back to Admin
                                 </button>
                                 <button className="btn btn-success" onClick={handleNewSeason}>
+                                    <i className="bi bi-plus-circle me-1"></i>
                                     Create New Season
                                 </button>
                             </div>
@@ -154,9 +165,15 @@ const AdminSeason = ()  =>
                     </>
                 ) : (
                     <>
-                        <div className="card mb-4">
-                            <div className="card-header bg-success text-white">
-                                <h4 className="mb-0">{editingSeason ? 'Edit Season & Teams' : 'Create New Season & Teams'}</h4>
+                        <div className="card shadow-sm mb-4">
+                            <div className="card-header bg-light border-bottom">
+                                <h6 className="mb-0 text-success fw-semibold">
+                                    <i className="bi bi-gear me-2"></i>
+                                    {editingSeason ? 'Edit Season & Teams' : 'Create New Season & Teams'}
+                                </h6>
+                                <small className="text-muted">
+                                    {editingSeason ? 'Update season configuration and team assignments' : 'Set up a new season with participating teams'}
+                                </small>
                             </div>
                             <div className="card-body">
                                 {feedback && (
@@ -277,12 +294,21 @@ const AdminSeason = ()  =>
 
                 {/* Existing Seasons Display */}
                 {!showTeamSetup && (
-                    <div className="mt-4">
-                        <h4>Existing Seasons</h4>
-                        {existingSeasons.length > 0 ? (
-                            <div className="table-responsive">
-                                <table className="table table-striped table-bordered">
-                                    <thead className="table-dark">
+                    <div className="card shadow-sm mt-4">
+                        <div className="card-header bg-light border-bottom">
+                            <h6 className="mb-0 text-success fw-semibold">
+                                <i className="bi bi-list-check me-2"></i>
+                                Existing Seasons
+                            </h6>
+                            <small className="text-muted">
+                                Click "Setup Teams" to configure team assignments
+                            </small>
+                        </div>
+                        <div className="card-body p-0">
+                            {existingSeasons.length > 0 ? (
+                                <div className="table-responsive">
+                                    <table className="table table-hover table-condensed table-responsive table-sm mb-0">
+                                    <thead>
                                         <tr>
                                             <th>Season</th>
                                             <th>Age Group</th>
@@ -292,7 +318,7 @@ const AdminSeason = ()  =>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="table-group-divider">
                                         {existingSeasons
                                             .sort((a, b) => b.startYear - a.startYear)
                                             .map((season) => (
@@ -318,10 +344,14 @@ const AdminSeason = ()  =>
                                         ))}
                                     </tbody>
                                 </table>
-                            </div>
-                        ) : (
-                            <p>No existing seasons found.</p>
-                        )}
+                                </div>
+                            ) : (
+                                <div className="text-center py-4 text-muted">
+                                    <i className="bi bi-calendar-x display-4"></i>
+                                    <p className="mt-2">No existing seasons found.</p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 )}
             </div>

@@ -5,6 +5,7 @@ import { PostPlayer, GetPlayers, PutPlayer, DeletePlayer } from "../../services/
 import { Player } from "../../objects/player";
 import { Position } from "../../objects/enums/enums";
 import { useState, useEffect } from "react";
+import { EditButton, DeleteButton, CancelButton } from "../../atoms/buttons/admin-action-buttons";
 
 const AdminPlayer = ()  =>
 {
@@ -119,20 +120,36 @@ const AdminPlayer = ()  =>
 
     return(
         <div className="container-fluid">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <h3>{isEditMode ? 'Edit Player' : 'Player Management'}</h3>
+            {/* Modern Compact Header - Responsive */}
+            <div className="d-flex flex-column flex-md-row justify-content-between align-items-center align-items-md-center mb-3 p-3 bg-light rounded">
+                <div className="text-center text-md-start mb-3 mb-md-0">
+                    <h5 className="mb-0 text-success fw-bold">
+                        <i className="bi bi-people me-2"></i>
+                        {isEditMode ? 'Edit Player' : 'Player Management'}
+                    </h5>
+                    <small className="text-muted">
+                        {isEditMode ? 'Update player information' : 'Add and manage players in the system'}
+                    </small>
+                </div>
                 <button
                     className="btn btn-secondary"
                     onClick={() => navigate('/Admin')}
                 >
+                    <i className="bi bi-arrow-left me-1"></i>
                     Back to Admin
                 </button>
             </div>
 
             {/* Add/Edit Player Section */}
-            <div className="card mb-4">
-                <div className="card-header bg-success text-white">
-                    <h4 className="mb-0">{isEditMode ? 'Edit Player' : 'Add New Player'}</h4>
+            <div className="card shadow-sm mb-4">
+                <div className="card-header bg-light border-bottom">
+                    <h6 className="mb-0 text-success fw-semibold">
+                        <i className="bi bi-person-plus me-2"></i>
+                        {isEditMode ? 'Edit Player' : 'Add New Player'}
+                    </h6>
+                    <small className="text-muted">
+                        {isEditMode ? 'Update player details below' : 'Enter player information to add them to the system'}
+                    </small>
                 </div>
                 <div className="card-body">
                     {feedback && (
@@ -168,9 +185,7 @@ const AdminPlayer = ()  =>
 
                         <div className="d-flex justify-content-end gap-2 pt-3 border-top">
                             {isEditMode && (
-                                <button className="btn btn-outline-secondary" type="button" onClick={handleCancelEdit}>
-                                    <i className="bi bi-x-circle me-1"></i>Cancel
-                                </button>
+                                <CancelButton onClick={handleCancelEdit} />
                             )}
                             <button className="btn btn-success" type="submit">
                                 <i className={`bi ${isEditMode ? 'bi-check-circle' : 'bi-plus-circle'} me-1`}></i>
@@ -182,16 +197,24 @@ const AdminPlayer = ()  =>
             </div>
 
             {/* Existing Players Section */}
-            <div className="card">
-                <div className="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
-                    <h4 className="mb-0">Existing Players</h4>
-                    <span className="badge bg-light text-dark">{existingPlayers.length} players</span>
+            <div className="card shadow-sm">
+                <div className="card-header bg-light border-bottom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 className="mb-0 text-success fw-semibold">
+                            <i className="bi bi-people-fill me-2"></i>
+                            Existing Players
+                        </h6>
+                        <small className="text-muted">
+                            Click edit to modify player information
+                        </small>
+                    </div>
+                    <span className="badge bg-success">{existingPlayers.length} players</span>
                 </div>
                 <div className="card-body p-0">
                     {existingPlayers.length > 0 ? (
                         <div className="table-responsive">
-                            <table className="table table-striped table-bordered mb-0">
-                                <thead className="table-dark">
+                            <table className="table table-hover table-condensed table-responsive table-sm mb-0">
+                                <thead>
                                     <tr>
                                         <th className="ps-3">Name</th>
                                         <th>Nickname</th>
@@ -200,7 +223,7 @@ const AdminPlayer = ()  =>
                                         <th className="text-center">Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="table-group-divider">
                                     {existingPlayers
                                         .sort((a, b) => a.shirt - b.shirt)
                                         .map((player, index) => (
@@ -225,18 +248,8 @@ const AdminPlayer = ()  =>
                                             </td>
                                             <td className="text-center">
                                                 <div className="d-flex gap-2 justify-content-center">
-                                                    <button
-                                                        className="btn btn-outline-success btn-sm"
-                                                        onClick={() => handleEditPlayer(player)}
-                                                    >
-                                                        <i className="bi bi-pencil me-1"></i>Edit
-                                                    </button>
-                                                    <button
-                                                        className="btn btn-outline-danger btn-sm"
-                                                        onClick={() => handleDeletePlayer(player.id)}
-                                                    >
-                                                        <i className="bi bi-trash me-1"></i>Delete
-                                                    </button>
+                                                    <EditButton onClick={() => handleEditPlayer(player)} />
+                                                    <DeleteButton onClick={() => handleDeletePlayer(player.id)} />
                                                 </div>
                                             </td>
                                         </tr>
