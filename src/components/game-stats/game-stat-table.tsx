@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { GameStat } from "../../objects/game-stat";
 interface GameStatComponentProps {
   gameStats: GameStat[];
@@ -6,6 +6,12 @@ interface GameStatComponentProps {
 
 const GameStatTable = (gameStatProps: GameStatComponentProps) => {
   const [sort, setSort] = useState(0);
+
+  // Sort by goals on initial load
+  useEffect(() => {
+    gameStatProps.gameStats.sort((a, b) => b.goals - a.goals);
+    setSort(1);
+  }, []);
 
   function Sort(name: string) {
     switch (name) {
@@ -31,10 +37,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
 
       case "ass":
         gameStatProps.gameStats.sort((a, b) => b.assists - a.assists);
-        break;
-
-      case "gso":
-        gameStatProps.gameStats.sort((a, b) => b.gso - a.gso);
         break;
 
       case "shots":
@@ -67,10 +69,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
 
       case "cs":
         gameStatProps.gameStats.sort((a, b) => b.cleanSheets - a.cleanSheets);
-        break;
-
-      case "pens":
-        gameStatProps.gameStats.sort((a, b) => b.penSaves - a.penSaves);
         break;
     }
     setSort(sort + 1);
@@ -127,13 +125,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
                 </th>
                 <th
                   scope="col"
-                  className="sortable d-none d-sm-table-cell"
-                  onClick={() => Sort("gso")}
-                >
-                  GSOs
-                </th>
-                <th
-                  scope="col"
                   className="sortable"
                   onClick={() => Sort("shots")}
                 >
@@ -181,13 +172,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
                 >
                   Saves
                 </th>
-                <th
-                  scope="col"
-                  className="sortable d-none d-sm-table-cell"
-                  onClick={() => Sort("penSaves")}
-                >
-                  Pens
-                </th>
               </tr>
             </thead>
             <tbody className="table-group-divider">
@@ -201,7 +185,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
                     <td className="d-none d-sm-table-cell">{f.goalsRight}</td>
                     <td>{f.goalsOther}</td>
                     <td>{f.assists}</td>
-                    <td className="d-none d-sm-table-cell">{f.gso}</td>
                     <td>{f.shots}</td>
                     <td>{f.shotsLeft}</td>
                     <td>{f.shotsRight}</td>
@@ -209,7 +192,6 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
                     <td>{f.shotsOffTarget}</td>
                     <td className="d-none d-sm-table-cell">{f.cleanSheets}</td>
                     <td>{f.saves}</td>
-                    <td className="d-none d-sm-table-cell">{f.penSaves}</td>
                   </tr>
                 </>
               ))}

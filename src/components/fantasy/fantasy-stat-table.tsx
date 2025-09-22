@@ -28,10 +28,6 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                 fantasyStatsProps.fantasyStats.sort((a , b) => b.assistsPts - a.assistsPts)
                 break;
 
-            case "gso":
-                fantasyStatsProps.fantasyStats.sort((a , b) => b.gsoPts - a.gsoPts)
-                break;
-
             case "shots":
                 fantasyStatsProps.fantasyStats.sort((a , b) => b.shotPts - a.shotPts)
                 break;
@@ -61,11 +57,9 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                                 <th className="sortable" onClick={() => Sort("pld")}>Apps</th>
                                 <th className="sortable" onClick={() => Sort("gls")}>Gls</th>
                                 <th className="sortable" onClick={() => Sort("ass")}>Ass</th>
-                                <th className="sortable" onClick={() => Sort("gso")}>GSOs</th>
                                 <th className="sortable" onClick={() => Sort("shots")}>Shots</th>                                                      
-                                <th className="sortable" onClick={() => Sort("cs")}>CS</th> 
+                                <th className="sortable" onClick={() => Sort("cs")}>CS</th>
                                 <th className="sortable" onClick={() => Sort("saves")}>Saves</th> 
-                                <th className="sortable" onClick={() => Sort("pens")}>Pen Saves</th> 
                             </tr>
                         </thead>
                         <tbody className="table-group-divider">
@@ -77,11 +71,9 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                                         <td>{f.apps} ({f.appsPts})</td>
                                         <td>{f.goals} ({f.goalPts})</td>
                                         <td>{f.assists} ({f.assistsPts})</td>
-                                        <td>{f.gso} ({f.gsoPts})</td>
                                         <td>{f.shots} ({f.shotPts})</td>                                
-                                        <td>{f.cleanSheets} ({f.cleanSheetPoints})</td>  
+                                        <td>{f.cleanSheets} ({f.cleanSheetPoints})</td>
                                         <td>{f.saves} ({f.savesPts})</td>
-                                        <td>{f.penSaves} ({f.penSavesPts})</td>
                                     </tr>
                                 </>
                             )}
