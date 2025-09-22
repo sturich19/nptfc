@@ -302,7 +302,7 @@ public class GameStatsController : ControllerBase
         if (gameStatDTOs == null || !gameStatDTOs.Any())
             return BadRequest("No game stats provided");
 
-        var addedGameStats = new List<GameStatDTO>();
+        var processedGameStats = new List<GameStatDTO>();
         var errors = new List<string>();
 
         foreach (var gameStatDTO in gameStatDTOs)
@@ -322,26 +322,58 @@ public class GameStatsController : ControllerBase
                 continue;
             }
 
-            GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);
-            _context.GameStats.Add(gameStatToAdd);
-            addedGameStats.Add(gameStatDTO);
+            // Check if a game stat already exists for this player/fixture/season combination
+            var existingGameStat = await _context.GameStats
+                .FirstOrDefaultAsync(gs =>
+                    gs.PlayerId == gameStatDTO.PlayerId &&
+                    gs.FixtureId == gameStatDTO.FixtureId &&
+                    gs.SeasonId == gameStatDTO.SeasonId);
+
+            if (existingGameStat != null)
+            {
+                // Update existing record
+                existingGameStat.Goals = gameStatDTO.Goals;
+                existingGameStat.GoalsLeft = gameStatDTO.GoalsLeft;
+                existingGameStat.GoalsRight = gameStatDTO.GoalsRight;
+                existingGameStat.GoalsOther = gameStatDTO.GoalsOther;
+                existingGameStat.Assists = gameStatDTO.Assists;
+                existingGameStat.GSO = gameStatDTO.GSO;
+                existingGameStat.Shots = gameStatDTO.Shots;
+                existingGameStat.ShotsOnTarget = gameStatDTO.ShotsOnTarget;
+                existingGameStat.ShotsOffTarget = gameStatDTO.ShotsOffTarget;
+                existingGameStat.ShotsLeft = gameStatDTO.ShotsLeft;
+                existingGameStat.ShotsRight = gameStatDTO.ShotsRight;
+                existingGameStat.CleanSheets = gameStatDTO.CleanSheets;
+                existingGameStat.Saves = gameStatDTO.Saves;
+                existingGameStat.PenSaves = gameStatDTO.PenSaves;
+
+                _context.GameStats.Update(existingGameStat);
+            }
+            else
+            {
+                // Add new record
+                GameStat gameStatToAdd = GameStat.Create(gameStatDTO, fixture, player, season);
+                _context.GameStats.Add(gameStatToAdd);
+            }
+
+            processedGameStats.Add(gameStatDTO);
         }
 
-        if (addedGameStats.Any())
+        if (processedGameStats.Any())
         {
             await _context.SaveChangesAsync();
         }
 
-        if (errors.Any() && !addedGameStats.Any())
+        if (errors.Any() && !processedGameStats.Any())
         {
             return BadRequest(new { errors });
         }
 
         if (errors.Any())
         {
-            return Ok(new { addedGameStats, errors });
+            return Ok(new { processedGameStats, errors });
         }
 
-        return Ok(addedGameStats);
+        return Ok(processedGameStats);
     }
 }
