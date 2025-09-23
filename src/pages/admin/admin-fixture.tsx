@@ -7,12 +7,20 @@ import {
   GetFixturesForSeason,
   PostBulkFixtures,
   PutFixture,
+  DeleteFixture,
 } from "../../services/fixture-service";
+import {
+  GetTigersFixturesForSeason,
+  PostTigersFixture,
+  DeleteTigersFixture,
+} from "../../services/tigers-fixture-service";
 import { Season } from "../../objects/season";
 import { Team } from "../../objects/team";
 import { LeagueTable } from "../../objects/league-table";
 import { FixtureDTO, BulkFixtureDTO } from "../../objects/fixture-dto";
 import { Fixture } from "../../objects/fixture";
+import { TigersFixture } from "../../objects/tigers-fixture";
+import { GameType } from "../../objects/enums/game-type";
 
 const AdminFixture = () => {
   const navigate = useNavigate();
@@ -110,12 +118,19 @@ const AdminFixture = () => {
 
   const loadExistingFixtures = async (seasonId: number) => {
     try {
-      const existing = await GetFixturesForSeason(seasonId);
-      setExistingFixtures(existing || []);
+      // Load both league fixtures and friendly fixtures
+      const [leagueFixtures, tigersFixtures] = await Promise.all([
+        GetFixturesForSeason(seasonId),
+        GetTigersFixturesForSeason(seasonId),
+      ]);
+
+      setExistingFixtures(leagueFixtures || []);
 
       // Group existing fixtures by date
       const groupedFixtures: { [key: string]: FixtureDTO[] } = {};
-      (existing || []).forEach((fixture: Fixture) => {
+
+      // Process league fixtures
+      (leagueFixtures || []).forEach((fixture: Fixture) => {
         const dateKey = formatDate(new Date(fixture.date));
         if (!groupedFixtures[dateKey]) {
           groupedFixtures[dateKey] = [];
@@ -135,7 +150,35 @@ const AdminFixture = () => {
           date: new Date(fixture.date),
           seasonId: fixture.seasonId,
           knownScore: fixture.homeTeamScore > 0 || fixture.awayTeamScore > 0,
+          gameType: GameType.League,
         });
+      });
+
+      // Process Tigers fixtures (friendlies)
+      (tigersFixtures || []).forEach((fixture: TigersFixture) => {
+        if (fixture.type === 1) { // Only friendlies
+          const dateKey = formatDate(new Date(fixture.date));
+          if (!groupedFixtures[dateKey]) {
+            groupedFixtures[dateKey] = [];
+          }
+
+          // Determine if Tigers is home or away based on location
+          const isHome = fixture.location === 0; // Assuming 0 is Home
+
+          groupedFixtures[dateKey].push({
+            id: fixture.id,
+            homeTeamId: isHome ? 1 : 999, // Use 999 as placeholder for opposition
+            homeTeam: fixture.homeTeam,
+            awayTeamId: isHome ? 999 : 1,
+            awayTeam: fixture.awayTeam,
+            homeTeamScore: fixture.homeTeamScore,
+            awayTeamScore: fixture.awayTeamScore,
+            date: new Date(fixture.date),
+            seasonId: fixture.seasonId,
+            knownScore: fixture.homeTeamScore > 0 || fixture.awayTeamScore > 0,
+            gameType: GameType.Friendly,
+          });
+        }
       });
 
       setFixtures(groupedFixtures);
@@ -161,18 +204,23 @@ const AdminFixture = () => {
     }
   };
 
-  const addFixtureToDate = (dateKey: string) => {
+  const addFixtureToDate = (dateKey: string, gameType: GameType = GameType.League) => {
+    // Parse the date string properly to avoid timezone issues
+    const [year, month, day] = dateKey.split('-').map(Number);
+    const fixtureDate = new Date(year, month - 1, day); // month is 0-indexed
+
     const newFixture: FixtureDTO = {
       id: 0,
-      homeTeamId: 0,
-      homeTeam: "",
+      homeTeamId: gameType === GameType.Friendly ? 1 : 0, // Tigers is TeamId 1
+      homeTeam: gameType === GameType.Friendly ? "Tigers" : "",
       awayTeamId: 0,
       awayTeam: "",
       homeTeamScore: 0,
       awayTeamScore: 0,
-      date: new Date(dateKey),
+      date: fixtureDate,
       seasonId: selectedSeason?.id || 0,
       knownScore: false,
+      gameType: gameType,
     };
 
     setFixtures((prev) => ({
@@ -193,14 +241,18 @@ const AdminFixture = () => {
 
       if (field === "homeTeamId") {
         fixture.homeTeamId = parseInt(value);
-        fixture.homeTeam =
-          seasonTeams.find((t) => t.id === parseInt(value))?.name || "";
+        // For friendlies, look up from all teams; for league, from season teams
+        const teamsList = fixture.gameType === GameType.Friendly ? allTeams : seasonTeams;
+        fixture.homeTeam = teamsList.find((t) => t.id === parseInt(value))?.name || "";
       } else if (field === "awayTeamId") {
         fixture.awayTeamId = parseInt(value);
-        fixture.awayTeam =
-          seasonTeams.find((t) => t.id === parseInt(value))?.name || "";
+        // For friendlies, look up from all teams; for league, from season teams
+        const teamsList = fixture.gameType === GameType.Friendly ? allTeams : seasonTeams;
+        fixture.awayTeam = teamsList.find((t) => t.id === parseInt(value))?.name || "";
       } else if (field === "date") {
-        fixture.date = new Date(value);
+        // Parse the date string properly to avoid timezone issues
+        const [year, month, day] = value.split('-').map(Number);
+        fixture.date = new Date(year, month - 1, day);
       } else {
         (fixture as any)[field] = value;
       }
@@ -214,7 +266,55 @@ const AdminFixture = () => {
     });
   };
 
-  const removeFixture = (dateKey: string, index: number) => {
+  const removeFixture = async (dateKey: string, index: number) => {
+    const fixture = fixtures[dateKey][index];
+
+    // Only delete from database if it has an ID (exists in DB)
+    if (fixture.id > 0) {
+      try {
+        if (fixture.gameType === GameType.Friendly) {
+          // Delete from TigersFixtures table
+          await DeleteTigersFixture(fixture.id);
+        } else {
+          // Delete from regular Fixtures table
+          await DeleteFixture(fixture.id);
+
+          // Also check if it's a Tigers league game that needs to be deleted from TigersFixtures
+          if (fixture.homeTeamId === 1 || fixture.awayTeamId === 1) {
+            // Find and delete corresponding TigersFixture
+            // Note: We'd need to find the TigersFixture ID that matches this fixture
+            // This is a limitation - we might need to search TigersFixtures by date/teams
+            const tigersFixtures = await GetTigersFixturesForSeason(selectedSeason?.id);
+            const matchingTigersFixture = tigersFixtures?.find((tf: TigersFixture) => {
+              const tfDate = new Date(tf.date);
+              const fixtureDate = new Date(fixture.date);
+              return tfDate.toDateString() === fixtureDate.toDateString() &&
+                     tf.type === 0; // League game
+            });
+
+            if (matchingTigersFixture) {
+              await DeleteTigersFixture(matchingTigersFixture.id);
+            }
+          }
+        }
+
+        setFeedback({
+          message: "Fixture deleted successfully!",
+          type: "success",
+        });
+        setTimeout(() => setFeedback(null), 3000);
+      } catch (error) {
+        console.error("Error deleting fixture:", error);
+        setFeedback({
+          message: "Error deleting fixture. Please try again.",
+          type: "error",
+        });
+        setTimeout(() => setFeedback(null), 3000);
+        return; // Don't remove from UI if delete failed
+      }
+    }
+
+    // Remove from UI state
     setFixtures((prev) => {
       const dateFixtures = [...(prev[dateKey] || [])];
       dateFixtures.splice(index, 1);
@@ -233,46 +333,135 @@ const AdminFixture = () => {
     }));
   };
 
-  const saveAllFixtures = async () => {
-    if (!selectedSeason) return;
+  const saveIndividualFixture = async (dateKey: string, index: number) => {
+    const fixture = fixtures[dateKey][index];
+
+    if (!selectedSeason) {
+      setFeedback({
+        message: "Please select a season first.",
+        type: "error",
+      });
+      setTimeout(() => setFeedback(null), 3000);
+      return;
+    }
+
+    if (!fixture.homeTeamId || !fixture.awayTeamId || fixture.homeTeamId === fixture.awayTeamId) {
+      setFeedback({
+        message: "Please select both home and away teams.",
+        type: "error",
+      });
+      setTimeout(() => setFeedback(null), 3000);
+      return;
+    }
 
     setLoading(true);
+    let savedFixtureId = fixture.id;
+
     try {
-      const allFixtures: FixtureDTO[] = [];
+      if (fixture.gameType === GameType.Friendly) {
+        // Save friendly to TigersFixtures
+        const isHome = fixture.homeTeamId === 1;
 
-      Object.values(fixtures).forEach((dateFixtures) => {
-        dateFixtures.forEach((fixture) => {
-          if (
-            fixture.homeTeamId > 0 &&
-            fixture.awayTeamId > 0 &&
-            fixture.homeTeamId !== fixture.awayTeamId
-          ) {
-            allFixtures.push({
-              ...fixture,
-              seasonId: selectedSeason.id,
-            });
-          }
-        });
-      });
+        // Calculate result based on scores
+        let result = 0; // Draw
+        if (fixture.homeTeamScore > fixture.awayTeamScore) {
+          result = isHome ? 1 : 2; // 1 = Win, 2 = Loss
+        } else if (fixture.homeTeamScore < fixture.awayTeamScore) {
+          result = isHome ? 2 : 1;
+        }
 
-      if (allFixtures.length > 0) {
-        const bulkFixtures: BulkFixtureDTO = { fixtures: allFixtures };
-        await PostBulkFixtures(bulkFixtures);
+        const tigersFixtureDTO: any = {
+          homeTeam: fixture.homeTeamId.toString(),
+          awayTeam: fixture.awayTeamId.toString(),
+          homeTeamScore: fixture.homeTeamScore,
+          awayTeamScore: fixture.awayTeamScore,
+          date: fixture.date,
+          result: result,
+          location: isHome ? 0 : 1, // 0 = Home, 1 = Away
+          seasonId: selectedSeason.id,
+          type: 1, // Friendly
+          glsFor: isHome ? fixture.homeTeamScore : fixture.awayTeamScore,
+          glsA: isHome ? fixture.awayTeamScore : fixture.homeTeamScore,
+        };
 
-        setFeedback({
-          message: `${allFixtures.length} fixtures saved successfully!`,
-          type: "success",
-        });
-        await loadExistingFixtures(selectedSeason.id);
+        await PostTigersFixture(tigersFixtureDTO);
       } else {
-        setFeedback({ message: "No valid fixtures to save.", type: "error" });
+        // Save league fixture
+        const leagueFixture: FixtureDTO = {
+          ...fixture,
+          seasonId: selectedSeason.id,
+          knownScore: fixture.homeTeamScore > 0 || fixture.awayTeamScore > 0,
+        };
+
+        if (fixture.id > 0) {
+          // Existing fixture - use PUT to update (this will update league table if scores changed)
+          await PutFixture(leagueFixture);
+        } else {
+          // New fixture - use POST
+          const bulkFixtures: BulkFixtureDTO = { fixtures: [leagueFixture] };
+          const response = await PostBulkFixtures(bulkFixtures);
+
+          // Update the saved fixture ID if available
+          if (response && response.length > 0) {
+            savedFixtureId = response[0].id;
+          } else {
+            savedFixtureId = Date.now(); // Fallback temporary ID
+          }
+        }
+
+        // If Tigers is involved, also save to TigersFixtures
+        if (fixture.homeTeamId === 1 || fixture.awayTeamId === 1) {
+          const isHome = fixture.homeTeamId === 1;
+
+          let result = 0;
+          if (fixture.homeTeamScore > fixture.awayTeamScore) {
+            result = isHome ? 1 : 2;
+          } else if (fixture.homeTeamScore < fixture.awayTeamScore) {
+            result = isHome ? 2 : 1;
+          }
+
+          const tigersFixtureDTO: any = {
+            homeTeam: fixture.homeTeamId.toString(),
+            awayTeam: fixture.awayTeamId.toString(),
+            homeTeamScore: fixture.homeTeamScore,
+            awayTeamScore: fixture.awayTeamScore,
+            date: fixture.date,
+            result: result,
+            location: isHome ? 0 : 1,
+            seasonId: selectedSeason.id,
+            type: 0, // League game
+            glsFor: isHome ? fixture.homeTeamScore : fixture.awayTeamScore,
+            glsA: isHome ? fixture.awayTeamScore : fixture.homeTeamScore,
+          };
+
+          await PostTigersFixture(tigersFixtureDTO);
+        }
       }
 
+      // Mark fixture as saved by updating its ID and knownScore
+      setFixtures((prev) => {
+        const dateFixtures = [...(prev[dateKey] || [])];
+        const updatedFixture = { ...dateFixtures[index] };
+
+        updatedFixture.id = savedFixtureId || Date.now();
+        updatedFixture.knownScore = fixture.homeTeamScore > 0 || fixture.awayTeamScore > 0;
+        dateFixtures[index] = updatedFixture;
+
+        return {
+          ...prev,
+          [dateKey]: dateFixtures,
+        };
+      });
+
+      setFeedback({
+        message: "Fixture saved successfully!",
+        type: "success",
+      });
       setTimeout(() => setFeedback(null), 3000);
     } catch (error) {
-      console.error("Error saving fixtures:", error);
+      console.error("Error saving fixture:", error);
       setFeedback({
-        message: "Error saving fixtures. Please try again.",
+        message: "Error saving fixture. Please try again.",
         type: "error",
       });
       setTimeout(() => setFeedback(null), 3000);
@@ -280,6 +469,7 @@ const AdminFixture = () => {
       setLoading(false);
     }
   };
+
 
   useEffect(() => {
     const initializeData = async () => {
@@ -314,10 +504,10 @@ const AdminFixture = () => {
         <div className="text-center text-md-start mb-3 mb-md-0">
           <h5 className="mb-0 text-success fw-bold">
             <i className="bi bi-calendar-event me-2"></i>
-            Bulk Fixture Management
+            Fixture Management
           </h5>
           <small className="text-muted">
-            Create and manage fixtures for the season
+            Create and manage fixtures - save each one individually
           </small>
         </div>
         <div className="d-flex gap-2">
@@ -327,25 +517,6 @@ const AdminFixture = () => {
           >
             <i className="bi bi-arrow-left me-1"></i>
             Back to Admin
-          </button>
-          <button
-            className="btn btn-success"
-            onClick={saveAllFixtures}
-            disabled={loading || !selectedSeason}
-          >
-            {loading ? (
-              <>
-                <div className="spinner-border spinner-border-sm me-2" role="status">
-                  <span className="visually-hidden">Loading...</span>
-                </div>
-                Saving...
-              </>
-            ) : (
-              <>
-                <i className="bi bi-check-circle me-2"></i>
-                Save All Fixtures
-              </>
-            )}
           </button>
         </div>
       </div>
@@ -469,34 +640,63 @@ const AdminFixture = () => {
                       >
                         <div className="accordion-body">
                           {dateFixtures.map((fixture, fixtureIndex) => (
-                            <div key={fixtureIndex} className="card mb-2">
+                            <div key={fixtureIndex} className={`card mb-2 ${fixture.gameType === GameType.Friendly ? 'border-success' : ''}`}>
                               <div className="card-body">
+                                {fixture.gameType === GameType.Friendly && (
+                                  <span className="badge bg-success position-absolute top-0 end-0 m-2">
+                                    Friendly
+                                  </span>
+                                )}
                                 <div className="row align-items-center">
                                   <div className="col-md-3">
                                     <label className="form-label">
                                       Home Team
                                     </label>
-                                    <select
-                                      className="form-select form-select-sm"
-                                      value={fixture.homeTeamId}
-                                      onChange={(e) =>
-                                        updateFixture(
-                                          dateKey,
-                                          fixtureIndex,
-                                          "homeTeamId",
-                                          e.target.value,
-                                        )
-                                      }
-                                    >
-                                      <option value={0}>
-                                        Select Home Team
-                                      </option>
-                                      {seasonTeams.map((team) => (
-                                        <option key={team.id} value={team.id}>
-                                          {team.name}
+                                    {fixture.gameType === GameType.Friendly ? (
+                                      <select
+                                        className="form-select form-select-sm"
+                                        value={fixture.homeTeamId}
+                                        onChange={(e) =>
+                                          updateFixture(
+                                            dateKey,
+                                            fixtureIndex,
+                                            "homeTeamId",
+                                            e.target.value,
+                                          )
+                                        }
+                                      >
+                                        <option value={0}>
+                                          Select Home Team
                                         </option>
-                                      ))}
-                                    </select>
+                                        {allTeams.map((team) => (
+                                          <option key={team.id} value={team.id}>
+                                            {team.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    ) : (
+                                      <select
+                                        className="form-select form-select-sm"
+                                        value={fixture.homeTeamId}
+                                        onChange={(e) =>
+                                          updateFixture(
+                                            dateKey,
+                                            fixtureIndex,
+                                            "homeTeamId",
+                                            e.target.value,
+                                          )
+                                        }
+                                      >
+                                        <option value={0}>
+                                          Select Home Team
+                                        </option>
+                                        {seasonTeams.map((team) => (
+                                          <option key={team.id} value={team.id}>
+                                            {team.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    )}
                                   </div>
                                   <div className="col-md-1 text-center">
                                     <strong>vs</strong>
@@ -505,27 +705,51 @@ const AdminFixture = () => {
                                     <label className="form-label">
                                       Away Team
                                     </label>
-                                    <select
-                                      className="form-select form-select-sm"
-                                      value={fixture.awayTeamId}
-                                      onChange={(e) =>
-                                        updateFixture(
-                                          dateKey,
-                                          fixtureIndex,
-                                          "awayTeamId",
-                                          e.target.value,
-                                        )
-                                      }
-                                    >
-                                      <option value={0}>
-                                        Select Away Team
-                                      </option>
-                                      {seasonTeams.map((team) => (
-                                        <option key={team.id} value={team.id}>
-                                          {team.name}
+                                    {fixture.gameType === GameType.Friendly ? (
+                                      <select
+                                        className="form-select form-select-sm"
+                                        value={fixture.awayTeamId}
+                                        onChange={(e) =>
+                                          updateFixture(
+                                            dateKey,
+                                            fixtureIndex,
+                                            "awayTeamId",
+                                            e.target.value,
+                                          )
+                                        }
+                                      >
+                                        <option value={0}>
+                                          Select Away Team
                                         </option>
-                                      ))}
-                                    </select>
+                                        {allTeams.map((team) => (
+                                          <option key={team.id} value={team.id}>
+                                            {team.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    ) : (
+                                      <select
+                                        className="form-select form-select-sm"
+                                        value={fixture.awayTeamId}
+                                        onChange={(e) =>
+                                          updateFixture(
+                                            dateKey,
+                                            fixtureIndex,
+                                            "awayTeamId",
+                                            e.target.value,
+                                          )
+                                        }
+                                      >
+                                        <option value={0}>
+                                          Select Away Team
+                                        </option>
+                                        {seasonTeams.map((team) => (
+                                          <option key={team.id} value={team.id}>
+                                            {team.name}
+                                          </option>
+                                        ))}
+                                      </select>
+                                    )}
                                   </div>
                                   <div className="col-md-2">
                                     <label className="form-label">Date</label>
@@ -581,27 +805,49 @@ const AdminFixture = () => {
                                     </div>
                                   </div>
                                   <div className="col-md-1">
-                                    <button
-                                      className="btn btn-outline-danger btn-sm mt-4"
-                                      onClick={() =>
-                                        removeFixture(dateKey, fixtureIndex)
-                                      }
-                                      title="Remove fixture"
-                                    >
-                                      ×
-                                    </button>
+                                    <div className="d-flex flex-column gap-1 mt-4">
+                                      <button
+                                        className={`btn btn-sm ${fixture.id > 0 ? 'btn-outline-success' : 'btn-success'}`}
+                                        onClick={() =>
+                                          saveIndividualFixture(dateKey, fixtureIndex)
+                                        }
+                                        title={fixture.id > 0 ? "Fixture saved" : "Save fixture"}
+                                        disabled={loading}
+                                      >
+                                        {fixture.id > 0 ? '✓' : '💾'}
+                                      </button>
+                                      <button
+                                        className="btn btn-outline-danger btn-sm"
+                                        onClick={() =>
+                                          removeFixture(dateKey, fixtureIndex)
+                                        }
+                                        title="Remove fixture"
+                                      >
+                                        ×
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
                             </div>
                           ))}
 
-                          <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => addFixtureToDate(dateKey)}
-                          >
-                            + Add Fixture for this Date
-                          </button>
+                          <div className="d-flex gap-2">
+                            <button
+                              className="btn btn-outline-primary btn-sm"
+                              onClick={() => addFixtureToDate(dateKey, GameType.League)}
+                            >
+                              <i className="bi bi-trophy me-1"></i>
+                              Add League Fixture
+                            </button>
+                            <button
+                              className="btn btn-outline-success btn-sm"
+                              onClick={() => addFixtureToDate(dateKey, GameType.Friendly)}
+                            >
+                              <i className="bi bi-people me-1"></i>
+                              Add Friendly
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>

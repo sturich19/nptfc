@@ -103,4 +103,16 @@ export const PostBulkFixtures = async (bulkFixtures : BulkFixtureDTO) => {
     }
 };
 
+export const DeleteFixture = async (fixtureId: number) => {
+    const url = API_URL + '/' + fixtureId;
+
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting fixture: ", error);
+        throw error;
+    }
+};
+
 

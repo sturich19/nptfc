@@ -3,12 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { GetSeasons } from "../../services/season-service";
 import { GetTeams } from "../../services/teams-service";
 import { GetLeagueTable } from "../../services/league-table-service";
-import { GetFixturesForSeason } from "../../services/fixture-service";
-import { PostTigersFixture } from "../../services/tigers-fixture-service";
+import { GetTigersFixturesForSeason, PostTigersFixture, PutTigersFixture } from "../../services/tigers-fixture-service";
 import { Season } from "../../objects/season";
 import { Team } from "../../objects/team";
 import { LeagueTable } from "../../objects/league-table";
-import { Fixture } from "../../objects/fixture";
 import { TigersFixture } from "../../objects/tigers-fixture";
 import { GameLocation, GameType, ResultType } from "../../objects/enums/enums";
 import { EditButton, SaveButton, CancelButton } from "../../atoms/buttons/admin-action-buttons";
@@ -88,64 +86,32 @@ const AdminTigersFixture = () => {
   const loadTigersFixtures = async (seasonId: number) => {
     setLoading(true);
     try {
-      const fixtures = await GetFixturesForSeason(seasonId);
+      const tigersFixtures = await GetTigersFixturesForSeason(seasonId);
 
-      if (fixtures) {
-        // Filter fixtures that include Team ID 1 (Tigers)
-        const tigersFixturesData = fixtures
-          .filter(
-            (fixture: Fixture) =>
-              fixture.homeTeamId === 1 || fixture.awayTeamId === 1,
-          )
-          .map((fixture: Fixture): TigersFixtureForm => {
-            const homeTeam = allTeams.find((t) => t.id === fixture.homeTeamId);
-            const awayTeam = allTeams.find((t) => t.id === fixture.awayTeamId);
-
-            // Calculate Tigers-specific values
-            const tigersScore =
-              fixture.homeTeamId === 1
-                ? fixture.homeTeamScore
-                : fixture.awayTeamScore;
-            const opponentScore =
-              fixture.homeTeamId === 1
-                ? fixture.awayTeamScore
-                : fixture.homeTeamScore;
-
-            let result = ResultType.Draw;
-            let points = 1;
-            if (tigersScore > opponentScore) {
-              result = ResultType.Win;
-              points = 3;
-            } else if (tigersScore < opponentScore) {
-              result = ResultType.Loss;
-              points = 0;
-            }
-
-            return {
-              id: 0, // Will be set when creating TigersFixture
-              fixtureId: fixture.id,
-              homeTeam: homeTeam?.name || "",
-              awayTeam: awayTeam?.name || "",
-              homeTeamScore: fixture.homeTeamScore,
-              awayTeamScore: fixture.awayTeamScore,
-              date: new Date(fixture.date),
-              result: result,
-              location:
-                fixture.homeTeamId === 1
-                  ? GameLocation.Home
-                  : GameLocation.Away,
-              type: GameType.League, // Default
-              glsFor: tigersScore,
-              glsA: opponentScore,
-              pts: points,
-              isEditing: false,
-              hasChanges: false,
-            };
-          })
-          .sort(
-            (a: TigersFixtureForm, b: TigersFixtureForm) =>
-              new Date(a.date).getTime() - new Date(b.date).getTime(),
-          );
+      if (tigersFixtures) {
+        const tigersFixturesData = tigersFixtures.map((fixture: any): TigersFixtureForm => {
+          return {
+            id: fixture.id,
+            fixtureId: fixture.id, // TigersFixture ID is the same as its own ID
+            homeTeam: fixture.homeTeam,
+            awayTeam: fixture.awayTeam,
+            homeTeamScore: fixture.homeTeamScore,
+            awayTeamScore: fixture.awayTeamScore,
+            date: new Date(fixture.date),
+            result: fixture.result,
+            location: fixture.location,
+            type: fixture.type,
+            glsFor: fixture.glsFor,
+            glsA: fixture.glsA,
+            pts: fixture.pts,
+            isEditing: false,
+            hasChanges: false,
+          };
+        })
+        .sort(
+          (a: TigersFixtureForm, b: TigersFixtureForm) =>
+            new Date(a.date).getTime() - new Date(b.date).getTime(),
+        );
 
         setTigersFixtures(tigersFixturesData);
       }
@@ -259,7 +225,12 @@ const AdminTigersFixture = () => {
         glsA: fixture.glsA,
       };
 
-      await PostTigersFixture(tigersFixture);
+      // Use PUT for existing fixtures (id > 0) or POST for new fixtures (id = 0)
+      if (fixture.id > 0) {
+        await PutTigersFixture(tigersFixture);
+      } else {
+        await PostTigersFixture(tigersFixture);
+      }
 
       setTigersFixtures((prev) =>
         prev.map((f, i) =>

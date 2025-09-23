@@ -1,3 +1,5 @@
+import { GameType } from './enums/game-type';
+
 export interface FixtureDTO {
     id: number;
     homeTeamId: number;
@@ -9,6 +11,7 @@ export interface FixtureDTO {
     date: Date;
     seasonId: number;
     knownScore: boolean;
+    gameType?: GameType;
 }
 
 export interface BulkFixtureDTO {

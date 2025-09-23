@@ -42,6 +42,31 @@ export const PostTigersFixture = async (fixture : TigersFixture) => {
         const response = await axios.post(url, fixture);
         return response.data;
     } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error("Error posting tigers fixture: ", error);
+        throw error;
+    }
+};
+
+export const PutTigersFixture = async (fixture : TigersFixture) => {
+    const url = API_URL + '/' + fixture.id;
+
+    try {
+        const response = await axios.put(url, fixture);
+        return response.data;
+    } catch (error) {
+        console.error("Error updating tigers fixture: ", error);
+        throw error;
+    }
+};
+
+export const DeleteTigersFixture = async (fixtureId: number) => {
+    const url = API_URL + '/' + fixtureId;
+
+    try {
+        const response = await axios.delete(url);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting tigers fixture: ", error);
+        throw error;
     }
 };
