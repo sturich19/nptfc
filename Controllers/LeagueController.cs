@@ -45,28 +45,83 @@ public class LeagueController : ControllerBase
             .ToListAsync();
     }   
 
+    // PUT: api/League
+    [HttpPut()]
+    public async Task<IActionResult> PutLeague(LeagueDTO leagueDTO)
+    {
+        var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == leagueDTO.TeamId);
+        if (team == null)
+        {
+            return BadRequest($"Team with ID {leagueDTO.TeamId} not found");
+        }
+
+        var existingEntry = await _context.League
+            .FirstOrDefaultAsync(lt => lt.TeamId == leagueDTO.TeamId && lt.SeasonId == leagueDTO.SeasonId);
+
+        if (existingEntry == null)
+        {
+            return NotFound($"League entry not found for team {leagueDTO.TeamId} in season {leagueDTO.SeasonId}");
+        }
+
+        existingEntry.Won = leagueDTO.Won;
+        existingEntry.Drawn = leagueDTO.Drawn;
+        existingEntry.Lost = leagueDTO.Lost;
+        existingEntry.GlsFor = leagueDTO.GlsFor;
+        existingEntry.GlsA = leagueDTO.GlsA;
+
+        _context.Entry(existingEntry).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!LeagueTeamExists(existingEntry.Id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
     // Post: api/League
     [HttpPost()]
-    public async Task<IActionResult> PutLeague(League leagueResult)
+    public async Task<IActionResult> PostLeague(LeagueDTO leagueDTO)
     {
+        var team = await _context.Teams.FirstOrDefaultAsync(t => t.Id == leagueDTO.TeamId);
+        if (team == null)
+        {
+            return BadRequest($"Team with ID {leagueDTO.TeamId} not found");
+        }
+
         var existingEntry = await _context.League
-            .FirstOrDefaultAsync(lt => (lt.TeamId == leagueResult.TeamId) && (lt.SeasonId == leagueResult.SeasonId));
+            .FirstOrDefaultAsync(lt => lt.TeamId == leagueDTO.TeamId && lt.SeasonId == leagueDTO.SeasonId);
 
         if (existingEntry == null)
         {
             _context.League.Add(new League() {
-                TeamId = leagueResult.TeamId,
-                SeasonId = leagueResult.SeasonId
-            });            
+                TeamId = leagueDTO.TeamId,
+                SeasonId = leagueDTO.SeasonId,
+                Won = leagueDTO.Won,
+                Drawn = leagueDTO.Drawn,
+                Lost = leagueDTO.Lost,
+                GlsFor = leagueDTO.GlsFor,
+                GlsA = leagueDTO.GlsA
+            });
         }
         else
         {
-            existingEntry.Won += leagueResult.Won;
-            existingEntry.Drawn += leagueResult.Drawn;
-            existingEntry.Lost += leagueResult.Lost;
-            existingEntry.GlsFor += leagueResult.GlsFor;
-            existingEntry.GlsA += leagueResult.GlsA;
-            _context.League.Attach(existingEntry);
+            existingEntry.Won = leagueDTO.Won;
+            existingEntry.Drawn = leagueDTO.Drawn;
+            existingEntry.Lost = leagueDTO.Lost;
+            existingEntry.GlsFor = leagueDTO.GlsFor;
+            existingEntry.GlsA = leagueDTO.GlsA;
             _context.Entry(existingEntry).State = EntityState.Modified;
         }
 
@@ -76,7 +131,7 @@ public class LeagueController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!LeagueTeamExists(leagueResult.TeamId))
+            if (!LeagueTeamExists(leagueDTO.TeamId))
             {
                 return NotFound();
             }

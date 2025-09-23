@@ -17,16 +17,16 @@ public class FixturesController : ControllerBase
     {
         _context = databaseContext;
         _leagueController = new LeagueController(databaseContext);
-    }    
+    }
 
 
-     [HttpGet("history/{id}")]
+    [HttpGet("history/{id}")]
     public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetFixtureHistory(int id)
     {
         var fixture = await _context.Fixtures
-                .Where(f=> f.Id == id)
+                .Where(f => f.Id == id)
                 .Include(f => f.AwayTeam)
-                .Include(f => f.HomeTeam)                        
+                .Include(f => f.HomeTeam)
                 .FirstOrDefaultAsync();
 
         if (fixture == null)
@@ -36,9 +36,9 @@ public class FixturesController : ControllerBase
 
         // You have the fixture - now get all the other fixtures where the home id or away id is included
         return await _context.Fixtures
-                .Where(f => (f.HomeTeamId == fixture.HomeTeamId && f.AwayTeamId == fixture.AwayTeamId) || (f.HomeTeamId == fixture.AwayTeamId && f.AwayTeamId == fixture.HomeTeamId))                
+                .Where(f => (f.HomeTeamId == fixture.HomeTeamId && f.AwayTeamId == fixture.AwayTeamId) || (f.HomeTeamId == fixture.AwayTeamId && f.AwayTeamId == fixture.HomeTeamId))
                 .Include(f => f.AwayTeam)
-                .Include(f => f.HomeTeam)                        
+                .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
                 .Select(fixture => new FixtureDTO
                 {
@@ -51,10 +51,10 @@ public class FixturesController : ControllerBase
                     HomeTeamId = fixture.HomeTeam.Id,
                     HomeTeamScore = fixture.HomeTeamScore,
                     SeasonId = fixture.SeasonId,
-                    KnownScore = fixture.KnownScore         
+                    KnownScore = fixture.KnownScore
                 })
-                .OrderBy(f  => f.Date)                    
-                .ToListAsync();                                      
+                .OrderBy(f => f.Date)
+                .ToListAsync();
     }
 
     [HttpGet(Name = "GetFixtures")]
@@ -72,30 +72,30 @@ public class FixturesController : ControllerBase
                         HomeTeamId = fixture.HomeTeam.Id,
                         HomeTeamScore = fixture.HomeTeamScore,
                         SeasonId = fixture.SeasonId,
-                        KnownScore = fixture.KnownScore         
+                        KnownScore = fixture.KnownScore
                     })
-                    .OrderBy(f  => f.Date)                    
+                    .OrderBy(f => f.Date)
                     .ToListAsync();
 
-            
+
     }
 
     [HttpGet("{id}")]
     public async Task<ActionResult<FixtureDTO>> GetFixture(int id)
     {
-             var fixture = await _context.Fixtures
-                        .Where(f=> f.Id == id)
-                        .Include(f => f.AwayTeam)
-                        .Include(f => f.HomeTeam)                        
-                        .Include(f => f.Season) 
-                        .FirstOrDefaultAsync();
+        var fixture = await _context.Fixtures
+                   .Where(f => f.Id == id)
+                   .Include(f => f.AwayTeam)
+                   .Include(f => f.HomeTeam)
+                   .Include(f => f.Season)
+                   .FirstOrDefaultAsync();
 
-            if (fixture == null)
-            {
-                return NotFound();
-            }
+        if (fixture == null)
+        {
+            return NotFound();
+        }
 
-            return FixtureDTO.Create(fixture);                    
+        return FixtureDTO.Create(fixture);
     }
 
     [HttpGet("grid/{seasonId}", Name = "GetFixtureGrid")]
@@ -112,12 +112,12 @@ public class FixturesController : ControllerBase
                         TeamName = leagueTeam.Team.Name,
                         TeamId = leagueTeam.TeamId,
                         SeasonId = leagueTeam.SeasonId,
-                        Won = leagueTeam.Won,                
-                        Lost = leagueTeam.Lost,                
-                        Drawn = leagueTeam.Drawn,                
+                        Won = leagueTeam.Won,
+                        Lost = leagueTeam.Lost,
+                        Drawn = leagueTeam.Drawn,
                         Points = leagueTeam.Won * 3 + leagueTeam.Drawn,
                         GlsFor = leagueTeam.GlsFor,
-                        GlsA = leagueTeam.GlsA,    
+                        GlsA = leagueTeam.GlsA,
                         GD = leagueTeam.GlsFor - leagueTeam.GlsA,
                         AchieveablePoints = 36 - (leagueTeam.Lost * 3) - (leagueTeam.Drawn * 2),
                         WinPercentage = leagueTeam.WinPercentage
@@ -126,9 +126,9 @@ public class FixturesController : ControllerBase
                     .OrderBy(l => l.TeamName)
                     .ToListAsync();
 
-        
+
         // Get me all the fixtures. For each fixture - add a new team and row element into the grid.
-        List<FixtureDTO> fixtures =  _context.Fixtures
+        List<FixtureDTO> fixtures = _context.Fixtures
                         .Select(fixture => new FixtureDTO
                         {
                             Id = fixture.Id,
@@ -140,9 +140,9 @@ public class FixturesController : ControllerBase
                             HomeTeamId = fixture.HomeTeam.Id,
                             HomeTeamScore = fixture.HomeTeamScore,
                             KnownScore = fixture.KnownScore,
-                            SeasonId = fixture.SeasonId                      
+                            SeasonId = fixture.SeasonId
                         })
-                        .OrderBy(f  => f.HomeTeam)                                        
+                        .OrderBy(f => f.HomeTeam)
                         .Where(f => f.SeasonId == seasonId).ToList();
 
         foreach (LeagueDTO leagueTeam in leagueTeams)
@@ -153,30 +153,30 @@ public class FixturesController : ControllerBase
                 HomeTeamName = leagueTeam.TeamName,
                 SeasonId = seasonId,
                 Items = new List<FixtureGridItemDTO>()
-                
+
             };
 
             List<FixtureDTO> homeTeamFixtures = fixtures.Where(f => f.HomeTeamId == leagueTeam.TeamId).ToList();
-            
+
             // Go through all the teams again - add a 
             foreach (var opposition in leagueTeams)
             {
                 if (leagueTeam.Id == opposition.Id)
                 {
                     // If we are playing ourself then ignore.
-                    fixtureItem.Items.Add(new FixtureGridItemDTO(){ AwayTeamName = opposition.TeamName, NoGame = true});
+                    fixtureItem.Items.Add(new FixtureGridItemDTO() { AwayTeamName = opposition.TeamName, NoGame = true });
                     continue;
                 }
-                
+
                 // See if the oposition appear as an away team.
                 FixtureDTO? fixture = homeTeamFixtures.Where(f => f.AwayTeamId == opposition.TeamId).FirstOrDefault();
                 if (fixture == null)
                 {
                     // We dont play this team at home.
-                    fixtureItem.Items.Add(new FixtureGridItemDTO(){ AwayTeamName = opposition.TeamName, NoGame = true});
+                    fixtureItem.Items.Add(new FixtureGridItemDTO() { AwayTeamName = opposition.TeamName, NoGame = true });
                     continue;
-                }                
-                
+                }
+
                 fixtureItem.Items.Add(new FixtureGridItemDTO()
                 {
                     Id = fixture.Id,
@@ -184,19 +184,19 @@ public class FixturesController : ControllerBase
                     AwayTeamName = fixture.AwayTeam,
                     AwayTeamScore = fixture.AwayTeamScore,
                     Date = fixture.Date,
-                    HomeTeamScore = fixture.HomeTeamScore ,                    
-                    HomeTeamId = fixture.HomeTeamId ,
+                    HomeTeamScore = fixture.HomeTeamScore,
+                    HomeTeamId = fixture.HomeTeamId,
                     HomeTeamName = fixture.HomeTeam,
                     KnownScore = fixture.KnownScore
                 });
-            } 
+            }
 
             grid.Add(fixtureItem);
         }
 
-        return grid;      
+        return grid;
     }
-     
+
     [HttpGet("season/{seasonId}", Name = "GetFixturesBySeasonId")]
     public async Task<ActionResult<IEnumerable<FixtureDTO>>> GetFixturesBySeasonId(int seasonId)
     {
@@ -212,12 +212,12 @@ public class FixturesController : ControllerBase
                         HomeTeamId = fixture.HomeTeam.Id,
                         HomeTeamScore = fixture.HomeTeamScore,
                         KnownScore = fixture.KnownScore,
-                        SeasonId = fixture.SeasonId  
+                        SeasonId = fixture.SeasonId
                     })
-                    .OrderBy(f  => f.Date)
-                    .Where(f=> seasonId == f.SeasonId)                    
+                    .OrderBy(f => f.Date)
+                    .Where(f => seasonId == f.SeasonId)
                     .ToListAsync();
-    }    
+    }
 
 
     [HttpGet("date/{seasonId},{date}", Name = "GetFixturesForDate")]
@@ -236,10 +236,10 @@ public class FixturesController : ControllerBase
                     HomeTeamId = fixture.HomeTeam.Id,
                     HomeTeamScore = fixture.HomeTeamScore,
                     KnownScore = fixture.KnownScore,
-                    SeasonId = fixture.SeasonId  
-                })                
-                .Where(f=> seasonId == f.SeasonId)
-                .Where(f => date.Date == f.Date.Date)                    
+                    SeasonId = fixture.SeasonId
+                })
+                .Where(f => seasonId == f.SeasonId)
+                .Where(f => date.Date == f.Date.Date)
                 .ToListAsync();
     }
 
@@ -247,8 +247,8 @@ public class FixturesController : ControllerBase
     [HttpGet("results/{seasonId},{teamId}", Name = "GetResultsForTeam")]
     public async Task<ActionResult<TeamsFixturesDTO>> GetResultsForTeam(int seasonId, int teamId)
     {
-         var team = await _context.Teams
-            .FirstOrDefaultAsync(lt => lt.Id == teamId);
+        var team = await _context.Teams
+           .FirstOrDefaultAsync(lt => lt.Id == teamId);
 
         if (team == null)
             return BadRequest();
@@ -265,15 +265,15 @@ public class FixturesController : ControllerBase
                         HomeTeamId = fixture.HomeTeam.Id,
                         HomeTeamScore = fixture.HomeTeamScore,
                         KnownScore = fixture.KnownScore,
-                        SeasonId = fixture.SeasonId  
+                        SeasonId = fixture.SeasonId
                     })
-                    .OrderBy(f  => f.Date)
-                    .Where(f=> seasonId == f.SeasonId)  
-                    .Where(f=> teamId == f.HomeTeamId || teamId == f.AwayTeamId)                  
+                    .OrderBy(f => f.Date)
+                    .Where(f => seasonId == f.SeasonId)
+                    .Where(f => teamId == f.HomeTeamId || teamId == f.AwayTeamId)
                     .ToListAsync();
 
-        return new TeamsFixturesDTO() { Id = team.Id, Fixtures = fixtures, TeamName = team.Name};
-    }    
+        return new TeamsFixturesDTO() { Id = team.Id, Fixtures = fixtures, TeamName = team.Name };
+    }
 
     // POST: api/Fixtures
     [HttpPost]
@@ -290,9 +290,9 @@ public class FixturesController : ControllerBase
 
         if (homeTeam == null || awayTeam == null || season == null)
             return BadRequest();
-       
-        Fixture fixtureToAdd = Fixture.Create(fixture, homeTeam, awayTeam, season);      
-        EntityEntry<Fixture> addedFixture = _context.Fixtures.Add(fixtureToAdd);        
+
+        Fixture fixtureToAdd = Fixture.Create(fixture, homeTeam, awayTeam, season);
+        EntityEntry<Fixture> addedFixture = _context.Fixtures.Add(fixtureToAdd);
         await _context.SaveChangesAsync();
 
         return CreatedAtAction(nameof(PostFixture), new { id = addedFixture.Entity.Id }, fixture);
@@ -314,13 +314,13 @@ public class FixturesController : ControllerBase
         if (homeTeam == null || awayTeam == null || season == null)
             return BadRequest();
 
-        Fixture originalFixture = await _context.Fixtures.FirstOrDefaultAsync(f => f.Id == fixture.Id);            
-        
+        Fixture originalFixture = await _context.Fixtures.FirstOrDefaultAsync(f => f.Id == fixture.Id);
+
         if (fixture.KnownScore)
         {
             // Its a score we already know - we dont need to add a league result for this. We need to update it.
-            await _leagueController.UpdateLeagueAfterScrewUp(fixture, homeTeam, awayTeam, originalFixture);                
-        }   
+            await _leagueController.UpdateLeagueAfterScrewUp(fixture, homeTeam, awayTeam, originalFixture);
+        }
         else
         {
             await _leagueController.UpdateLeagueWithResult(fixture, homeTeam, awayTeam);
@@ -329,7 +329,7 @@ public class FixturesController : ControllerBase
         await _context.SaveChangesAsync();
 
         // Now ensure the fixture object itself is updated.
-        Fixture fixtureToUpdate = Fixture.Create(fixture, homeTeam, awayTeam, season); 
+        Fixture fixtureToUpdate = Fixture.Create(fixture, homeTeam, awayTeam, season);
         fixtureToUpdate.Id = fixture.Id;
 
         try
@@ -338,10 +338,10 @@ public class FixturesController : ControllerBase
             var existingEntity = _context.Fixtures.Find(fixtureToUpdate.Id);
             if (existingEntity != null)
                 _context.Entry(existingEntity).State = EntityState.Detached;
-            
+
             _context.Fixtures.Attach(fixtureToUpdate);
             _context.Entry(fixtureToUpdate).State = EntityState.Modified;
-            
+
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateConcurrencyException)
@@ -357,7 +357,7 @@ public class FixturesController : ControllerBase
         }
 
         return NoContent();
-    }   
+    }
 
     // POST: api/Fixtures/bulk
     [HttpPost("bulk")]
@@ -476,5 +476,21 @@ public class FixturesController : ControllerBase
     private bool FixtureExists(int id)
     {
         return _context.Fixtures.Any(e => e.Id == id);
+    }
+    
+    // DELETE: api/Fixtures/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteFixture(int id)
+    {
+        var fixture = await _context.Fixtures.FindAsync(id);
+        if (fixture == null)
+        {
+            return NotFound();
+        }
+
+        _context.Fixtures.Remove(fixture);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
     }
 }
