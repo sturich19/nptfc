@@ -1,0 +1,184 @@
+using Microsoft.EntityFrameworkCore;
+using nptfcBE.Models;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+
+namespace nptfcBE.Tests;
+
+public class TestBase : IDisposable
+{
+    protected DatabaseContext Context { get; private set; }
+
+    public TestBase()
+    {
+        var options = new DbContextOptionsBuilder<DatabaseContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        Context = new DatabaseContext(options);
+        SeedTestData();
+    }
+
+    protected virtual void SeedTestData()
+    {
+        // Seed basic test data
+        var ageGroups = new List<AgeGroup>
+        {
+            new AgeGroup { Id = 1, Name = "U18", Active = true },
+            new AgeGroup { Id = 2, Name = "U16", Active = true },
+            new AgeGroup { Id = 3, Name = "Senior", Active = true }
+        };
+
+        var teams = new List<Team>
+        {
+            new Team { Id = 1, Name = "Tigers FC", Active = true },
+            new Team { Id = 2, Name = "Lions FC", Active = true },
+            new Team { Id = 3, Name = "Eagles FC", Active = true }
+        };
+
+        var players = new List<Player>
+        {
+            new Player { Id = 1, Name = "John Doe", Position = "Forward", Active = true },
+            new Player { Id = 2, Name = "Jane Smith", Position = "Midfielder", Active = true },
+            new Player { Id = 3, Name = "Bob Wilson", Position = "Defender", Active = true }
+        };
+
+        var seasons = new List<Season>
+        {
+            new Season
+            {
+                Id = 1,
+                StartYear = 2023,
+                EndYear = 2024,
+                AgeGroupId = 1,
+                MonthStart = 9,
+                MonthEnd = 5,
+                Division = "Premier",
+                Active = true
+            },
+            new Season
+            {
+                Id = 2,
+                StartYear = 2024,
+                EndYear = 2025,
+                AgeGroupId = 1,
+                MonthStart = 9,
+                MonthEnd = 5,
+                Division = "Premier",
+                Active = true
+            }
+        };
+
+        Context.AgeGroups.AddRange(ageGroups);
+        Context.Teams.AddRange(teams);
+        Context.Players.AddRange(players);
+        Context.Seasons.AddRange(seasons);
+        Context.SaveChanges();
+    }
+
+    public void Dispose()
+    {
+        Context?.Dispose();
+    }
+}
+
+public class IntegrationTestBase : IClassFixture<WebApplicationFactory<Program>>
+{
+    protected readonly WebApplicationFactory<Program> Factory;
+    protected readonly HttpClient Client;
+
+    public IntegrationTestBase(WebApplicationFactory<Program> factory)
+    {
+        Factory = factory.WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                // Remove the existing database context
+                var descriptor = services.SingleOrDefault(
+                    d => d.ServiceType == typeof(DbContextOptions<DatabaseContext>));
+                if (descriptor != null)
+                    services.Remove(descriptor);
+
+                // Add in-memory database for testing
+                services.AddDbContext<DatabaseContext>(options =>
+                {
+                    options.UseInMemoryDatabase("InMemoryDbForTesting");
+                });
+
+                // Build the service provider and ensure database is created
+                var sp = services.BuildServiceProvider();
+                using var scope = sp.CreateScope();
+                var scopedServices = scope.ServiceProvider;
+                var db = scopedServices.GetRequiredService<DatabaseContext>();
+                db.Database.EnsureCreated();
+
+                // Seed test data
+                SeedTestData(db);
+            });
+        });
+
+        Client = Factory.CreateClient();
+    }
+
+    protected virtual void SeedTestData(DatabaseContext context)
+    {
+        // Ensure clean state
+        context.Database.EnsureDeleted();
+        context.Database.EnsureCreated();
+
+        // Seed basic test data
+        var ageGroups = new List<AgeGroup>
+        {
+            new AgeGroup { Id = 1, Name = "U18", Active = true },
+            new AgeGroup { Id = 2, Name = "U16", Active = true },
+            new AgeGroup { Id = 3, Name = "Senior", Active = true }
+        };
+
+        var teams = new List<Team>
+        {
+            new Team { Id = 1, Name = "Tigers FC", Active = true },
+            new Team { Id = 2, Name = "Lions FC", Active = true },
+            new Team { Id = 3, Name = "Eagles FC", Active = true }
+        };
+
+        var players = new List<Player>
+        {
+            new Player { Id = 1, Name = "John Doe", Position = "Forward", Active = true },
+            new Player { Id = 2, Name = "Jane Smith", Position = "Midfielder", Active = true },
+            new Player { Id = 3, Name = "Bob Wilson", Position = "Defender", Active = true }
+        };
+
+        var seasons = new List<Season>
+        {
+            new Season
+            {
+                Id = 1,
+                StartYear = 2023,
+                EndYear = 2024,
+                AgeGroupId = 1,
+                MonthStart = 9,
+                MonthEnd = 5,
+                Division = "Premier",
+                Active = true
+            },
+            new Season
+            {
+                Id = 2,
+                StartYear = 2024,
+                EndYear = 2025,
+                AgeGroupId = 1,
+                MonthStart = 9,
+                MonthEnd = 5,
+                Division = "Premier",
+                Active = true
+            }
+        };
+
+        context.AgeGroups.AddRange(ageGroups);
+        context.Teams.AddRange(teams);
+        context.Players.AddRange(players);
+        context.Seasons.AddRange(seasons);
+        context.SaveChanges();
+    }
+}
