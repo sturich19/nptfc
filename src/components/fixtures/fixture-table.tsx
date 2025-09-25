@@ -24,7 +24,7 @@ const FixtureTable = ({ fixtures, handleClick }: FixtureComponentProps) => {
       <tbody className="table-group-divider">
         {fixtures
           .sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+            (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
           )
           .map((f) => (
             <FixtureRow key={f.id} fixture={f} handleClick={handleClick} />
