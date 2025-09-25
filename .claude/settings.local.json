@@ -6,7 +6,21 @@
       "Bash(npm run lint)",
       "Bash(npm run:*)",
       "Bash(npm test)",
-      "Read(//c/Users/srichardson/Pictures/Screenshots/**)"
+      "Read(//c/Users/srichardson/Pictures/Screenshots/**)",
+      "Bash(npx prettier:*)",
+      "Read(//c/Source/NPTFC/backend/nptfc-backend/Controllers/**)",
+      "Read(//c/Source/NPTFC/backend/**)",
+      "Bash(lsof:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Read(//c/Source/NPTFC/**)"
     ],
     "deny": [],
     "ask": []
