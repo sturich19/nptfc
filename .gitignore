@@ -3,5 +3,16 @@ build/
 package-lock.json
 yarn.lock
 .scannerwork
-node_modules
-build
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+
+# Test environment variables
+.env.test
+.env.local
+
+# Authentication state for tests
+/tests/.auth/
