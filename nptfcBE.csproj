@@ -22,4 +22,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="nptfcBE.Tests/**" />
+    <EmbeddedResource Remove="nptfcBE.Tests/**" />
+    <None Remove="nptfcBE.Tests/**" />
+  </ItemGroup>
+
 </Project>
