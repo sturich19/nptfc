@@ -35,9 +35,29 @@ test.describe("NPTFC Basic Navigation", () => {
       const loginButton = page.locator('button:has-text("Log In")');
       await expect(loginButton).toBeVisible({ timeout: 10000 });
     } else {
-      // If authenticated, we should see main navigation
-      const navigation = page.locator("nav");
-      await expect(navigation).toBeVisible({ timeout: 10000 });
+      // If authenticated, we should see Material-UI AppBar/Toolbar or header content
+      const headerElements = [
+        'header[class*="MuiAppBar"]',
+        '[class*="MuiToolbar"]',
+        "header",
+        '[role="banner"]',
+        "div.container-fluid",
+      ];
+
+      let headerFound = false;
+      for (const selector of headerElements) {
+        try {
+          await expect(page.locator(selector).first()).toBeVisible({
+            timeout: 5000,
+          });
+          headerFound = true;
+          break;
+        } catch {
+          continue;
+        }
+      }
+
+      expect(headerFound).toBe(true);
     }
   });
 

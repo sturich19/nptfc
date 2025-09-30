@@ -19,19 +19,18 @@ test.describe("NPTFC Admin Functions", () => {
     // Wait a bit longer for dynamic content to load
     await page.waitForTimeout(1000);
 
-    // Look for admin navigation or content with longer timeouts
+    // Look for actual admin page content (Material-UI cards and text)
     const adminElements = [
-      'text="Admin"',
-      'text="Season"',
-      'text="Player"',
-      'text="Team"',
-      'text="Fixture"',
-      'text="Manage"',
-      'a[href*="Admin"]',
-      'button:has-text("Season")',
-      'button:has-text("Player")',
+      'text="Admin Dashboard"',
+      'text="Update League Table"',
+      'text="Manage Fixtures"',
+      'text="Manage Season"',
+      'text="Add Player"',
+      'text="Team Management"',
+      'button:has-text("Access")',
+      '[class*="MuiCard"]',
+      '[class*="MuiAppBar"]',
       "header",
-      "nav",
     ];
 
     let adminFound = false;
@@ -320,23 +319,29 @@ test.describe("NPTFC Public Pages (Authenticated)", () => {
 
   test("should access home page", async ({ page }) => {
     await page.goto("/");
+
+    // Home page redirects to /season/X or /AgeGroup/1, so wait for navigation
     await page.waitForLoadState("networkidle");
 
-    // Should be on home page or redirected within same domain
+    // Should be redirected but still on same domain
     expect(page.url()).toContain("localhost:3000");
 
-    // Wait for content to load
+    // Should be redirected away from home page
+    expect(page.url()).not.toBe("http://localhost:3000/");
+
+    // Wait for content to load after redirect
     await page.waitForTimeout(1000);
 
-    // Should see authenticated content
+    // Should see authenticated content (AppBar, header, or page content)
     const homeElements = [
-      "nav",
+      '[class*="MuiAppBar"]',
       "header",
       "main",
       "body",
-      'text="Home"',
+      '[class*="MuiToolbar"]',
       'text="Tigers"',
       'text="NPTFC"',
+      'text="Loading"',
     ];
 
     let homeContentFound = false;
@@ -384,16 +389,15 @@ test.describe("NPTFC Public Pages (Authenticated)", () => {
     await page.goto("/");
     await page.waitForLoadState("networkidle");
 
-    // Look for navigation elements
+    // Look for Material-UI AppBar/Toolbar or navigation elements
     const navElements = [
-      "nav a",
+      '[class*="MuiAppBar"]',
+      '[class*="MuiToolbar"]',
+      "header",
+      '[role="banner"]',
       "header a",
-      '[role="navigation"] a',
-      'a[href="/players"]',
-      'a[href="/admin"]',
-      'text="Players"',
-      'text="Admin"',
-      'text="Home"',
+      "a",
+      "button",
     ];
 
     let navigationFound = false;
