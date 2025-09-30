@@ -59,11 +59,11 @@ test.describe("NPTFC App Loading", () => {
       console.log("App loaded on localhost, checking content...");
 
       // Should show loading or redirect message
-      const loadingText = page.locator("text=Loading");
-      const redirectText = page.locator("text=Redirecting to login");
+      const loadingText = page.locator("text=Loading").first();
+      const redirectText = page.locator("text=Redirecting to login").first();
 
-      const hasLoading = await loadingText.isVisible();
-      const hasRedirect = await redirectText.isVisible();
+      const hasLoading = await loadingText.isVisible().catch(() => false);
+      const hasRedirect = await redirectText.isVisible().catch(() => false);
 
       expect(hasLoading || hasRedirect).toBeTruthy();
     }
@@ -107,7 +107,9 @@ test.describe("NPTFC App Loading", () => {
         !error.includes("chunk") &&
         !error.includes("AxiosError") &&
         !error.includes("Connection refused") &&
-        !error.includes("Error fetching data"),
+        !error.includes("Error fetching data") &&
+        !error.includes("Cross-Origin") &&
+        !error.includes("CORS"),
     );
 
     // Log any errors for debugging

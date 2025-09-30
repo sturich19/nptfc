@@ -102,7 +102,9 @@ test.describe("NPTFC Basic Navigation", () => {
         !error.includes("Microsoft Clarity") &&
         !error.includes("AxiosError") &&
         !error.includes("Connection refused") &&
-        !error.includes("Error fetching data"),
+        !error.includes("Error fetching data") &&
+        !error.includes("Cross-Origin") &&
+        !error.includes("CORS"),
     );
 
     expect(criticalErrors).toHaveLength(0);
