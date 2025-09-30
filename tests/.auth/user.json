@@ -2,30 +2,30 @@
   "cookies": [
     {
       "name": "CLID",
-      "value": "e740c4721c024db29181e96d9d8a527a.20250930.20260930",
+      "value": "af38eece65a4408d89930a6fcdbac759.20250930.20260930",
       "domain": "www.clarity.ms",
       "path": "/",
-      "expires": 1790758507.611625,
+      "expires": 1790762224.216367,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "_clck",
-      "value": "1fkx1pz%5E2%5Efzr%5E0%5E2099",
+      "value": "sfh15v%5E2%5Efzr%5E0%5E2099",
       "domain": "localhost",
       "path": "/",
-      "expires": 1790758507,
+      "expires": 1790762224,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "MUID",
-      "value": "2C2C4780A1B66F2B356651F7A0916E02",
+      "value": "2E8403CEA8EA6A3219F915B9A90A6BE6",
       "domain": ".bing.com",
       "path": "/",
-      "expires": 1792918507.956413,
+      "expires": 1792922227.274381,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -35,17 +35,17 @@
       "value": "0",
       "domain": ".c.bing.com",
       "path": "/",
-      "expires": 1759827307.957,
+      "expires": 1759831027.274575,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "SRM_B",
-      "value": "2C2C4780A1B66F2B356651F7A0916E02",
+      "value": "2E8403CEA8EA6A3219F915B9A90A6BE6",
       "domain": ".c.bing.com",
       "path": "/",
-      "expires": 1792918507.957254,
+      "expires": 1792922227.274649,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -62,10 +62,10 @@
     },
     {
       "name": "MUID",
-      "value": "2C2C4780A1B66F2B356651F7A0916E02",
+      "value": "2E8403CEA8EA6A3219F915B9A90A6BE6",
       "domain": ".clarity.ms",
       "path": "/",
-      "expires": 1792918508.042237,
+      "expires": 1792922226.311185,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -75,7 +75,7 @@
       "value": "0",
       "domain": ".c.clarity.ms",
       "path": "/",
-      "expires": 1759827308.042372,
+      "expires": 1759831026.312215,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
@@ -85,57 +85,57 @@
       "value": "0",
       "domain": ".c.clarity.ms",
       "path": "/",
-      "expires": 1759223108.042422,
+      "expires": 1759226826.312308,
       "httpOnly": false,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "WMF-Uniq",
-      "value": "jXC_iEDjDqfYJU7uSXRcUwJ-AAAAAFvdSikkfGCP79ew0EPav__XxUWrKo5egDtA",
+      "value": "3h6fRJTcdP2VWlXT-nA2rgJ-AAAAAFvd6i0eIhVWULxCmmrJHcNZO6ZmruxSsn9L",
       "domain": ".upload.wikimedia.org",
       "path": "/",
-      "expires": 1790789733.269613,
+      "expires": 1790793452.063676,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "did",
-      "value": "s%3Av0%3Af8bbb351-1579-4a1b-ab0e-815f492ccc55%3A6c19aa6cccfda76bb08f2879bfd32b86b2779e5eddc69118a910c4a14012c392.Fizkh3SkDb0qolvkZYLH3T8QMNx%2F4VO%2ByE7eLR%2BcC5M",
+      "value": "s%3Av0%3Aa7d1f179-6fd5-4c59-ae63-0222342aba63%3A6c19aa6cccfda76bb08f2879bfd32b86b2779e5eddc69118a910c4a14012c392.kqoK4%2B%2FEbcglCeIHaJ5MFo6xi2TUUBze4I4Wo7pLLHg",
       "domain": "dev-vo68ze2fgam758d0.us.auth0.com",
       "path": "/",
-      "expires": 1790780109.696761,
+      "expires": 1790783828.813899,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "did_compat",
-      "value": "s%3Av0%3Af8bbb351-1579-4a1b-ab0e-815f492ccc55%3A6c19aa6cccfda76bb08f2879bfd32b86b2779e5eddc69118a910c4a14012c392.Fizkh3SkDb0qolvkZYLH3T8QMNx%2F4VO%2ByE7eLR%2BcC5M",
+      "value": "s%3Av0%3Aa7d1f179-6fd5-4c59-ae63-0222342aba63%3A6c19aa6cccfda76bb08f2879bfd32b86b2779e5eddc69118a910c4a14012c392.kqoK4%2B%2FEbcglCeIHaJ5MFo6xi2TUUBze4I4Wo7pLLHg",
       "domain": "dev-vo68ze2fgam758d0.us.auth0.com",
       "path": "/",
-      "expires": 1790780109.697211,
+      "expires": 1790783828.814221,
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
     },
     {
       "name": "auth0",
-      "value": "s%3AMkQ9BHVZIQ-LPHS5dz-WsXiSbYBsDU7n.UERDiN2R%2BaXfaA8pTp0goDyu4Atd9nPY8DjXkTBZxx0",
+      "value": "s%3AcgEEByCK8HtD7802y5JhGUYvYlGwz3LX.2nFi8GeBguC%2FYSGjKVhFmcm8qJv5LRWJZVWxyD9zGG0",
       "domain": "dev-vo68ze2fgam758d0.us.auth0.com",
       "path": "/",
-      "expires": 1759481708.994761,
+      "expires": 1759485429.112601,
       "httpOnly": true,
       "secure": true,
       "sameSite": "None"
     },
     {
       "name": "auth0_compat",
-      "value": "s%3AMkQ9BHVZIQ-LPHS5dz-WsXiSbYBsDU7n.UERDiN2R%2BaXfaA8pTp0goDyu4Atd9nPY8DjXkTBZxx0",
+      "value": "s%3AcgEEByCK8HtD7802y5JhGUYvYlGwz3LX.2nFi8GeBguC%2FYSGjKVhFmcm8qJv5LRWJZVWxyD9zGG0",
       "domain": "dev-vo68ze2fgam758d0.us.auth0.com",
       "path": "/",
-      "expires": 1759481708.995149,
+      "expires": 1759485429.112952,
       "httpOnly": true,
       "secure": true,
       "sameSite": "Lax"
@@ -145,7 +145,7 @@
       "value": "true",
       "domain": "localhost",
       "path": "/",
-      "expires": 1759308911,
+      "expires": 1759312630,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
@@ -155,17 +155,17 @@
       "value": "true",
       "domain": "localhost",
       "path": "/",
-      "expires": 1759308911,
+      "expires": 1759312630,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
     },
     {
       "name": "_clsk",
-      "value": "gxa6ng%5E1759222516969%5E3%5E1%5En.clarity.ms%2Fcollect",
+      "value": "1wrwm4t%5E1759226230750%5E3%5E1%5En.clarity.ms%2Fcollect",
       "domain": "localhost",
       "path": "/",
-      "expires": 1759308916,
+      "expires": 1759312630,
       "httpOnly": false,
       "secure": false,
       "sameSite": "Lax"
