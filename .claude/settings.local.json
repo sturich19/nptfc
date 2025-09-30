@@ -20,7 +20,8 @@
       "Bash(npx playwright test:*)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Read(//c/Source/NPTFC/**)"
+      "Read(//c/Source/NPTFC/**)",
+      "Bash(rm:*)"
     ],
     "deny": [],
     "ask": []
