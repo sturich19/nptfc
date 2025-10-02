@@ -21,7 +21,14 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Development
 - `npm start` - Start development server (opens at http://localhost:3000)
 - `npm run build` - Build for production
-- `npm test` - Run tests (currently returns "No tests" message)
+- `npm test` - Run tests using Vitest
+
+### Testing
+- **Test Framework**: Vitest with React Testing Library
+- **Test Location**: Tests are co-located with components in `__tests__` directories
+- **Centralized Mock Data**: `src/__mocks__/test-data.ts` contains reusable mock data for all tests
+- **Running Tests**: Use `npm test` to run all tests
+- **Current Coverage**: Admin fixture management component has comprehensive test coverage
 
 ### Special Notes
 - If you encounter "permission denied" errors with react-scripts on Windows, run: `git update-index --chmod=+x node_modules/.bin/react-scripts`
@@ -66,6 +73,7 @@ This is a React TypeScript application for NPTFC (Newport Pagnell Tigers Footbal
 - **Services**: API communication layer for all entities
 - **Objects**: TypeScript interfaces/types for data models
 - **Utils**: Helper functions for dates, formatting, seasons, fixtures
+- **__mocks__**: Centralized test mock data (see `src/__mocks__/README.md` for usage)
 
 #### Data Models
 Key entities include: Player, Team, Fixture, Season, AgeGroup, GameStat, FantasyStat, TigersFixture
