@@ -1,6 +1,5 @@
 import { useFormik } from "formik";
 import { useEffect, useState } from "react";
-import TextField from "../../atoms/textfield/textfield";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fixture } from "../../objects/fixture";
 import { GetFixture, PutFixture } from "../../services/fixture-service";
@@ -29,6 +28,7 @@ const AdminLeagueFixtureUpdate = () => {
         });
       }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id2]);
 
   const formik = useFormik({

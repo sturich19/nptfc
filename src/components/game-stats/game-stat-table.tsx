@@ -11,6 +11,7 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
   useEffect(() => {
     gameStatProps.gameStats.sort((a, b) => b.goals - a.goals);
     setSort(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function Sort(name: string) {

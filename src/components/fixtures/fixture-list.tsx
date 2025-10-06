@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
-import { GetFixturesForDate, GetFixturesForSeason } from "../../services/fixture-service";
+import { GetFixturesForSeason } from "../../services/fixture-service";
 import { Fixture } from "../../objects/fixture";
-import { FormatDateYYYYMMDD } from "../../utils/formatter-util";
-import { GetClosestSaturday } from "../../utils/date-utils";
 import FixtureTable from "./fixture-table";
-import { ArrowBack, ArrowForward, ArrowRightAlt } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 
 interface FixtureListProps
@@ -22,6 +19,7 @@ const FixtureList = (fixtureListProps : FixtureListProps) => {
         //GetFixturesForDate(fixtureListProps.seasonId, FormatDateYYYYMMDD(currentFixturesDate)).then(fixtures => setFixtures(fixtures));
         GetFixturesForSeason(fixtureListProps.seasonId).then(fixtures => setFixtures(fixtures));
         //setFixturesDate(currentFixturesDate);
+     // eslint-disable-next-line react-hooks/exhaustive-deps
      }, []);  
 
      const navigate = useNavigate();

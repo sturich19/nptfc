@@ -210,6 +210,7 @@ export const mockTigersFixtures: TigersFixture[] = [
     type: 1, // Friendly
     glsFor: 2,
     glsA: 2,
+    pts: 1,
   },
   {
     id: 2,
@@ -224,6 +225,7 @@ export const mockTigersFixtures: TigersFixture[] = [
     type: 1, // Friendly
     glsFor: 3,
     glsA: 1,
+    pts: 3,
   },
 ];
 
@@ -231,48 +233,44 @@ export const mockTigersFixtures: TigersFixture[] = [
 export const mockPlayers: Player[] = [
   {
     id: 1,
-    firstName: "John",
-    lastName: "Smith",
-    dateOfBirth: new Date("2014-05-15"),
-    squadNumber: 7,
-    position: "Forward",
-    active: true,
+    firstname: "John",
+    surname: "Smith",
+    position: 3, // Forward
+    nickname: "Smitty",
+    shirt: 7,
   },
   {
     id: 2,
-    firstName: "Emma",
-    lastName: "Johnson",
-    dateOfBirth: new Date("2014-08-20"),
-    squadNumber: 10,
-    position: "Midfielder",
-    active: true,
+    firstname: "Emma",
+    surname: "Johnson",
+    position: 2, // Midfielder
+    nickname: "EJ",
+    shirt: 10,
   },
   {
     id: 3,
-    firstName: "Michael",
-    lastName: "Brown",
-    dateOfBirth: new Date("2013-11-10"),
-    squadNumber: 1,
-    position: "Goalkeeper",
-    active: true,
+    firstname: "Michael",
+    surname: "Brown",
+    position: 0, // Goalkeeper
+    nickname: "Mike",
+    shirt: 1,
   },
   {
     id: 4,
-    firstName: "Sarah",
-    lastName: "Wilson",
-    dateOfBirth: new Date("2014-03-25"),
-    squadNumber: 5,
-    position: "Defender",
-    active: false,
+    firstname: "Sarah",
+    surname: "Wilson",
+    position: 1, // Defender
+    nickname: "Sar",
+    shirt: 5,
   },
 ];
 
 // Age Groups
 export const mockAgeGroups: AgeGroup[] = [
-  { id: 1, name: "U10", minAge: 9, maxAge: 10 },
-  { id: 2, name: "U11", minAge: 10, maxAge: 11 },
-  { id: 3, name: "U12", minAge: 11, maxAge: 12 },
-  { id: 4, name: "U13", minAge: 12, maxAge: 13 },
+  { id: 1, age: 10, startYear: 2023, endYear: 2024 },
+  { id: 2, age: 11, startYear: 2023, endYear: 2024 },
+  { id: 3, age: 12, startYear: 2023, endYear: 2024 },
+  { id: 4, age: 13, startYear: 2023, endYear: 2024 },
 ];
 
 // Helper functions for creating variations of mock data

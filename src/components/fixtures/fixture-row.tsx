@@ -1,11 +1,4 @@
-import { useNavigate } from "react-router-dom";
 import { Fixture } from "../../objects/fixture";
-import { FormatDate } from "../../utils/formatter-util";
-
-interface FixtureItemComponentProps {
-  fixture: Fixture;
-  handleClick: Event;
-}
 
 // Here we are passing in the object we want as props and deconstructing it.
 // We do need an Id for each row but that is in the calling code where we are .Map the array

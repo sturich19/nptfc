@@ -20,7 +20,6 @@ const AdminLeagueTableUpdate = () => {
   const navigate = useNavigate();
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
-  const [allTeams, setAllTeams] = useState<Team[]>([]);
   const [leagueTableData, setLeagueTableData] = useState<LeagueTableForm[]>([]);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{
@@ -184,13 +183,12 @@ const AdminLeagueTableUpdate = () => {
   useEffect(() => {
     const initializeData = async () => {
       try {
-        const [seasonsData, teamsData] = await Promise.all([
+        const [seasonsData] = await Promise.all([
           GetSeasons(),
           GetTeams(),
         ]);
 
         setSeasons(seasonsData || []);
-        setAllTeams(teamsData || []);
 
         // Auto-select active season
         const activeSeason = (seasonsData || []).find(
@@ -205,6 +203,7 @@ const AdminLeagueTableUpdate = () => {
     };
 
     initializeData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

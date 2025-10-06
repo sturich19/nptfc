@@ -10,9 +10,10 @@ interface fantastyStatProps{
 export default function FantasyStats( fantastyStats : fantastyStatProps)
 {
     const [stats, setStats] = useState<FantasyStat[] | null>(null);
-    
+
     useEffect(() => {
         GetAgeGroupFantasyStats(fantastyStats.ageGroup).then(stats => setStats(stats));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); 
     
     return(        

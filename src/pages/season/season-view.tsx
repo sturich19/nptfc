@@ -14,7 +14,6 @@ import LeagueTableComponent from "../../components/league-table/league-table";
 import { GetSeasonFantasyStats } from "../../services/fantasy-stat-service";
 import { FantasyStat } from "../../objects/fantasy-stat";
 import FantasyStatTable from "../../components/fantasy/fantasy-stat-table";
-import FixtureGridComponent from "../../components/fixtures/fixture-grid";
 import { GetSeason } from "../../services/season-service";
 import { Season } from "../../objects/season";
 import ButtonAtom from "../../atoms/button/button-atom";

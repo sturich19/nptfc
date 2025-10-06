@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Player } from "../../objects/player";
 import { PositionString } from "../../utils/game-stats-util";
-import { GetSeasons } from "../../services/season-service";
 import { Season } from "../../objects/season";
 import { GetPlayerGameStats } from "../../services/game-stat-service";
 import { GameStat } from "../../objects/game-stat";

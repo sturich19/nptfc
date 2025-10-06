@@ -9,6 +9,7 @@ const Logout = () => {
               returnTo: window.location.origin,
             },
           });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);   
 
     return(

@@ -1,8 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { GetFixtureGameStats } from "../services/game-stat-service";
-import { GameStat } from "../objects/game-stat";
-import GameStatTable from "../components/game-stats/game-stat-table";
 import { GetTigersFixture } from "../services/tigers-fixture-service";
 import { TigersFixture } from "../objects/tigers-fixture";
 import { FantasyStat } from "../objects/fantasy-stat";
@@ -15,12 +12,10 @@ export default function TigersFixturePage()
     const navigate = useNavigate();
     const param = useParams();
     const [fixture, setFixture] = useState<TigersFixture | null>(null);
-    const [gameStats, setGameStats] = useState<GameStat[] | null>(null);
     const [fantasyStats, setFantasyStats] = useState<FantasyStat[] | null>(null);
 
     useEffect(() => {
         GetTigersFixture(param.id).then(fixture => setFixture(fixture));
-        GetFixtureGameStats(param.id).then(gameStats => setGameStats(gameStats));
         GetFixtureFantasyStats(param.id).then(fantasyStats => setFantasyStats(fantasyStats));
     }, [param.id]);
 

@@ -8,8 +8,7 @@ import {
     CardActions,
     Button,
     Grid,
-    Avatar,
-    Paper
+    Avatar
 } from '@mui/material';
 import {
     TableChart as TableChartIcon,
@@ -18,8 +17,7 @@ import {
     BarChart as BarChartIcon,
     PersonAdd as PersonAddIcon,
     CalendarMonth as CalendarMonthIcon,
-    Group as GroupIcon,
-    AdminPanelSettings as AdminPanelSettingsIcon
+    Group as GroupIcon
 } from '@mui/icons-material';
 
 export default function Admin() {

@@ -30,7 +30,6 @@ const AdminFixture = () => {
   const [seasonTeams, setSeasonTeams] = useState<Team[]>([]);
   const [saturdays, setSaturdays] = useState<Date[]>([]);
   const [fixtures, setFixtures] = useState<{ [key: string]: FixtureDTO[] }>({});
-  const [existingFixtures, setExistingFixtures] = useState<Fixture[]>([]);
   const [feedback, setFeedback] = useState<{
     message: string;
     type: "success" | "error";
@@ -123,8 +122,6 @@ const AdminFixture = () => {
         GetFixturesForSeason(seasonId),
         GetTigersFixturesForSeason(seasonId),
       ]);
-
-      setExistingFixtures(leagueFixtures || []);
 
       // Group existing fixtures by date
       const groupedFixtures: { [key: string]: FixtureDTO[] } = {};
@@ -495,6 +492,7 @@ const AdminFixture = () => {
     };
 
     initializeData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -10,6 +10,7 @@ const LeagueFixtureHistory = () => {
 
   useEffect(() => {
     GetHistoryFixture(id2).then((fixtures) => setFixtures(fixtures));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const navigate = useNavigate();
