@@ -1,5 +1,3 @@
-import { Fixture } from "../../objects/fixture";
-
 // Here we are passing in the object we want as props and deconstructing it.
 // We do need an Id for each row but that is in the calling code where we are .Map the array
 // <ResultsRow key={fixture.Id} {fixture=h}

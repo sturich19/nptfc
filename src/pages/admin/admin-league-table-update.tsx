@@ -7,7 +7,6 @@ import {
   PostLeagueTableResult,
 } from "../../services/league-table-service";
 import { Season } from "../../objects/season";
-import { Team } from "../../objects/team";
 import { LeagueTable } from "../../objects/league-table";
 import { EditButton, SaveButton, CancelButton } from "../../atoms/buttons/admin-action-buttons";
 
