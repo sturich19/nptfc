@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Season } from "../../objects/season";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { GetSeasons } from "../../services/season-service";
 import { TigersFixture } from "../../objects/tigers-fixture";
 import { GetTigersFixtures } from "../../services/tigers-fixture-service";
@@ -112,6 +112,44 @@ const AdminGameStats = () => {
       ),
     );
   };
+
+  // Calculate totals for all numeric columns
+  const statTotals = useMemo(() => {
+    return playerStats.reduce(
+      (totals, stat) => ({
+        goals: totals.goals + stat.goals,
+        goalsLeft: totals.goalsLeft + stat.goalsLeft,
+        goalsRight: totals.goalsRight + stat.goalsRight,
+        goalsOther: totals.goalsOther + stat.goalsOther,
+        assists: totals.assists + stat.assists,
+        gso: totals.gso + stat.gso,
+        shots: totals.shots + stat.shots,
+        shotsOnTarget: totals.shotsOnTarget + stat.shotsOnTarget,
+        shotsOffTarget: totals.shotsOffTarget + stat.shotsOffTarget,
+        shotsLeft: totals.shotsLeft + stat.shotsLeft,
+        shotsRight: totals.shotsRight + stat.shotsRight,
+        cleanSheets: totals.cleanSheets + stat.cleanSheets,
+        saves: totals.saves + stat.saves,
+        penSaves: totals.penSaves + stat.penSaves,
+      }),
+      {
+        goals: 0,
+        goalsLeft: 0,
+        goalsRight: 0,
+        goalsOther: 0,
+        assists: 0,
+        gso: 0,
+        shots: 0,
+        shotsOnTarget: 0,
+        shotsOffTarget: 0,
+        shotsLeft: 0,
+        shotsRight: 0,
+        cleanSheets: 0,
+        saves: 0,
+        penSaves: 0,
+      },
+    );
+  }, [playerStats]);
 
   const handleSaveAll = async () => {
     if (!selectedSeason || !selectedFixture) {
@@ -503,6 +541,24 @@ const AdminGameStats = () => {
                     </td>
                   </tr>
                 ))}
+                {/* Total Row */}
+                <tr className="table-secondary fw-bold">
+                  <td style={{ minWidth: "150px" }}>TOTAL</td>
+                  <td>{statTotals.goals}</td>
+                  <td>{statTotals.goalsLeft}</td>
+                  <td>{statTotals.goalsRight}</td>
+                  <td>{statTotals.goalsOther}</td>
+                  <td>{statTotals.assists}</td>
+                  <td>{statTotals.gso}</td>
+                  <td>{statTotals.shots}</td>
+                  <td>{statTotals.shotsOnTarget}</td>
+                  <td>{statTotals.shotsOffTarget}</td>
+                  <td>{statTotals.shotsLeft}</td>
+                  <td>{statTotals.shotsRight}</td>
+                  <td>{statTotals.cleanSheets}</td>
+                  <td>{statTotals.saves}</td>
+                  <td>{statTotals.penSaves}</td>
+                </tr>
               </tbody>
                 </table>
               </div>
