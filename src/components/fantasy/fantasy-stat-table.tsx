@@ -117,7 +117,7 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                             <tr className="table-secondary fw-bold">
                                 <td>TOTAL</td>
                                 <td>{fantasyTotals.totalPoints}</td>
-                                <td>{fantasyTotals.apps} ({fantasyTotals.appsPts})</td>
+                                <td>-</td>
                                 <td>{fantasyTotals.goals} ({fantasyTotals.goalPts})</td>
                                 <td>{fantasyTotals.assists} ({fantasyTotals.assistsPts})</td>
                                 <td>{fantasyTotals.shots} ({fantasyTotals.shotPts})</td>

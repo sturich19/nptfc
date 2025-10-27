@@ -235,7 +235,7 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
               {/* Total Row */}
               <tr className="table-secondary fw-bold">
                 <td>TOTAL</td>
-                <td>{statTotals.apps}</td>
+                <td>-</td>
                 <td>{statTotals.goals}</td>
                 <td className="d-none d-sm-table-cell">{statTotals.goalsLeft}</td>
                 <td className="d-none d-sm-table-cell">{statTotals.goalsRight}</td>
