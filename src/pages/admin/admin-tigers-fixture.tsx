@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { GetSeasons } from "../../services/season-service";
 import { GetTeams } from "../../services/teams-service";
 import { GetLeagueTable } from "../../services/league-table-service";
-import { GetTigersFixturesForSeason, PostTigersFixture, PutTigersFixture } from "../../services/tigers-fixture-service";
+import {
+  GetTigersFixturesForSeason,
+  PostTigersFixture,
+  PutTigersFixture,
+} from "../../services/tigers-fixture-service";
 import { Season } from "../../objects/season";
 import { Team } from "../../objects/team";
 import { LeagueTable } from "../../objects/league-table";
 import { TigersFixture } from "../../objects/tigers-fixture";
 import { GameLocation, GameType, ResultType } from "../../objects/enums/enums";
-import { EditButton, SaveButton, CancelButton } from "../../atoms/buttons/admin-action-buttons";
+import {
+  EditButton,
+  SaveButton,
+  CancelButton,
+} from "../../atoms/buttons/admin-action-buttons";
 
 interface TigersFixtureForm {
   id: number;
@@ -89,29 +97,30 @@ const AdminTigersFixture = () => {
       const tigersFixtures = await GetTigersFixturesForSeason(seasonId);
 
       if (tigersFixtures) {
-        const tigersFixturesData = tigersFixtures.map((fixture: any): TigersFixtureForm => {
-          return {
-            id: fixture.id,
-            fixtureId: fixture.id, // TigersFixture ID is the same as its own ID
-            homeTeam: fixture.homeTeam,
-            awayTeam: fixture.awayTeam,
-            homeTeamScore: fixture.homeTeamScore,
-            awayTeamScore: fixture.awayTeamScore,
-            date: new Date(fixture.date),
-            result: fixture.result,
-            location: fixture.location,
-            type: fixture.type,
-            glsFor: fixture.glsFor,
-            glsA: fixture.glsA,
-            pts: fixture.pts,
-            isEditing: false,
-            hasChanges: false,
-          };
-        })
-        .sort(
-          (a: TigersFixtureForm, b: TigersFixtureForm) =>
-            new Date(a.date).getTime() - new Date(b.date).getTime(),
-        );
+        const tigersFixturesData = tigersFixtures
+          .map((fixture: any): TigersFixtureForm => {
+            return {
+              id: fixture.id,
+              fixtureId: fixture.id, // TigersFixture ID is the same as its own ID
+              homeTeam: fixture.homeTeam,
+              awayTeam: fixture.awayTeam,
+              homeTeamScore: fixture.homeTeamScore,
+              awayTeamScore: fixture.awayTeamScore,
+              date: new Date(fixture.date),
+              result: fixture.result,
+              location: fixture.location,
+              type: fixture.type,
+              glsFor: fixture.glsFor,
+              glsA: fixture.glsA,
+              pts: fixture.pts,
+              isEditing: false,
+              hasChanges: false,
+            };
+          })
+          .sort(
+            (a: TigersFixtureForm, b: TigersFixtureForm) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime(),
+          );
 
         setTigersFixtures(tigersFixturesData);
       }
@@ -204,10 +213,11 @@ const AdminTigersFixture = () => {
 
     try {
       // Find the team IDs from the fixture data
+      // Use allTeams instead of seasonTeams to support friendly fixtures with teams not in the league
       const homeTeamId =
-        seasonTeams.find((t) => t.name === fixture.homeTeam)?.id || 0;
+        allTeams.find((t) => t.name === fixture.homeTeam)?.id || 0;
       const awayTeamId =
-        seasonTeams.find((t) => t.name === fixture.awayTeam)?.id || 0;
+        allTeams.find((t) => t.name === fixture.awayTeam)?.id || 0;
 
       const tigersFixture: TigersFixture = {
         id: fixture.id,
@@ -286,7 +296,7 @@ const AdminTigersFixture = () => {
     };
 
     initializeData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -340,7 +350,9 @@ const AdminTigersFixture = () => {
                 value={selectedSeason?.id || 0}
                 onChange={(e) => handleSeasonChange(parseInt(e.target.value))}
               >
-                {!selectedSeason && <option value={0}>Choose a season...</option>}
+                {!selectedSeason && (
+                  <option value={0}>Choose a season...</option>
+                )}
                 {seasons
                   .sort((a, b) => {
                     // Active season first
@@ -352,8 +364,8 @@ const AdminTigersFixture = () => {
                   })
                   .map((season) => (
                     <option key={season.id} value={season.id}>
-                      U{season.ageGroup} {season.endYear} (Div {season.division})
-                      {season.active && ' (Active)'}
+                      U{season.ageGroup} {season.endYear} (Div {season.division}
+                      ){season.active && " (Active)"}
                     </option>
                   ))}
               </select>
@@ -364,7 +376,10 @@ const AdminTigersFixture = () => {
                   <div className="d-flex align-items-center">
                     <i className="bi bi-info-circle me-2"></i>
                     <div>
-                      <strong>{tigersFixtures.length} Tigers fixtures</strong> found for {selectedSeason.monthStart} {selectedSeason.startYear} - {selectedSeason.monthEnd} {selectedSeason.endYear}
+                      <strong>{tigersFixtures.length} Tigers fixtures</strong>{" "}
+                      found for {selectedSeason.monthStart}{" "}
+                      {selectedSeason.startYear} - {selectedSeason.monthEnd}{" "}
+                      {selectedSeason.endYear}
                     </div>
                   </div>
                 </div>
