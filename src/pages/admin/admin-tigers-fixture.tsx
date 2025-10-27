@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GetSeasons } from "../../services/season-service";
 import { GetTeams } from "../../services/teams-service";
-import { GetLeagueTable } from "../../services/league-table-service";
 import {
   GetTigersFixturesForSeason,
   PostTigersFixture,
@@ -10,7 +9,6 @@ import {
 } from "../../services/tigers-fixture-service";
 import { Season } from "../../objects/season";
 import { Team } from "../../objects/team";
-import { LeagueTable } from "../../objects/league-table";
 import { TigersFixture } from "../../objects/tigers-fixture";
 import { GameLocation, GameType, ResultType } from "../../objects/enums/enums";
 import {
@@ -42,7 +40,6 @@ const AdminTigersFixture = () => {
   const [seasons, setSeasons] = useState<Season[]>([]);
   const [selectedSeason, setSelectedSeason] = useState<Season | null>(null);
   const [allTeams, setAllTeams] = useState<Team[]>([]);
-  const [seasonTeams, setSeasonTeams] = useState<Team[]>([]);
   const [tigersFixtures, setTigersFixtures] = useState<TigersFixtureForm[]>([]);
   const [loading, setLoading] = useState(false);
   const [feedback, setFeedback] = useState<{
@@ -72,24 +69,6 @@ const AdminTigersFixture = () => {
   const filteredLocationOptions = gameLocation.filter(
     (option) => !isNaN(Number(option.key)),
   );
-
-  const loadTeamsForSeason = async (seasonId: number) => {
-    try {
-      const leagueTable = await GetLeagueTable(seasonId);
-      if (leagueTable && leagueTable.length > 0) {
-        const teamIds = leagueTable.map((entry: LeagueTable) => entry.teamId);
-        const teamsInSeason = allTeams.filter((team) =>
-          teamIds.includes(team.id),
-        );
-        setSeasonTeams(teamsInSeason);
-      } else {
-        setSeasonTeams([]);
-      }
-    } catch (error) {
-      console.error("Error loading teams for season:", error);
-      setSeasonTeams([]);
-    }
-  };
 
   const loadTigersFixtures = async (seasonId: number) => {
     setLoading(true);
@@ -140,7 +119,6 @@ const AdminTigersFixture = () => {
     if (!season) return;
 
     setSelectedSeason(season);
-    await loadTeamsForSeason(seasonId);
     await loadTigersFixtures(seasonId);
   };
 
