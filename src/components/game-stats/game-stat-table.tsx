@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { GameStat } from "../../objects/game-stat";
 interface GameStatComponentProps {
   gameStats: GameStat[];
@@ -13,6 +13,42 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
     setSort(1);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Calculate totals for all numeric columns
+  const statTotals = useMemo(() => {
+    return gameStatProps.gameStats.reduce(
+      (totals, stat) => ({
+        apps: totals.apps + stat.apps,
+        goals: totals.goals + stat.goals,
+        goalsLeft: totals.goalsLeft + stat.goalsLeft,
+        goalsRight: totals.goalsRight + stat.goalsRight,
+        goalsOther: totals.goalsOther + stat.goalsOther,
+        assists: totals.assists + stat.assists,
+        shots: totals.shots + stat.shots,
+        shotsLeft: totals.shotsLeft + stat.shotsLeft,
+        shotsRight: totals.shotsRight + stat.shotsRight,
+        shotsOnTarget: totals.shotsOnTarget + stat.shotsOnTarget,
+        shotsOffTarget: totals.shotsOffTarget + stat.shotsOffTarget,
+        cleanSheets: totals.cleanSheets + stat.cleanSheets,
+        saves: totals.saves + stat.saves,
+      }),
+      {
+        apps: 0,
+        goals: 0,
+        goalsLeft: 0,
+        goalsRight: 0,
+        goalsOther: 0,
+        assists: 0,
+        shots: 0,
+        shotsLeft: 0,
+        shotsRight: 0,
+        shotsOnTarget: 0,
+        shotsOffTarget: 0,
+        cleanSheets: 0,
+        saves: 0,
+      },
+    );
+  }, [gameStatProps.gameStats]);
 
   function Sort(name: string) {
     switch (name) {
@@ -196,6 +232,23 @@ const GameStatTable = (gameStatProps: GameStatComponentProps) => {
                   </tr>
                 </>
               ))}
+              {/* Total Row */}
+              <tr className="table-secondary fw-bold">
+                <td>TOTAL</td>
+                <td>{statTotals.apps}</td>
+                <td>{statTotals.goals}</td>
+                <td className="d-none d-sm-table-cell">{statTotals.goalsLeft}</td>
+                <td className="d-none d-sm-table-cell">{statTotals.goalsRight}</td>
+                <td>{statTotals.goalsOther}</td>
+                <td>{statTotals.assists}</td>
+                <td>{statTotals.shots}</td>
+                <td>{statTotals.shotsLeft}</td>
+                <td>{statTotals.shotsRight}</td>
+                <td>{statTotals.shotsOnTarget}</td>
+                <td>{statTotals.shotsOffTarget}</td>
+                <td className="d-none d-sm-table-cell">{statTotals.cleanSheets}</td>
+                <td>{statTotals.saves}</td>
+              </tr>
             </tbody>
           </table>
         </div>

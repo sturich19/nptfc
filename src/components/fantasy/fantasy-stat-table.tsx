@@ -1,12 +1,48 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { FantasyStat } from "../../objects/fantasy-stat";
 interface FantasyStatComponentProps{
-    fantasyStats : FantasyStat[]    
+    fantasyStats : FantasyStat[]
 }
 
-const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {      
+const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
 
     const [sort, setSort] = useState(0);
+
+    // Calculate totals for all stats and points columns
+    const fantasyTotals = useMemo(() => {
+        return fantasyStatsProps.fantasyStats.reduce(
+            (totals, stat) => ({
+                totalPoints: totals.totalPoints + stat.totalPoints,
+                apps: totals.apps + stat.apps,
+                appsPts: totals.appsPts + stat.appsPts,
+                goals: totals.goals + stat.goals,
+                goalPts: totals.goalPts + stat.goalPts,
+                assists: totals.assists + stat.assists,
+                assistsPts: totals.assistsPts + stat.assistsPts,
+                shots: totals.shots + stat.shots,
+                shotPts: totals.shotPts + stat.shotPts,
+                cleanSheets: totals.cleanSheets + stat.cleanSheets,
+                cleanSheetPoints: totals.cleanSheetPoints + stat.cleanSheetPoints,
+                saves: totals.saves + stat.saves,
+                savesPts: totals.savesPts + stat.savesPts,
+            }),
+            {
+                totalPoints: 0,
+                apps: 0,
+                appsPts: 0,
+                goals: 0,
+                goalPts: 0,
+                assists: 0,
+                assistsPts: 0,
+                shots: 0,
+                shotPts: 0,
+                cleanSheets: 0,
+                cleanSheetPoints: 0,
+                saves: 0,
+                savesPts: 0,
+            },
+        );
+    }, [fantasyStatsProps.fantasyStats]);
 
     function Sort(name : string)
     {
@@ -63,20 +99,31 @@ const FantasyStatTable = (fantasyStatsProps : FantasyStatComponentProps) => {
                             </tr>
                         </thead>
                         <tbody className="table-group-divider">
-                            {fantasyStatsProps.fantasyStats.map(f => 
+                            {fantasyStatsProps.fantasyStats.map(f =>
                                 <>
                                     <tr key={f.id}>
-                                        <td>{f.playerName}</td>                                                                
-                                        <td>{f.totalPoints}</td>   
+                                        <td>{f.playerName}</td>
+                                        <td>{f.totalPoints}</td>
                                         <td>{f.apps} ({f.appsPts})</td>
                                         <td>{f.goals} ({f.goalPts})</td>
                                         <td>{f.assists} ({f.assistsPts})</td>
-                                        <td>{f.shots} ({f.shotPts})</td>                                
+                                        <td>{f.shots} ({f.shotPts})</td>
                                         <td>{f.cleanSheets} ({f.cleanSheetPoints})</td>
                                         <td>{f.saves} ({f.savesPts})</td>
                                     </tr>
                                 </>
                             )}
+                            {/* Total Row */}
+                            <tr className="table-secondary fw-bold">
+                                <td>TOTAL</td>
+                                <td>{fantasyTotals.totalPoints}</td>
+                                <td>{fantasyTotals.apps} ({fantasyTotals.appsPts})</td>
+                                <td>{fantasyTotals.goals} ({fantasyTotals.goalPts})</td>
+                                <td>{fantasyTotals.assists} ({fantasyTotals.assistsPts})</td>
+                                <td>{fantasyTotals.shots} ({fantasyTotals.shotPts})</td>
+                                <td>{fantasyTotals.cleanSheets} ({fantasyTotals.cleanSheetPoints})</td>
+                                <td>{fantasyTotals.saves} ({fantasyTotals.savesPts})</td>
+                            </tr>
                         </tbody>
                     </table>                          
                 </div>
