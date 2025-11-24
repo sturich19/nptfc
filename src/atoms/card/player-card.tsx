@@ -47,7 +47,7 @@ const PlayerCard = (playerProps: playerProps) => {
     playerStats.forEach((stat) => {
       const existing = seasonStatsMap.get(stat.seasonId);
       if (existing) {
-        existing.apps += 1;
+        existing.apps += stat.apps || 0;
         existing.goals += stat.goals || 0;
         existing.assists += stat.assists || 0;
       }
