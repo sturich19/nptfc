@@ -10,7 +10,7 @@ export interface GameStat{
     goalsOther : number,
     assists : number,
     gso : number,
-    shots : number,    
+    shots : number,
     playerName : string,
     shotsOnTarget : number,
     shotsOffTarget : number,
@@ -18,5 +18,6 @@ export interface GameStat{
     cleanSheets : number,
     penSaves : number,
     shotsLeft : number,
-    shotsRight : number
+    shotsRight : number,
+    played : boolean
 }

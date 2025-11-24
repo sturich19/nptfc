@@ -16,6 +16,7 @@ import { FormatDate } from "../../utils/formatter-util";
 interface PlayerStats {
   playerId: number;
   playerName: string;
+  played: boolean;
   goals: number;
   goalsLeft: number;
   goalsRight: number;
@@ -80,6 +81,7 @@ const AdminGameStats = () => {
           return {
             playerId: player.id,
             playerName: `${player.firstname} ${player.surname}`,
+            played: existing?.played ?? true,
             goals: existing?.goals || 0,
             goalsLeft: existing?.goalsLeft || 0,
             goalsRight: existing?.goalsRight || 0,
@@ -113,42 +115,52 @@ const AdminGameStats = () => {
     );
   };
 
-  // Calculate totals for all numeric columns
-  const statTotals = useMemo(() => {
-    return playerStats.reduce(
-      (totals, stat) => ({
-        goals: totals.goals + stat.goals,
-        goalsLeft: totals.goalsLeft + stat.goalsLeft,
-        goalsRight: totals.goalsRight + stat.goalsRight,
-        goalsOther: totals.goalsOther + stat.goalsOther,
-        assists: totals.assists + stat.assists,
-        gso: totals.gso + stat.gso,
-        shots: totals.shots + stat.shots,
-        shotsOnTarget: totals.shotsOnTarget + stat.shotsOnTarget,
-        shotsOffTarget: totals.shotsOffTarget + stat.shotsOffTarget,
-        shotsLeft: totals.shotsLeft + stat.shotsLeft,
-        shotsRight: totals.shotsRight + stat.shotsRight,
-        cleanSheets: totals.cleanSheets + stat.cleanSheets,
-        saves: totals.saves + stat.saves,
-        penSaves: totals.penSaves + stat.penSaves,
-      }),
-      {
-        goals: 0,
-        goalsLeft: 0,
-        goalsRight: 0,
-        goalsOther: 0,
-        assists: 0,
-        gso: 0,
-        shots: 0,
-        shotsOnTarget: 0,
-        shotsOffTarget: 0,
-        shotsLeft: 0,
-        shotsRight: 0,
-        cleanSheets: 0,
-        saves: 0,
-        penSaves: 0,
-      },
+  const handlePlayedToggle = (playerId: number) => {
+    setPlayerStats((prev) =>
+      prev.map((stat) =>
+        stat.playerId === playerId ? { ...stat, played: !stat.played } : stat,
+      ),
     );
+  };
+
+  // Calculate totals for all numeric columns (only for players who played)
+  const statTotals = useMemo(() => {
+    return playerStats
+      .filter((stat) => stat.played)
+      .reduce(
+        (totals, stat) => ({
+          goals: totals.goals + stat.goals,
+          goalsLeft: totals.goalsLeft + stat.goalsLeft,
+          goalsRight: totals.goalsRight + stat.goalsRight,
+          goalsOther: totals.goalsOther + stat.goalsOther,
+          assists: totals.assists + stat.assists,
+          gso: totals.gso + stat.gso,
+          shots: totals.shots + stat.shots,
+          shotsOnTarget: totals.shotsOnTarget + stat.shotsOnTarget,
+          shotsOffTarget: totals.shotsOffTarget + stat.shotsOffTarget,
+          shotsLeft: totals.shotsLeft + stat.shotsLeft,
+          shotsRight: totals.shotsRight + stat.shotsRight,
+          cleanSheets: totals.cleanSheets + stat.cleanSheets,
+          saves: totals.saves + stat.saves,
+          penSaves: totals.penSaves + stat.penSaves,
+        }),
+        {
+          goals: 0,
+          goalsLeft: 0,
+          goalsRight: 0,
+          goalsOther: 0,
+          assists: 0,
+          gso: 0,
+          shots: 0,
+          shotsOnTarget: 0,
+          shotsOffTarget: 0,
+          shotsLeft: 0,
+          shotsRight: 0,
+          cleanSheets: 0,
+          saves: 0,
+          penSaves: 0,
+        },
+      );
   }, [playerStats]);
 
   const handleSaveAll = async () => {
@@ -178,6 +190,7 @@ const AdminGameStats = () => {
         cleanSheets: stat.cleanSheets,
         saves: stat.saves,
         penSaves: stat.penSaves,
+        played: stat.played,
         apps: 0,
         playerName: "",
       }));
@@ -241,7 +254,9 @@ const AdminGameStats = () => {
                     value={selectedSeason}
                     onChange={(e) => setSelectedSeason(Number(e.target.value))}
                   >
-                    {selectedSeason === 0 && <option value={0}>Choose a season...</option>}
+                    {selectedSeason === 0 && (
+                      <option value={0}>Choose a season...</option>
+                    )}
                     {seasons
                       ?.sort((a, b) => {
                         if (a.active && !b.active) return -1;
@@ -249,16 +264,16 @@ const AdminGameStats = () => {
                         return b.endYear - a.endYear;
                       })
                       .map((option) => (
-                      <option key={option.id} value={option.id}>
-                        U
-                        {option.ageGroup +
-                          " " +
-                          option.endYear +
-                          " (Div " +
-                          option.division +
-                          ")"}
-                      </option>
-                    ))}
+                        <option key={option.id} value={option.id}>
+                          U
+                          {option.ageGroup +
+                            " " +
+                            option.endYear +
+                            " (Div " +
+                            option.division +
+                            ")"}
+                        </option>
+                      ))}
                   </select>
                 </label>
               </div>
@@ -272,7 +287,9 @@ const AdminGameStats = () => {
                     onChange={(e) => setSelectedFixture(Number(e.target.value))}
                     disabled={!selectedSeason}
                   >
-                    {selectedFixture === 0 && <option value={0}>Choose a fixture...</option>}
+                    {selectedFixture === 0 && (
+                      <option value={0}>Choose a fixture...</option>
+                    )}
                     {fixtures?.map((option) => (
                       <option key={option.id} value={option.id}>
                         {FormatDate(option.date) +
@@ -304,262 +321,310 @@ const AdminGameStats = () => {
             <div className="card-body p-0">
               <div className="table-responsive">
                 <table className="table table-hover table-condensed table-responsive table-sm mb-0">
-              <thead>
-                <tr>
-                  <th>Player</th>
-                  <th>Goals</th>
-                  <th>G Left</th>
-                  <th>G Right</th>
-                  <th>G Other</th>
-                  <th>Assists</th>
-                  <th>GSO</th>
-                  <th>Shots</th>
-                  <th>On Target</th>
-                  <th>Off Target</th>
-                  <th>S Left</th>
-                  <th>S Right</th>
-                  <th>Clean Sheets</th>
-                  <th>Saves</th>
-                  <th>Pen Saves</th>
-                </tr>
-              </thead>
-              <tbody className="table-group-divider">
-                {playerStats.map((stat) => (
-                  <tr key={stat.playerId}>
-                    <td style={{ minWidth: "150px" }}>
-                      {stat.playerName}
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.goals}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "goals",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.goalsLeft}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "goalsLeft",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.goalsRight}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "goalsRight",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.goalsOther}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "goalsOther",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.assists}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "assists",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.gso}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "gso",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.shots}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "shots",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.shotsOnTarget}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "shotsOnTarget",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "70px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.shotsOffTarget}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "shotsOffTarget",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "70px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.shotsLeft}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "shotsLeft",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.shotsRight}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "shotsRight",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.cleanSheets}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "cleanSheets",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.saves}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "saves",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "60px" }}
-                      />
-                    </td>
-                    <td>
-                      <input
-                        type="number"
-                        className="form-control form-control-sm"
-                        value={stat.penSaves}
-                        onChange={(e) =>
-                          handleStatChange(
-                            stat.playerId,
-                            "penSaves",
-                            Number(e.target.value),
-                          )
-                        }
-                        style={{ width: "70px" }}
-                      />
-                    </td>
-                  </tr>
-                ))}
-                {/* Total Row */}
-                <tr className="table-secondary fw-bold">
-                  <td style={{ minWidth: "150px" }}>TOTAL</td>
-                  <td>{statTotals.goals}</td>
-                  <td>{statTotals.goalsLeft}</td>
-                  <td>{statTotals.goalsRight}</td>
-                  <td>{statTotals.goalsOther}</td>
-                  <td>{statTotals.assists}</td>
-                  <td>{statTotals.gso}</td>
-                  <td>{statTotals.shots}</td>
-                  <td>{statTotals.shotsOnTarget}</td>
-                  <td>{statTotals.shotsOffTarget}</td>
-                  <td>{statTotals.shotsLeft}</td>
-                  <td>{statTotals.shotsRight}</td>
-                  <td>{statTotals.cleanSheets}</td>
-                  <td>{statTotals.saves}</td>
-                  <td>{statTotals.penSaves}</td>
-                </tr>
-              </tbody>
+                  <thead>
+                    <tr>
+                      <th>Player</th>
+                      <th>Played</th>
+                      <th>Goals</th>
+                      <th>G Left</th>
+                      <th>G Right</th>
+                      <th>G Other</th>
+                      <th>Assists</th>
+                      <th>GSO</th>
+                      <th>Shots</th>
+                      <th>On Target</th>
+                      <th>Off Target</th>
+                      <th>S Left</th>
+                      <th>S Right</th>
+                      <th>Clean Sheets</th>
+                      <th>Saves</th>
+                      <th>Pen Saves</th>
+                    </tr>
+                  </thead>
+                  <tbody className="table-group-divider">
+                    {playerStats.map((stat) => (
+                      <tr
+                        key={stat.playerId}
+                        style={{
+                          opacity: stat.played ? 1 : 0.5,
+                          backgroundColor: stat.played ? "inherit" : "#f0f0f0",
+                        }}
+                      >
+                        <td style={{ minWidth: "150px" }}>{stat.playerName}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className={`btn btn-sm ${stat.played ? "btn-success" : "btn-secondary"}`}
+                            onClick={() => handlePlayedToggle(stat.playerId)}
+                            title={
+                              stat.played
+                                ? "Mark as not played"
+                                : "Mark as played"
+                            }
+                          >
+                            {stat.played ? "✓" : "✗"}
+                          </button>
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.goals}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "goals",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Goals"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.goalsLeft}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "goalsLeft",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Goals Left"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.goalsRight}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "goalsRight",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Goals Right"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.goalsOther}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "goalsOther",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Goals Other"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.assists}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "assists",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Assists"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.gso}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "gso",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="GSO"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.shots}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "shots",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Shots"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.shotsOnTarget}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "shotsOnTarget",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "70px" }}
+                            title="Shots On Target"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.shotsOffTarget}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "shotsOffTarget",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "70px" }}
+                            title="Shots Off Target"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.shotsLeft}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "shotsLeft",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Shots Left"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.shotsRight}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "shotsRight",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Shots Right"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.cleanSheets}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "cleanSheets",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Clean Sheets"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.saves}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "saves",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "60px" }}
+                            title="Saves"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            className="form-control form-control-sm"
+                            value={stat.penSaves}
+                            onChange={(e) =>
+                              handleStatChange(
+                                stat.playerId,
+                                "penSaves",
+                                Number(e.target.value),
+                              )
+                            }
+                            disabled={!stat.played}
+                            style={{ width: "70px" }}
+                            title="Penalty Saves"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                    {/* Total Row */}
+                    <tr className="table-secondary fw-bold">
+                      <td style={{ minWidth: "150px" }}>TOTAL</td>
+                      <td></td>
+                      <td>{statTotals.goals}</td>
+                      <td>{statTotals.goalsLeft}</td>
+                      <td>{statTotals.goalsRight}</td>
+                      <td>{statTotals.goalsOther}</td>
+                      <td>{statTotals.assists}</td>
+                      <td>{statTotals.gso}</td>
+                      <td>{statTotals.shots}</td>
+                      <td>{statTotals.shotsOnTarget}</td>
+                      <td>{statTotals.shotsOffTarget}</td>
+                      <td>{statTotals.shotsLeft}</td>
+                      <td>{statTotals.shotsRight}</td>
+                      <td>{statTotals.cleanSheets}</td>
+                      <td>{statTotals.saves}</td>
+                      <td>{statTotals.penSaves}</td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -577,7 +642,10 @@ const AdminGameStats = () => {
               >
                 {loading ? (
                   <>
-                    <div className="spinner-border spinner-border-sm me-2" role="status">
+                    <div
+                      className="spinner-border spinner-border-sm me-2"
+                      role="status"
+                    >
                       <span className="visually-hidden">Loading...</span>
                     </div>
                     Saving...
