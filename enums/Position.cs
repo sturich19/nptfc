@@ -1,4 +1,4 @@
- public enum Position
+public enum Position
 {
     GK = 0,
     Defender = 1,

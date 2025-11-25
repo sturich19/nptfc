@@ -74,7 +74,7 @@ public class PlayersController : ControllerBase
         }
 
         return NoContent();
-    }    
+    }
 
     // DELETE: api/Players/5
     [HttpDelete("{id}")]

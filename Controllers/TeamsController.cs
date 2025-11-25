@@ -74,7 +74,7 @@ public class TeamsController : ControllerBase
         }
 
         return NoContent();
-    }    
+    }
 
     // DELETE: api/Teams/5
     [HttpDelete("{id}")]

@@ -11,6 +11,7 @@ namespace nptfcBE.DTO
         public int AgeGroupId { get; set; }
         public int Division { get; set; }
         public bool Active { get; set; }
+        public int? Sequence { get; set; }
         public List<int> TeamIds { get; set; } = new List<int>();
     }
 }

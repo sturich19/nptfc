@@ -4,16 +4,16 @@ namespace nptfcBE.DTO
 {
     public class FixtureDTO
     {
-        public int Id {get; set;}
-        public int HomeTeamId {get; set;}
-        public string? HomeTeam {get; set;}
-        public string? AwayTeam {get; set;}
-        public int AwayTeamId {get; set;}
-        public int HomeTeamScore {get; set;}
-        public int AwayTeamScore  {get; set;}
-        public DateTime Date {get; set;}
-        public int SeasonId {get; set;}
-        public bool KnownScore {get; set;}
+        public int Id { get; set; }
+        public int HomeTeamId { get; set; }
+        public string? HomeTeam { get; set; }
+        public string? AwayTeam { get; set; }
+        public int AwayTeamId { get; set; }
+        public int HomeTeamScore { get; set; }
+        public int AwayTeamScore { get; set; }
+        public DateTime Date { get; set; }
+        public int SeasonId { get; set; }
+        public bool KnownScore { get; set; }
 
         public static FixtureDTO Create(Fixture fixture)
         {
@@ -28,7 +28,7 @@ namespace nptfcBE.DTO
                 HomeTeamId = fixture.HomeTeam.Id,
                 HomeTeamScore = fixture.HomeTeamScore,
                 SeasonId = fixture.SeasonId,
-                KnownScore = fixture.KnownScore         
+                KnownScore = fixture.KnownScore
             };
         }
     }

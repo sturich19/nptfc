@@ -477,7 +477,7 @@ public class FixturesController : ControllerBase
     {
         return _context.Fixtures.Any(e => e.Id == id);
     }
-    
+
     // DELETE: api/Fixtures/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteFixture(int id)

@@ -20,7 +20,7 @@ public class FantasyStatsController : ControllerBase
     public FantasyStatsController(DatabaseContext databaseContext)
     {
         _context = databaseContext;
-    }    
+    }
 
     // <summary>
     // Gets the fantasy stats for the current season.
@@ -35,9 +35,9 @@ public class FantasyStatsController : ControllerBase
                     .Join(_context.Players,
                         gs => gs.PlayerId,
                         p => p.Id,
-                        (gs, p) => new {gs, p})
-                    .Where(g => g.gs.SeasonId == seasonId && g.p.Active)                                        
-                    .GroupBy(x => x.gs.PlayerId)                    
+                        (gs, p) => new { gs, p })
+                    .Where(g => g.gs.SeasonId == seasonId && g.p.Active)
+                    .GroupBy(x => x.gs.PlayerId)
                     .Select(gameStatGroup => new GameStatDTO
                     {
                         Id = gameStatGroup.Key,
@@ -48,16 +48,16 @@ public class FantasyStatsController : ControllerBase
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
-                        Shots = gameStatGroup.Sum(x => x.gs.Shots),                        
-                        PlayerId =  gameStatGroup.First().p.Id,
-                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),
+                        PlayerId = gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
-                    })                                                                                         
-                    .ToListAsync(); 
-        
+                    })
+                    .ToListAsync();
+
         List<FantasyStatDTO> fantasyStats = new List<FantasyStatDTO>();
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
@@ -65,11 +65,11 @@ public class FantasyStatsController : ControllerBase
             if (player == null || !player.Active)
                 continue;
 
-            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
-        } 
-        
+            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat));
+        }
+
         return fantasyStats.OrderByDescending(f => f.TotalPoints);
-    }   
+    }
 
     /// <summary>
     /// Gets the fantasy stats by age group.
@@ -88,9 +88,9 @@ public class FantasyStatsController : ControllerBase
                     .Join(_context.Players,
                         gs => gs.PlayerId,
                         p => p.Id,
-                        (gs, p) => new {gs, p})
-                    .Where(g => seasonIds.Contains(g.gs.SeasonId) && g.p.Active)                                        
-                    .GroupBy(x => x.gs.PlayerId)                    
+                        (gs, p) => new { gs, p })
+                    .Where(g => seasonIds.Contains(g.gs.SeasonId) && g.p.Active)
+                    .GroupBy(x => x.gs.PlayerId)
                     .Select(gameStatGroup => new GameStatDTO
                     {
                         Id = gameStatGroup.Key,
@@ -101,28 +101,28 @@ public class FantasyStatsController : ControllerBase
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
-                        Shots = gameStatGroup.Sum(x => x.gs.Shots),                        
-                        PlayerId =  gameStatGroup.First().p.Id,
-                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),
+                        PlayerId = gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
-                    })                                                                                         
-                    .ToListAsync(); 
-        
+                    })
+                    .ToListAsync();
+
         List<FantasyStatDTO> fantasyStats = new List<FantasyStatDTO>();
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
             Player player = _context.Players.Find(gameStat.PlayerId);
             if (player == null || !player.Active)
-                continue;                        
+                continue;
 
-           fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
-        } 
-        
+            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat));
+        }
+
         return fantasyStats.OrderByDescending(f => f.TotalPoints);
-    }   
+    }
 
     [HttpGet("fixture/{fixtureId}", Name = "GetFantasyStatsForFixture")]
     public async Task<IOrderedEnumerable<FantasyStatDTO>> GetFantasyStatsForFixture(int fixtureId)
@@ -131,9 +131,9 @@ public class FantasyStatsController : ControllerBase
                     .Join(_context.Players,
                         gs => gs.PlayerId,
                         p => p.Id,
-                        (gs, p) => new {gs, p})
-                    .Where(g => g.gs.FixtureId == fixtureId && g.p.Active)                                        
-                    .GroupBy(x => x.gs.PlayerId)                    
+                        (gs, p) => new { gs, p })
+                    .Where(g => g.gs.FixtureId == fixtureId && g.p.Active)
+                    .GroupBy(x => x.gs.PlayerId)
                     .Select(gameStatGroup => new GameStatDTO
                     {
                         Id = gameStatGroup.Key,
@@ -144,16 +144,16 @@ public class FantasyStatsController : ControllerBase
                         Apps = gameStatGroup.Count(),
                         Assists = gameStatGroup.Sum(x => x.gs.Assists),
                         GSO = gameStatGroup.Sum(x => x.gs.GSO),
-                        Shots = gameStatGroup.Sum(x => x.gs.Shots),                        
-                        PlayerId =  gameStatGroup.First().p.Id,
-                        SeasonId = gameStatGroup.First().gs.SeasonId,                       
+                        Shots = gameStatGroup.Sum(x => x.gs.Shots),
+                        PlayerId = gameStatGroup.First().p.Id,
+                        SeasonId = gameStatGroup.First().gs.SeasonId,
                         PlayerName = gameStatGroup.First().p.Nickname,
                         CleanSheets = gameStatGroup.Sum(x => x.gs.CleanSheets),
                         Saves = gameStatGroup.Sum(x => x.gs.Saves),
                         PenSaves = gameStatGroup.Sum(x => x.gs.PenSaves),
-                    })                                                                                         
-                    .ToListAsync(); 
-        
+                    })
+                    .ToListAsync();
+
         List<FantasyStatDTO> fantasyStats = new List<FantasyStatDTO>();
         foreach (GameStatDTO gameStat in gameStatsPerPlayer)
         {
@@ -161,9 +161,9 @@ public class FantasyStatsController : ControllerBase
             if (player == null || !player.Active)
                 continue;
 
-            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat)); 
-        } 
-        
+            fantasyStats.Add(FantasyStatDTO.Create(player, gameStat));
+        }
+
         return fantasyStats.OrderByDescending(f => f.TotalPoints);
-    }       
+    }
 }

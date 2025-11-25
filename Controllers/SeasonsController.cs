@@ -21,21 +21,21 @@ public class SeasonsController : ControllerBase
     [HttpGet(Name = "GetSeasons")]
     public async Task<ActionResult<IEnumerable<Season>>> GetSeasons()
     {
-        return await _context.Seasons.OrderByDescending(s => s.EndYear).ToListAsync();
-    }  
-    
+        return await _context.Seasons.OrderByDescending(s => s.Sequence).ToListAsync();
+    }
+
     // GET: api/Seasons/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Season>> GetSeason(int id)
     {
         var season = await _context.Seasons.FindAsync(id);
         if (season == null)
-            return NotFound();        
+            return NotFound();
 
         return season;
     }
 
-      // GET: api/AgeGroups/5
+    // GET: api/AgeGroups/5
     [HttpGet("ageGroup/{id}")]
     public async Task<ActionResult<IEnumerable<Season>>> GetSeasonsForAgeGroup(int id)
     {
@@ -101,6 +101,9 @@ public class SeasonsController : ControllerBase
         else
         {
             // Create new season
+            // Get the maximum sequence number and increment it
+            var maxSequence = await _context.Seasons.MaxAsync(s => (int?)s.Sequence) ?? 0;
+
             season = new Season
             {
                 StartYear = seasonSetup.StartYear,
@@ -110,7 +113,8 @@ public class SeasonsController : ControllerBase
                 MonthEnd = seasonSetup.MonthEnd,
                 AgeGroupId = seasonSetup.AgeGroupId,
                 Division = seasonSetup.Division,
-                Active = seasonSetup.Active
+                Active = seasonSetup.Active,
+                Sequence = maxSequence + 1
             };
 
             _context.Seasons.Add(season);
@@ -195,7 +199,7 @@ public class SeasonsController : ControllerBase
         }
 
         return NoContent();
-    }   
+    }
     #endregion Put Methods 
 
     #region Delete Methods

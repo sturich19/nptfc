@@ -1,4 +1,4 @@
- public enum WhoWon
+public enum WhoWon
 {
     Home = 0,
     Away = 1,

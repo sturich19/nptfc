@@ -1,4 +1,4 @@
- public enum ResultType
+public enum ResultType
 {
     Win = 0,
     Loss = 1,
