@@ -53,16 +53,11 @@ const PlayerCard = (playerProps: playerProps) => {
       }
     });
 
-    // Sort by season start date (newest first)
+    // Sort by sequence (newest first)
     return Array.from(seasonStatsMap.values()).sort((a, b) => {
-      const aDate = new Date(
-        a.season.startDate || `${a.season.monthStart} 1, 2020`,
-      );
-      const bDate = new Date(
-        b.season.startDate || `${b.season.monthStart} 1, 2020`,
-      );
-      return bDate.getTime() - aDate.getTime(); // Newest first
+      return (b.season.sequence ?? 0) - (a.season.sequence ?? 0);
     });
+
   };
 
   // Calculate totals across all displayed seasons

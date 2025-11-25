@@ -13,45 +13,9 @@ export default function Players() {
   useEffect(() => {
     GetPlayers().then((player) => setPlayers(player));
     GetSeasons().then((seasons) => {
-      // Sort seasons by most recent first
+      // Sort seasons by sequence (most recent first)
       const sortedSeasons = seasons?.sort((a: Season, b: Season) => {
-        // First compare end years
-        if (b.endYear !== a.endYear) {
-          return b.endYear - a.endYear;
-        }
-
-        // If end years are the same, compare by end month
-        const monthOrder: { [key: string]: number } = {
-          January: 1,
-          February: 2,
-          March: 3,
-          April: 4,
-          May: 5,
-          June: 6,
-          July: 7,
-          August: 8,
-          September: 9,
-          October: 10,
-          November: 11,
-          December: 12,
-        };
-
-        const aEndMonth = monthOrder[a.monthEnd] || 0;
-        const bEndMonth = monthOrder[b.monthEnd] || 0;
-
-        if (bEndMonth !== aEndMonth) {
-          return bEndMonth - aEndMonth;
-        }
-
-        // If end months are the same, compare start years
-        if (b.startYear !== a.startYear) {
-          return b.startYear - a.startYear;
-        }
-
-        // Finally, compare start months
-        const aStartMonth = monthOrder[a.monthStart] || 0;
-        const bStartMonth = monthOrder[b.monthStart] || 0;
-        return bStartMonth - aStartMonth;
+        return (b.sequence ?? 0) - (a.sequence ?? 0);
       });
 
       setSeasons(sortedSeasons);

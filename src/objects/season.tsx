@@ -6,5 +6,6 @@ export interface Season{
     division : number,
     monthStart : string,
     monthEnd : string,
-    active : boolean
+    active : boolean,
+    sequence?: number
 }
