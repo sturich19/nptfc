@@ -34,27 +34,65 @@ public class FixturesController : ControllerBase
             return NotFound();
         }
 
-        // You have the fixture - now get all the other fixtures where the home id or away id is included
-        return await _context.Fixtures
+        // Get all league fixtures between the two teams
+        var leagueFixtures = await _context.Fixtures
                 .Where(f => (f.HomeTeamId == fixture.HomeTeamId && f.AwayTeamId == fixture.AwayTeamId) || (f.HomeTeamId == fixture.AwayTeamId && f.AwayTeamId == fixture.HomeTeamId))
                 .Include(f => f.AwayTeam)
                 .Include(f => f.HomeTeam)
                 .Include(f => f.Season)
-                .Select(fixture => new FixtureDTO
+                .Select(f => new FixtureDTO
                 {
-                    Id = fixture.Id,
-                    Date = fixture.Date,
-                    AwayTeam = fixture.AwayTeam.Name,
-                    AwayTeamId = fixture.AwayTeam.Id,
-                    AwayTeamScore = fixture.AwayTeamScore,
-                    HomeTeam = fixture.HomeTeam.Name,
-                    HomeTeamId = fixture.HomeTeam.Id,
-                    HomeTeamScore = fixture.HomeTeamScore,
-                    SeasonId = fixture.SeasonId,
-                    KnownScore = fixture.KnownScore
+                    Id = f.Id,
+                    Date = f.Date,
+                    AwayTeam = f.AwayTeam.Name,
+                    AwayTeamId = f.AwayTeam.Id,
+                    AwayTeamScore = f.AwayTeamScore,
+                    HomeTeam = f.HomeTeam.Name,
+                    HomeTeamId = f.HomeTeam.Id,
+                    HomeTeamScore = f.HomeTeamScore,
+                    SeasonId = f.SeasonId,
+                    KnownScore = f.KnownScore
                 })
-                .OrderBy(f => f.Date)
                 .ToListAsync();
+
+        // If Tigers (id=1) are involved, also load friendlies from TigersFixtures
+        if (fixture.HomeTeamId == 1 || fixture.AwayTeamId == 1)
+        {
+            var leagueDates = leagueFixtures.Select(f => f.Date.Date).ToHashSet();
+
+            var tigersFixtures = await _context.TigersFixtures
+                    .Where(f => (f.HomeTeamId == fixture.HomeTeamId && f.AwayTeamId == fixture.AwayTeamId) || (f.HomeTeamId == fixture.AwayTeamId && f.AwayTeamId == fixture.HomeTeamId))
+                    .Include(f => f.AwayTeam)
+                    .Include(f => f.HomeTeam)
+                    .ToListAsync();
+
+            var friendlies = tigersFixtures
+                    .Where(f => !leagueDates.Contains(f.Date.Date))
+                    .Select(f =>
+                    {
+                        // Tigers are always home team id=1; work out scores relative to Tigers
+                        int tigersScore = f.HomeTeamId == 1 ? f.HomeTeamScore : f.AwayTeamScore;
+                        int opponentScore = f.HomeTeamId == 1 ? f.AwayTeamScore : f.HomeTeamScore;
+
+                        return new FixtureDTO
+                        {
+                            Id = f.Id,
+                            Date = f.Date,
+                            AwayTeam = f.AwayTeam.Name,
+                            AwayTeamId = f.AwayTeam.Id,
+                            AwayTeamScore = f.AwayTeamScore,
+                            HomeTeam = f.HomeTeam.Name,
+                            HomeTeamId = f.HomeTeam.Id,
+                            HomeTeamScore = f.HomeTeamScore,
+                            SeasonId = f.SeasonId,
+                            KnownScore = tigersScore > 0 || opponentScore > 0
+                        };
+                    });
+
+            return leagueFixtures.Concat(friendlies).OrderBy(f => f.Date).ToList();
+        }
+
+        return leagueFixtures.OrderBy(f => f.Date).ToList();
     }
 
     [HttpGet(Name = "GetFixtures")]
