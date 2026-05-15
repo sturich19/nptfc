@@ -1,0 +1,12 @@
+table td{
+    cursor: pointer;
+}  
+
+th.sortable, svg{
+    cursor: pointer;
+}
+
+#main-body
+{
+    padding-top: 2%;
+}

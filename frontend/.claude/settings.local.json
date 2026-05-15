@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm start)",
+      "Bash(npm run build:*)",
+      "Bash(npm run lint)",
+      "Bash(npm run:*)",
+      "Bash(npm test)",
+      "Read(//c/Users/srichardson/Pictures/Screenshots/**)",
+      "Bash(npx prettier:*)",
+      "Read(//c/Source/NPTFC/backend/nptfc-backend/Controllers/**)",
+      "Read(//c/Source/NPTFC/backend/**)",
+      "Bash(lsof:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(npx playwright test:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Read(//c/Source/NPTFC/**)",
+      "Bash(rm:*)",
+      "Bash(npm install)",
+      "Bash(npm install:*)",
+      "Bash(npm test:*)",
+      "Bash(timeout 30 npx vitest run:*)",
+      "Bash(timeout 90 npx vitest run:*)",
+      "Bash(timeout 60 npx vitest run --reporter=dot)",
+      "Bash(timeout 60 npx vitest run:*)",
+      "Bash(npx vitest run:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

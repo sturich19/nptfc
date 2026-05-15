@@ -1,0 +1,50 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+td, th, tr
+{
+    text-align: center;
+    vertical-align: middle;
+}
+
+table.table-bordered{
+    border:1px solid black;
+    margin-top:20px;
+  }
+table.table-bordered > thead > tr > th{
+    border:1px solid black;
+}
+table.table-bordered > tbody > tr > td{
+    border:1px solid black;
+}
+
+table{
+    font-size: small;
+}
+
+thead{
+  border-bottom: none;
+}
+
+ /* General Media queries  */
+@media screen and (max-device-width: 640px){
+  table tr th{
+      font-size: small;
+  }
+}

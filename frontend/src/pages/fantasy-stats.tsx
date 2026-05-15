@@ -1,0 +1,33 @@
+import { useEffect, useState } from "react";
+import { FantasyStat } from '../objects/fantasy-stat';
+import { GetAgeGroupFantasyStats } from '../services/fantasy-stat-service';
+import FantasyStatTable from '../components/fantasy/fantasy-stat-table';
+
+interface fantastyStatProps{
+    ageGroup : any    
+}
+
+export default function FantasyStats( fantastyStats : fantastyStatProps)
+{
+    const [stats, setStats] = useState<FantasyStat[] | null>(null);
+
+    useEffect(() => {
+        GetAgeGroupFantasyStats(fantastyStats.ageGroup).then(stats => setStats(stats));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); 
+    
+    return(        
+        <div>
+            { stats ? 
+                <>  
+                    <div className='container-fluid'>                        
+                        <div className="row">
+                            <FantasyStatTable fantasyStats={stats}></FantasyStatTable>
+                        </div>  
+                        {/* <FantasyScoringTable></FantasyScoringTable>   */}
+                    </div>        
+                </> 
+            : <p>Loading...</p>}
+        </div>                
+    )
+}

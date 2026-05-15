@@ -1,0 +1,9 @@
+node_modules/
+build/
+package-lock.json
+yarn.lock
+.scannerwork
+
+# Test environment variables
+.env.test
+.env.local
