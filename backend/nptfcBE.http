@@ -1,0 +1,6 @@
+@nptfcBE_HostAddress = http://localhost:5032
+
+GET {{nptfcBE_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

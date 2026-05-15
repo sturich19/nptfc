@@ -1,0 +1,12 @@
+# Build outputs
+bin/
+obj/
+
+# Compiled DLLs and executables
+*.dll
+*.exe
+*.pdb
+
+# .NET build artifacts
+*.cache
+*.json
