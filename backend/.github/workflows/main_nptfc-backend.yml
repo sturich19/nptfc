@@ -6,12 +6,17 @@ name: Build and deploy ASP.Net Core app to Azure Web App - nptfc-backend
 on:
   push:
     branches:
-      - main
+      - master
+    paths:
+      - 'backend/**'
   workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - uses: actions/checkout@v4
