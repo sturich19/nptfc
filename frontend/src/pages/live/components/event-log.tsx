@@ -1,7 +1,6 @@
 import { Box, Button, List, ListItem, ListItemText, Typography } from '@mui/material';
 import { formatDistanceToNow } from 'date-fns';
 import { LiveEvent, EVENT_LABELS } from '../types';
-import '../live-tracker.css';
 
 interface EventLogProps {
   events: LiveEvent[];

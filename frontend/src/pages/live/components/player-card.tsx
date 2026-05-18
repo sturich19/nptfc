@@ -1,7 +1,6 @@
 import { Avatar, Box, Card, CardActionArea, CardContent, Chip, Typography } from '@mui/material';
 import { Player } from '../../../objects/player';
 import { PlayerLiveStats } from '../types';
-import '../live-tracker.css';
 
 interface PlayerCardProps {
   player: Player;
