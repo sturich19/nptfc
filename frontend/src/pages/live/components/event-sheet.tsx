@@ -11,7 +11,7 @@ interface EventSheetProps {
 
 const ALL_EVENTS: EventType[] = [
   'GOAL_LEFT', 'GOAL_RIGHT', 'GOAL_OTHER',
-  'SHOT_ON', 'SHOT_OFF',
+  'SHOT_ON', 'SHOT_OFF', 'SHOT_LEFT', 'SHOT_RIGHT',
   'ASSIST', 'SAVE', 'PEN_SAVE',
 ];
 

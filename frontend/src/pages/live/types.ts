@@ -6,6 +6,8 @@ export type EventType =
   | 'GOAL_OTHER'
   | 'SHOT_ON'
   | 'SHOT_OFF'
+  | 'SHOT_LEFT'
+  | 'SHOT_RIGHT'
   | 'ASSIST'
   | 'SAVE'
   | 'PEN_SAVE';
@@ -28,17 +30,21 @@ export interface PlayerLiveStats {
   shots: number;
   shotsOnTarget: number;
   shotsOffTarget: number;
+  shotsLeft: number;
+  shotsRight: number;
   saves: number;
   penSaves: number;
   played: boolean;
 }
 
 export const EVENT_FIELD_MAP: Record<EventType, Partial<PlayerLiveStats>> = {
-  GOAL_LEFT:  { goals: 1, goalsLeft: 1 },
-  GOAL_RIGHT: { goals: 1, goalsRight: 1 },
-  GOAL_OTHER: { goals: 1, goalsOther: 1 },
+  GOAL_LEFT:  { goals: 1, goalsLeft: 1, shots: 1, shotsOnTarget: 1, shotsLeft: 1 },
+  GOAL_RIGHT: { goals: 1, goalsRight: 1, shots: 1, shotsOnTarget: 1, shotsRight: 1 },
+  GOAL_OTHER: { goals: 1, goalsOther: 1, shots: 1, shotsOnTarget: 1 },
   SHOT_ON:    { shots: 1, shotsOnTarget: 1 },
   SHOT_OFF:   { shots: 1, shotsOffTarget: 1 },
+  SHOT_LEFT:  { shots: 1, shotsLeft: 1 },
+  SHOT_RIGHT: { shots: 1, shotsRight: 1 },
   ASSIST:     { assists: 1 },
   SAVE:       { saves: 1 },
   PEN_SAVE:   { penSaves: 1 },
@@ -50,6 +56,8 @@ export const EVENT_LABELS: Record<EventType, string> = {
   GOAL_OTHER: 'Goal - Header/Other',
   SHOT_ON:    'Shot on Target',
   SHOT_OFF:   'Shot off Target',
+  SHOT_LEFT:  'Shot - Left Foot',
+  SHOT_RIGHT: 'Shot - Right Foot',
   ASSIST:     'Assist',
   SAVE:       'Save',
   PEN_SAVE:   'Penalty Save',

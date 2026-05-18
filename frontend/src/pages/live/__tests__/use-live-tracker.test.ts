@@ -71,7 +71,7 @@ describe('useLiveTracker', () => {
     expect(result.current.squadIds.has(1)).toBe(false);
   });
 
-  it('addEvent GOAL_LEFT increments goals and goalsLeft', async () => {
+  it('addEvent GOAL_LEFT increments goals, goalsLeft, shots, shotsOnTarget, shotsLeft', async () => {
     setupMocks();
     const { result } = renderHook(() => useLiveTracker(10));
     await act(async () => {});
@@ -81,7 +81,11 @@ describe('useLiveTracker', () => {
     const stats = result.current.stats.get(1);
     expect(stats?.goals).toBe(1);
     expect(stats?.goalsLeft).toBe(1);
+    expect(stats?.shots).toBe(1);
+    expect(stats?.shotsOnTarget).toBe(1);
+    expect(stats?.shotsLeft).toBe(1);
     expect(stats?.goalsRight).toBe(0);
+    expect(stats?.shotsRight).toBe(0);
   });
 
   it('addEvent SHOT_ON increments shots and shotsOnTarget', async () => {
