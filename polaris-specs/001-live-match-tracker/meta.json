@@ -1,0 +1,16 @@
+{
+  "feature_number": "001",
+  "slug": "001-live-match-tracker",
+  "friendly_name": "Live Match Tracker",
+  "mission": "software-dev",
+  "source_description": "Mobile-optimised real-time stat logging during a match. Admin taps player then taps event (goal, shot, assist etc). Undo on mis-taps. Saves to existing GameStat bulk endpoint at full time.",
+  "created_at": "2026-05-18T00:00:00Z",
+  "target_branch": "master",
+  "vcs": "git",
+  "estimation": {
+    "baseline_raw": "unknown",
+    "baseline_hours": null,
+    "source": "developer",
+    "captured_at": "2026-05-18T00:00:00Z"
+  }
+}

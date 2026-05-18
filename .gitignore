@@ -6,3 +6,13 @@
 # OS
 .DS_Store
 Thumbs.db
+
+# Added by Polaris CLI (auto-managed)
+.claude/settings.local.json
+.codex/auth.json
+.polaris/.dashboard
+.polaris/telemetry/
+.polaris/reports/
+.polaris/autopilot-state.json
+.polaris/autopilot-state.json.bak
+.polaris/code-graph.json

@@ -1,0 +1,50 @@
+profile_version: '1.1'
+generated_at: '2026-05-18T13:28:47.870539+00:00'
+project:
+  name: nptfc
+  display_name: Newport Pagnell Tigers FC
+  primary_language: TypeScript, C#
+  project_types:
+    - monorepo
+    - web-app
+    - rest-api
+  maturity: brownfield
+architecture:
+  patterns:
+    - SPA (React)
+    - REST API (ASP.NET Core)
+    - Repository-via-EF-Core
+  top_level_dirs:
+    - backend
+    - frontend
+  frontend:
+    framework: React 18
+    language: TypeScript 4.9+
+    build_tool: Create React App (react-scripts)
+    ui_libraries:
+      - Material-UI v5
+      - Bootstrap 5
+    auth: Auth0
+    routing: React Router v6
+    http_client: Axios
+  backend:
+    framework: ASP.NET Core 8.0
+    language: C# (.NET 8 LTS)
+    orm: Entity Framework Core 8
+    database: SQL Server (Azure SQL)
+    auth: Auth0 JWT bearer
+test:
+  frameworks:
+    - vitest
+    - react-testing-library
+    - dotnet-test
+  frontend_command: npm test
+  backend_command: dotnet test
+cicd:
+  platforms:
+    - github-actions
+  frontend_target: Azure Web App (nptfc-tigers)
+  backend_target: Azure Web App (nptfc-backend)
+quality:
+  health_grade: B
+  health_score: 7.0

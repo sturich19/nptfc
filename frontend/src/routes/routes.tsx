@@ -18,6 +18,8 @@ import AdminLeagueFixtureUpdate from '../pages/admin/admin-league-fixture-update
 import AgeGroupOverview from '../pages/ageGroups/age-group-overview';
 import LeagueFixtureHistory from '../pages/league-fixture-history';
 import Logout from '../pages/logout';
+import LiveFixtureList from '../pages/live/live-fixture-list';
+import LiveTracker from '../pages/live/live-tracker';
 
 const AppRoutes = () => {
 
@@ -41,6 +43,8 @@ const AppRoutes = () => {
                 <Route path="/AdminGameStats" element={<AdminGameStats/>}></Route>  
                 <Route path="/AdminLeagueFixtureUpdate/:id/:id2" element={<AdminLeagueFixtureUpdate/>}></Route>                    
                 <Route path="/LeagueFixtureHistory/:id/:id2" element={<LeagueFixtureHistory/>}></Route>  
+                <Route path="/live" element={<LiveFixtureList/>}></Route>
+                <Route path="/live/:fixtureId" element={<LiveTracker/>}></Route>
                 <Route path="/Logout" element={<Logout/>}></Route>
                 <Route path="*" element={<Home/>}></Route>
             </Route>

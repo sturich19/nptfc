@@ -25,6 +25,13 @@ export default function Admin() {
 
     const adminCards = [
         {
+            title: "Live Match Tracker",
+            description: "Log player stats in real time during a match",
+            icon: <SportsSoccerIcon />,
+            color: "#00897b",
+            route: "/live"
+        },
+        {
             title: "Update League Table",
             description: "Correct and update league table standings for teams",
             icon: <TableChartIcon />,
