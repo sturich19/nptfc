@@ -51,16 +51,16 @@ export const EVENT_FIELD_MAP: Record<EventType, Partial<PlayerLiveStats>> = {
 };
 
 export const EVENT_LABELS: Record<EventType, string> = {
-  GOAL_LEFT:  'Goal - Left Foot',
-  GOAL_RIGHT: 'Goal - Right Foot',
-  GOAL_OTHER: 'Goal - Header/Other',
+  GOAL_LEFT:  'Goal Left',
+  GOAL_RIGHT: 'Goal Right',
+  GOAL_OTHER: 'Goal Header',
   SHOT_ON:    'Shot on Target',
   SHOT_OFF:   'Shot off Target',
-  SHOT_LEFT:  'Shot - Left Foot',
-  SHOT_RIGHT: 'Shot - Right Foot',
+  SHOT_LEFT:  'Shot Left',
+  SHOT_RIGHT: 'Shot Right',
   ASSIST:     'Assist',
   SAVE:       'Save',
-  PEN_SAVE:   'Penalty Save',
+  PEN_SAVE:   'Pen Save',
 };
 
 export const GK_ONLY_EVENTS: EventType[] = ['SAVE', 'PEN_SAVE'];
