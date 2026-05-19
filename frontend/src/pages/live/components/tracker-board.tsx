@@ -78,10 +78,10 @@ const TrackerBoard = ({ tracker }: TrackerBoardProps) => {
       <div className="lt-end-match-bar">
         <Button
           variant="contained"
-          color="error"
           fullWidth
           onClick={() => setConfirmOpen(true)}
           disabled={tracker.phase === 'saving'}
+          sx={{ bgcolor: '#28a745', '&:hover': { bgcolor: '#218838' } }}
         >
           End Match
         </Button>
@@ -98,11 +98,11 @@ const TrackerBoard = ({ tracker }: TrackerBoardProps) => {
           <Button onClick={() => setConfirmOpen(false)}>Cancel</Button>
           <Button
             variant="contained"
-            color="error"
             disabled={tracker.phase === 'saving'}
             onClick={() => { setConfirmOpen(false); tracker.saveMatch(); }}
+            sx={{ bgcolor: '#28a745', '&:hover': { bgcolor: '#218838' } }}
           >
-            Confirm
+            Save Stats
           </Button>
         </DialogActions>
       </Dialog>
