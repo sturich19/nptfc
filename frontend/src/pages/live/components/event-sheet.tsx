@@ -1,6 +1,6 @@
 import { Box, Button, Drawer, Grid, Typography } from '@mui/material';
 import { Player } from '../../../objects/player';
-import { EventType, EVENT_LABELS, GK_ONLY_EVENTS } from '../types';
+import { EventType, EVENT_LABELS } from '../types';
 
 interface EventSheetProps {
   open: boolean;
